@@ -1,0 +1,68 @@
+﻿@model Tatil2.Models.OtelCreateDTO
+
+@{
+    ViewData["Title"] = "Otel Ekle";
+}
+
+<h1>Otel Ekle</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<form asp-action="OtelCreate" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Ad" class="control-label"></label>
+        <input asp-for="Ad" class="form-control" />
+        <span asp-validation-for="Ad" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Aciklama" class="control-label"></label>
+        <textarea asp-for="Aciklama" class="form-control"></textarea>
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Poster" class="control-label"></label>
+        <input type="file" name="poster" class="form-control"/>
+        <span asp-validation-for="Poster" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Konum" class="control-label"></label>
+        <input asp-for="Konum" class="form-control" />
+        <span asp-validation-for="Konum" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="İlceId" class="control-label">İlçe</label>
+        <select asp-for="İlceId" class="form-control">
+            <option value="">İlçe Seçiniz</option>
+            @foreach (var ilce in ViewBag.Ilceler as List<Tatil2.Models.İlce>)
+            {
+                <option value="@ilce.Id">@ilce.Name</option>
+            }
+        </select>
+        <span asp-validation-for="İlceId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+
+<hr />
+
+<h2>Eklenen Oteller</h2>
+@foreach (var otel in ViewBag.Oteller as List<Tatil2.Models.Otel>)
+{
+    <div class="otel">
+        <h3>@otel.Ad</h3>
+        <p><strong>Konum:</strong> @otel.Konum</p>
+        <p>@otel.Aciklama</p>
+       <img src="@otel.Poster" alt="Alternate Text" />
+        <hr />
+    </div>
+}

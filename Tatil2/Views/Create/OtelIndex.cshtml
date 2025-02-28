@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Tatil2.Models.Otel>
+
+<h1>Oteller</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Açıklama</th>
+            <th>Konum</th>
+            <th>İlçe</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var otel in Model)
+        {
+            <tr>
+                <td>@otel.Ad</td>
+                <td>@otel.Aciklama</td>
+                <td>@otel.Konum</td>
+                <td>@otel.İlce.Name</td> 
+            </tr>
+        }
+    </tbody>
+</table>

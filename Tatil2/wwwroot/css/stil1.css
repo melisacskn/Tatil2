@@ -1,0 +1,53 @@
+﻿/* Genel stil ayarları */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #aad665;
+    margin: 0;
+    padding: 0;
+}
+
+/* Sayfa başlığı stil */
+h2 {
+    text-align: center;
+    color: #aad665;
+    font-size: 40px;
+    margin-bottom: 30px;
+}
+
+/* Form stilini düzenlemek */
+form {
+    width: 100%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form içindeki inputlar ve butonlar */
+input[type="email"], input[type="password"], input[type="text"], button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+/* Buton stilini düzenlemek */
+button {
+    background-color: #3d2224;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+    button:hover {
+        background-color: #1c1011;
+    }
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+}

@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<h2>Giriş Yap</h2>
+
+<form id="signInForm" method="post">
+    <div>
+        <label for="Mail">E-posta:</label>
+        <input type="email" id="Mail" name="Mail" required />
+    </div>
+    <div>
+        <label for="Sifre">Şifre:</label>
+        <input type="password" id="Sifre" name="Sifre" required />
+    </div>
+    <button type="submit">Giriş Yap</button>
+
+    <div class="error-message" id="error-message" style="color: red; font-weight: bold;"></div>
+</form>
+
+<div>
+    <p>Hesabınız yok mu? <a href="@Url.Action("Index", "kayit")">Kayıt Ol</a></p>
+</div>
+
+<script>
+            document.getElementById("signInForm").onsubmit = function (event) {
+        // Formun varsayılan davranışını engelle
+        event.preventDefault();
+
+        var mail = document.getElementById("Mail").value;
+        var sifre = document.getElementById("Sifre").value;
+
+        // Backend'e giriş bilgilerini gönder
+        fetch('@Url.Action("SignIn", "giris")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Mail: mail,
+                Sifre: sifre
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Ağ isteği başarısız.");
+            }
+            return response.json();  // JSON olarak dönmesini sağla
+        })
+        .then(data => {
+            // Backend'den gelen hata varsa, hata mesajını göster
+            if (data.hasError) {
+                document.getElementById("error-message").innerText = data.result;
+                document.getElementById("error-message").style.color = 'red'; // Hata mesajı kırmızı
+            } else {
+                // Başarılıysa, yönlendirme URL'si varsa yönlendir
+                if (data.redirectToUrl) {
+                    window.location.href = data.redirectToUrl;  // Yönlendirme
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Hata:', error);
+            document.getElementById("error-message").innerText = "Bir hata oluştu, lütfen tekrar deneyin.";
+            document.getElementById("error-message").style.color = 'red';
+        });
+    };
+
+
+
+</script>
