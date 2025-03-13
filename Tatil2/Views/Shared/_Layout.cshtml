@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="~/css/stil1.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Kayitstil.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/yazi.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/otelgoster.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/rezerve.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -28,14 +30,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Create" asp-action="OtelCreate">Oteller</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="otelgoster" asp-action="Index">Oteller</a>
 
                         </li>
+                       
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="İndirim" asp-action="index">Fırsatlar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="hakkımızda" asp-action="bilgi">Hakkımızda</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Create" asp-action="OtelCreate">Otel ekle</a>
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="hakkimizda" asp-action="bilgi">Hakkımızda</a>
                         </li>
                     </ul>
 

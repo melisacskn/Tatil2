@@ -7,5 +7,6 @@ namespace Tatil2.Models
         [Key]
         public int Id { get; set; }
         public string Ad { get; set; }
+        public ICollection<Tag> Tag { get; set; }
     }
 }

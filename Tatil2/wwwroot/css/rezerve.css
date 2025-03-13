@@ -1,0 +1,125 @@
+﻿/* Genel Stil */
+
+
+/* Otel Bilgileri Bölümü */
+.hotel-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hotel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.hotel-name {
+    font-size: 36px;
+    color: #333;
+}
+
+.hotel-image {
+    max-width: 40%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hotel-img {
+    width: 100%;
+    height: auto;
+}
+
+/* Otel Detayları */
+.hotel-details {
+    margin-bottom: 30px;
+}
+
+    .hotel-details h2 {
+        font-size: 28px;
+        color: #444;
+    }
+
+    .hotel-details p {
+        font-size: 18px;
+        color: #666;
+        line-height: 1.6;
+    }
+
+/* Oda Seçenekleri */
+.room-info h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.room-item {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+    .room-item h4 {
+        font-size: 22px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .room-item p {
+        font-size: 16px;
+        color: #555;
+    }
+
+/* Yorumlar */
+.reviews {
+    margin-bottom: 30px;
+}
+
+    .reviews h3 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+.review {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+    .review p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .review strong {
+        color: #333;
+    }
+
+/* Rezervasyon Butonu */
+.reservation-button {
+    text-align: center;
+    margin-top: 30px;
+}
+
+    .reservation-button button {
+        padding: 15px 30px;
+        font-size: 18px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .reservation-button button:hover {
+            background-color: #0056b3;
+        }

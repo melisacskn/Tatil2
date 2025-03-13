@@ -7,10 +7,11 @@ namespace Tatil2.Models
         public int Id { get; set; }
 
         public int KartBilgisiId { get; set; }
+        
         [ForeignKey(nameof(KartBilgisiId))]
         public KartBilgisi KartBilgisi { get; set; }
 
-        public string MusteriId { get; set; }  
+        public int MusteriId { get; set; }  
         [ForeignKey(nameof(MusteriId))]
         public Musteri Musteri { get; set; }
 
@@ -20,5 +21,6 @@ namespace Tatil2.Models
 
         public DateOnly BaslangicTarihi { get; set; }
         public DateOnly BitisTarihi { get; set; }
+        
     }
 }

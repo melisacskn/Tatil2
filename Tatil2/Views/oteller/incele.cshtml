@@ -1,0 +1,39 @@
+﻿@model Tatil2.Models.Otel
+
+<h1>@Model.Ad</h1>
+
+<div>
+    <p><strong>Konum:</strong> @Model.Konum</p>
+    <p><strong>Açıklama:</strong> @Model.Aciklama</p>
+    <p><strong>İlçe:</strong> @Model.İlce.Ad</p>
+    <img src="@Model.Poster" alt="@Model.Ad" class="img-fluid" />
+</div>
+
+<h2>Odalar</h2>
+@if (Model.Odalar != null && Model.Odalar.Any())
+{
+    <ul>
+        @foreach (var oda in Model.Odalar)
+        {
+            <li>
+                <h3>@oda.OdaAd</h3>
+                <p><strong>Açıklama:</strong> @oda.OdaAciklama</p>
+                <p><strong>Fiyat:</strong> @oda.OdaFiyat</p>
+                <p><strong>Kapasite:</strong> @oda.KisiSayisi</p>
+                @if (!string.IsNullOrEmpty(oda.OdaFoto))
+                {
+                    <img src="@oda.OdaFoto" alt="@oda.OdaAd" class="img-fluid" />
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Bu otelde henüz oda bilgisi bulunmamaktadır.</p>
+}
+
+
+<a href="@Url.Action("Rezerve", "Rezervasyon")" class="btn btn-primary">Rezervasyon Yap</a>
+<a href="@Url.Action("Index", "Otelgoster")" class="btn btn-primary">Geri Dön</a>
+

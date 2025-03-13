@@ -15,39 +15,22 @@ namespace Tatil2.Controllers
         {
             Tatildb = tatilDB;
         }
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> incele(int id)
         {
-            // Bu kısımda Include metodunu kullanıyoruz
-            var otel = await Tatildb.Otel.Include(o => o.İlce).ToListAsync();
-            return View(otel);
-        }
+            var otel = await Tatildb.Otel
+                .Include(o => o.İlce)  
+                .Include(o => o.Odalar)  
+                .FirstOrDefaultAsync(o => o.Id == id); 
 
-        // Otel ekleme formu
-        public IActionResult Create()
+            if (otel == null)
             {
-                ViewData["İlceId"] = new SelectList(Tatildb.İlce, "Id", "Name");
-                return View();
+                return NotFound();
             }
 
-           
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> Create(Otel otel)
-            {
-                if (ModelState.IsValid)
-                {
-                    Tatildb.Add(otel);
-                    await Tatildb.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                ViewData["İlceId"] = new SelectList(Tatildb.İlce, "Id", "Name", otel.İlceId);
-                return View(otel);
-            }
+            return View(otel);  
         }
     }
-
-
+}
 
 
 

@@ -24,13 +24,13 @@
 
 <script>
             document.getElementById("signInForm").onsubmit = function (event) {
-        // Formun varsayılan davranışını engelle
+       
         event.preventDefault();
 
         var mail = document.getElementById("Mail").value;
         var sifre = document.getElementById("Sifre").value;
 
-        // Backend'e giriş bilgilerini gönder
+        
         fetch('@Url.Action("SignIn", "giris")', {
             method: 'POST',
             headers: {
@@ -45,17 +45,17 @@
             if (!response.ok) {
                 throw new Error("Ağ isteği başarısız.");
             }
-            return response.json();  // JSON olarak dönmesini sağla
+            return response.json();  
         })
         .then(data => {
-            // Backend'den gelen hata varsa, hata mesajını göster
+            
             if (data.hasError) {
                 document.getElementById("error-message").innerText = data.result;
-                document.getElementById("error-message").style.color = 'red'; // Hata mesajı kırmızı
+                document.getElementById("error-message").style.color = 'red'; 
             } else {
-                // Başarılıysa, yönlendirme URL'si varsa yönlendir
+               
                 if (data.redirectToUrl) {
-                    window.location.href = data.redirectToUrl;  // Yönlendirme
+                    window.location.href = data.redirectToUrl;  
                 }
             }
         })

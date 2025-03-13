@@ -21,7 +21,7 @@ namespace Tatil2.Giris
             
             if (string.IsNullOrEmpty(request.Mail) || string.IsNullOrEmpty(request.Sifre))
             {
-                throw new ArgumentNullException(nameof(request), "Name veya şifre boş olamaz.");
+                throw new ArgumentNullException(nameof(request), "Ad veya şifre boş olamaz.");
             }
 
            

@@ -13,6 +13,13 @@
     </div>
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <form asp-action="OtelCreate" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="Ad" class="control-label"></label>
@@ -28,7 +35,7 @@
 
     <div class="form-group">
         <label asp-for="Poster" class="control-label"></label>
-        <input type="file" name="poster" class="form-control"/>
+        <input type="file" name="Poster" class="form-control" />
         <span asp-validation-for="Poster" class="text-danger"></span>
     </div>
 
@@ -39,30 +46,111 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="İlceId" class="control-label">İlçe</label>
-        <select asp-for="İlceId" class="form-control">
-            <option value="">İlçe Seçiniz</option>
-            @foreach (var ilce in ViewBag.Ilceler as List<Tatil2.Models.İlce>)
+        <label class="control-label">Şehir</label>
+        <select asp-for="SehirId" id="SehirId" class="form-control">
+            <option value="">Şehir Seçiniz</option>
+            @foreach (var sehir in ViewBag.Sehirler as List<Tatil2.Models.Sehir>)
             {
-                <option value="@ilce.Id">@ilce.Name</option>
+                <option value="@sehir.Id">@sehir.Name</option>
             }
+        </select>
+        <span asp-validation-for="SehirId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">İlçe</label>
+        <select asp-for="İlceId" id="İlceId" class="form-control" disabled>
+            <option value="">İlçe Seçiniz</option>
         </select>
         <span asp-validation-for="İlceId" class="text-danger"></span>
     </div>
 
+    <div class="form-group">
+        <h3 class="control-label">Tag Kategoriler</h3>
+        <div>
+            @if (ViewBag.TagKategori != null)
+            {
+                var tagKategoriList = ViewBag.TagKategori as List<Tatil2.Models.TagKategori>;
+                if (tagKategoriList != null && tagKategoriList.Count > 0)
+                {
+                    @foreach (var tagKategori in tagKategoriList)
+                    {
+                        <h6>@tagKategori.Ad</h6>
+                        @foreach (var tag in tagKategori.Tag)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="@tag.Ad" name="SelectedTagId" value="@tag.Id" />
+                                <label class="form-check-label" for="@tag.Ad">@tag.Ad</label>
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <p>No tag categories available.</p>
+                }
+            }
+            else
+            {
+                <p>No tag categories available.</p>
+            }
+        </div>
+    </div>
+
+    <div id="odalar">
+        <div class="oda">
+           <h4>Oda 1</h4>
+            <label for="OdaAd">Oda Adı</label>
+            <input type="text" name="Odalar[0].OdaAd" class="form-control" />
+
+            <label for="OdaAciklama">Oda Açıklaması</label>
+            <input type="text" name="Odalar[0].OdaAciklama" class="form-control" />
+
+            <label for="OdaFiyat">Fiyat</label>
+            <input type="number" name="Odalar[0].OdaFiyat" class="form-control" />
+
+            <label for="KisiSayisi">Kişi Sayısı</label>
+            <input type="number" name="Odalar[0].KisiSayisi" class="form-control" />
+
+            <label for="OdaStok">Oda Stok</label>
+            <input type="number" name="Odalar[0].OdaStok" class="form-control" />
+
+            <label for="OdaFoto">Oda Fotoğrafı</label>
+            <input type="file" name="Odalar[0].OdaFoto" class="form-control" />
+        </div>
+    </div>
+
+    <button type="button" onclick="addRoom()">Oda Ekle</button>
+
     <button type="submit" class="btn btn-primary">Kaydet</button>
 </form>
 
-<hr />
+<script>
+    var odaCount = 1;
+    function addRoom() {
+        var odaDiv = document.createElement('div');
+        odaDiv.classList.add('oda');
+        odaDiv.innerHTML = `
+            <h4>Oda ${odaCount + 1}</h4>
+            <label for="OdaAd">Oda Adı</label>
+            <input type="text" name="Odalar[${odaCount}].OdaAd" class="form-control" />
 
-<h2>Eklenen Oteller</h2>
-@foreach (var otel in ViewBag.Oteller as List<Tatil2.Models.Otel>)
-{
-    <div class="otel">
-        <h3>@otel.Ad</h3>
-        <p><strong>Konum:</strong> @otel.Konum</p>
-        <p>@otel.Aciklama</p>
-       <img src="@otel.Poster" alt="Alternate Text" />
-        <hr />
-    </div>
-}
+            <label for="OdaAciklama">Oda Açıklaması</label>
+            <input type="text" name="Odalar[${odaCount}].OdaAciklama" class="form-control" />
+
+            <label for="OdaFiyat">Fiyat</label>
+            <input type="number" name="Odalar[${odaCount}].OdaFiyat" class="form-control" />
+
+            <label for="KisiSayisi">Kişi Sayısı</label>
+            <input type="number" name="Odalar[${odaCount}].KisiSayisi" class="form-control" />
+
+            <label for="OdaStok">Oda Stok</label>
+            <input type="number" name="Odalar[${odaCount}].OdaStok" class="form-control" />
+
+            <label for="OdaFoto">Oda Fotoğrafı</label>
+            <input type="file" name="Odalar[${odaCount}].OdaFoto" class="form-control" />
+        `;
+        document.getElementById('odalar').appendChild(odaDiv);
+        odaCount++;
+    }
+</script>

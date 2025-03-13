@@ -1,0 +1,26 @@
+﻿@model Tatil2.Models.Rezervasyon  
+
+<h2>Rezervasyon Yap</h2>
+
+<form asp-action="RezervasyonYap" method="post">
+   
+
+
+    <div class="form-group">
+        <label for="BaslangicTarihi">Başlangıç Tarihi</label>
+        <input asp-for="BaslangicTarihi" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="BitisTarihi">Bitiş Tarihi</label>
+        <input asp-for="BitisTarihi" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="KartBilgisi">Kart bilgisi</label>
+        <input asp-for="KartBilgisi" type="date" class="form-control" />
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Rezervasyon Yap</button>
+</form>

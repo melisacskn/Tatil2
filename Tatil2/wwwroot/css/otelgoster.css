@@ -1,0 +1,29 @@
+﻿h3 {
+    font-size: 50px;
+    padding: 50px;
+    text-align: center;
+}
+a.btn {
+   width: 97%;
+    padding: 10px;
+    background-color: #3d2224;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 10px;
+}
+
+a.btn:hover {
+    background-color: #1c1011;
+}
+main{
+    padding: 30px;
+}
+li{
+
+}
+
+    

@@ -19,7 +19,7 @@ namespace Tatil2.Controllers
         {
             ModalLoginJsonResult result = new ModalLoginJsonResult();
 
-            // Eğer e-posta veya şifre boşsa
+           
             if (string.IsNullOrEmpty(loginViewModel.Mail) || string.IsNullOrEmpty(loginViewModel.Sifre))
             {
                 result.HasError = true;
@@ -27,34 +27,34 @@ namespace Tatil2.Controllers
             }
             else
             {
-                // Kullanıcıyı veritabanında bulma
+                
                 Musteri user = Tatildb.Musteri.FirstOrDefault(x => x.Mail == loginViewModel.Mail && x.Sifre == loginViewModel.Sifre);
 
                 if (user != null)
                 {
-                    // Giriş başarılı
+                    
                     result.HasError = false;
                     result.Result = "Giriş başarılı.";
 
-                    // Şifreyi temizle
+                    
                     user.Sifre = string.Empty;
 
-                    // Kullanıcı bilgilerini session'a kaydet
+                    
                     var userJson = JsonConvert.SerializeObject(user);
                     HttpContext.Session.SetString("login", userJson);
 
-                    // Yönlendirme URL'si ile dönüyoruz (Home/Index sayfasına yönlendiriyoruz)
+                    
                     return Json(new { HasError = false, Result = "Giriş başarılı.", redirectToUrl = Url.Action("Index", "Home") });
                 }
                 else
                 {
-                    // Hatalı giriş
+                   
                     result.HasError = true;
                     result.Result = "E-posta ya da şifre hatalı.";
                 }
             }
 
-            // Hata mesajı döndürüyoruz
+            
             return Json(result);
         }
 
