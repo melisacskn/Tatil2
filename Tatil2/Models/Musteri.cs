@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tatil2.Models
 {
@@ -22,5 +23,9 @@ namespace Tatil2.Models
         public string TC { get; set; }
         public string Sifre { get; set; }
         public bool Cinsiyet { get; set; }
+        public ICollection<KartBilgisi> KartBilgisi{ get; set; }
+        public int MusteriId { get; set; }  // Müşteri ile ilişkilendiriyoruz
+        [ForeignKey(nameof(MusteriId))]
+        public Musteri musteri { get; set; }
     }
 }

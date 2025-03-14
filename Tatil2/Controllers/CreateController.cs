@@ -49,22 +49,21 @@ namespace Tatil2.Controllers
             {
                 return RedirectToAction("Login");
             }
-            { 
-        
-            // Sehirleri alıyoruz
-            var sehirList = Tatildb.Sehir.ToList();
 
-            // View'a şehir verisini gönderiyoruz
+            // Şehirleri alıyoruz
+            var sehirList = Tatildb.Sehir.ToList();
             ViewBag.Sehirler = sehirList;
+
+            // Tag Kategorilerini ve Tag'lerini alıyoruz
+            var tagKategoriList = Tatildb.TagKategori.Include(tk => tk.Tag).ToList(); // İlişkili Tag'lerle birlikte
+            ViewBag.TagKategori = tagKategoriList;
 
             return View();
         }
 
-        }
-
         public IActionResult GetIlceler([FromQuery] int id)
         {
-            var result = Tatildb.İlce.Where(x => x.SehirId == id);
+            var result = Tatildb.İlce.Where(x => x.SehirId == id).Select(x => new { x.Id, x.Ad }).ToList();
             return Json(result);
         }
 
@@ -103,7 +102,7 @@ namespace Tatil2.Controllers
                             }
                             otel.Poster = "/images/" + posterAd;
                         }
-  
+
                         Tatildb.Otel.Add(otel);
                         Tatildb.SaveChanges();
 
@@ -148,6 +147,7 @@ namespace Tatil2.Controllers
 
                         if (otelCreate.SelectedTagId != null && otelCreate.SelectedTagId.Any())
                         {
+                            // SelectedTagId içinde boş olmayan ID'ler varsa, OtelTag ekliyoruz
                             Tatildb.OtelTag.AddRange(otelCreate.SelectedTagId.Select(id => new OtelTag() { OtelId = otel.Id, TagId = id }));
                             Tatildb.SaveChanges();
                         }

@@ -10,6 +10,17 @@
 </div>
 
 <h2>Odalar</h2>
+
+<div class="form-group">
+    <label for="BaslangicTarihi">Başlangıç Tarihi</label>
+    <input type="date" class="form-control" id="BaslangicTarihi" />
+</div>
+
+<div class="form-group">
+    <label for="BitisTarihi">Bitiş Tarihi</label>
+    <input type="date" class="form-control" id="BitisTarihi" />
+</div>
+
 @if (Model.Odalar != null && Model.Odalar.Any())
 {
     <ul>
@@ -24,6 +35,13 @@
                 {
                     <img src="@oda.OdaFoto" alt="@oda.OdaAd" class="img-fluid" />
                 }
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="SelectedOdaId" value="@oda.Id" id="oda_@oda.Id">
+                    <label class="form-check-label" for="oda_@oda.Id">
+                        Bu odayı seç
+                    </label>
+                </div>
             </li>
         }
     </ul>
@@ -33,7 +51,45 @@ else
     <p>Bu otelde henüz oda bilgisi bulunmamaktadır.</p>
 }
 
+<p id="hataMesaji" class="text-danger" style="display: none;">Bu tarihlerde oda müsait değil, lütfen başka bir tarih seçin.</p>
 
-<a href="@Url.Action("Rezerve", "Rezervasyon")" class="btn btn-primary">Rezervasyon Yap</a>
+<a href="@Url.Action("Rezervasyon", "Rezervasyon")" class="btn btn-primary">Rezervasyon Yap</a>
 <a href="@Url.Action("Index", "Otelgoster")" class="btn btn-primary">Geri Dön</a>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rezervasyonButon = document.getElementById("rezervasyonButon");
+        const hataMesaji = document.getElementById("hataMesaji");
+
+        document.querySelectorAll('input[name="SelectedOdaId"]').forEach(odaSecim => {
+            odaSecim.addEventListener("change", checkAvailability);
+        });
+
+        document.getElementById("BaslangicTarihi").addEventListener("change", checkAvailability);
+        document.getElementById("BitisTarihi").addEventListener("change", checkAvailability);
+
+        function checkAvailability() {
+            const odaId = document.querySelector('input[name="SelectedOdaId"]:checked')?.value;
+            const baslangic = document.getElementById("BaslangicTarihi").value;
+            const bitis = document.getElementById("BitisTarihi").value;
+
+            if (!odaId || !baslangic || !bitis) {
+                rezervasyonButon.style.display = "none";
+                hataMesaji.style.display = "none";
+                return;
+            }
+
+            fetch(`/Rezervasyon/OdaMusaitMi?odaId=${odaId}&baslangic=${baslangic}&bitis=${bitis}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.musait) {
+                        rezervasyonButon.style.display = "inline-block";
+                        hataMesaji.style.display = "none";
+                    } else {
+                        rezervasyonButon.style.display = "none";
+                        hataMesaji.style.display = "block";
+                    }
+                });
+        }
+    });
+</script>

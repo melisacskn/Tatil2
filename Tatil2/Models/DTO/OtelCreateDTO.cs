@@ -22,6 +22,9 @@ namespace Tatil2.Models
         // Odalar'ı ekliyoruz
         public List<OdaCreateDTO> Odalar { get; set; }
         public List<int> SelectedTagId { get; set; }
+        public DateOnly BaslangicTarihi { get; set; }
+        public DateOnly BitisTarihi { get; set; }
+       
     }
 
     public class OdaCreateDTO
@@ -32,7 +35,8 @@ namespace Tatil2.Models
         public short KisiSayisi { get; set; }
         public int OdaStok { get; set; }
         public int OtelId { get; set; }
-        public IFormFile OdaFoto { get; set; } 
+        public IFormFile OdaFoto { get; set; }
+        
     }
 
 }
