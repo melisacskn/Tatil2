@@ -20,7 +20,7 @@
 	</div>
 }
 
-<form asp-action="OtelCreate" method="post" enctype="multipart/form-data">
+<form asp-action="OtelCreate" onsubmit="Submit" method="post" enctype="multipart/form-data">
 	<div class="form-group">
 		<label asp-for="Ad" class="control-label"></label>
 		<input asp-for="Ad" class="form-control" />
@@ -90,37 +90,66 @@
 		{
 			<p>No tag categories available.</p>
 		}
-	
 
-	<div id="odalar">
-		<div class="oda">
-			<h4>Oda 1</h4>
-			<label for="OdaAd">Oda Adı</label>
-			<input type="text" name="Odalar[0].OdaAd" class="form-control" />
 
-			<label for="OdaAciklama">Oda Açıklaması</label>
-			<input type="text" name="Odalar[0].OdaAciklama" class="form-control" />
+		<div id="odalar">
+			<div class="oda">
+				<h4>Oda 1</h4>
+				<label for="OdaAd">Oda Adı</label>
+				<input type="text" name="Odalar[0].OdaAd" class="form-control" />
 
-			<label for="OdaFiyat">Fiyat</label>
-			<input type="number" name="Odalar[0].OdaFiyat" class="form-control" />
+				<label for="OdaAciklama">Oda Açıklaması</label>
+				<input type="text" name="Odalar[0].OdaAciklama" class="form-control" />
 
-			<label for="KisiSayisi">Kişi Sayısı</label>
-			<input type="number" name="Odalar[0].KisiSayisi" class="form-control" />
+				<label for="OdaFiyat">Fiyat</label>
+				<input type="number" name="Odalar[0].OdaFiyat" class="form-control" />
 
-			<label for="OdaStok">Oda Stok</label>
-			<input type="number" name="Odalar[0].OdaStok" class="form-control" />
+				<label for="KisiSayisi">Kişi Sayısı</label>
+				<input type="number" name="Odalar[0].KisiSayisi" class="form-control" />
 
-			<label for="OdaFoto">Oda Fotoğrafı</label>
-			<input type="file" name="Odalar[0].OdaFoto" class="form-control" />
+				<label for="OdaStok">Oda Stok</label>
+				<input type="number" name="Odalar[0].OdaStok" class="form-control" />
+
+				<label for="OdaFoto">Oda Fotoğrafı</label>
+				<input type="file" name="Odalar[0].OdaFoto" class="form-control" />
+			</div>
 		</div>
-	</div>
 
-	<button type="button" onclick="addRoom()">Oda Ekle</button>
+		<button type="button" onclick="addRoom()">Oda Ekle</button>
 
-	<button type="submit" class="btn btn-primary">Kaydet</button>
+		<button type="submit" class="btn btn-primary">Kaydet</button>
 </form>
 @section Scripts {
 	<script>
+				function Submit(event) {
+			// Formun submit işlemini engelle
+			event.preventDefault();
+
+			// Form elemanını al
+			const form = event.target;
+
+			// FormData nesnesi ile form verilerini al
+			const formData = new FormData(form);
+
+			// AJAX ile formu gönder
+			fetch('@Url.Action("OtelCreate", "Create")', {
+				method: 'POST',
+				body: formData, // FormData nesnesini doğrudan gönderiyoruz
+			})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Ağ isteği başarısız.");
+				}
+				alert("Otel başarıyla eklendi!");
+				// İsterseniz burada formu sıfırlayabilir ya da başka işlemler yapabilirsiniz
+			})
+			.catch(error => {
+				console.error('Hata:', error);
+				alert("Bir hata oluştu.");
+			});
+		}
+
+
 
 		document.getElementById("SehirId").addEventListener("change", function() {
 			var sehirId = this.value;
@@ -159,7 +188,7 @@
 	</script>
 }
 
- 
+
 <script>
 	var odaCount = 1;
 	function addRoom() {

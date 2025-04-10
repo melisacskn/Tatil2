@@ -1,35 +1,77 @@
-﻿@model Tatil2.Models.KartBilgisi
+﻿@model Tatil2.Models.DTO.RezervasyonDTO
 
-<h2>Rezervasyon Yap</h2>
+<h2>Rezervasyon ve Yorum Sayfası</h2>
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 
-<<form asp-action="Rezervasyon" method="post">
-    <!-- Kart Sahibinin Adı -->
-    <div class="form-group">
-        <label for="KartSahibiAdi">Kart Sahibi Adı Soyadı</label>
-        <input asp-for="RezervasyonId" type="text" class="form-control" required />
-    </div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
 
-    <div class="form-group">
-        <label for="Iban">IBAN</label>
-        <input asp-for="Iban" type="text" class="form-control" required pattern="[A-Z]{2}\d{2}[A-Z0-9]{11,30}" title="Geçerli bir IBAN girin" />
-    </div>
+<div class="card p-3">
+    <h4>Rezervasyon Bilgileri</h4>
+    <p><strong>Oda ID:</strong> @Model.OdaId</p>
+    <p><strong>Başlangıç:</strong> @Model.BaslangicTarihi.ToShortDateString()</p>
+    <p><strong>Bitiş:</strong> @Model.BitisTarihi.ToShortDateString()</p>
 
-    <div class="form-group">
-        <label for="KartTarih">Kart Son Kullanma Tarihi</label>
-        <input asp-for="KartTarih" type="month" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM")" />
-    </div>
+    <!-- Rezervasyon Tamamla Butonu (örnek) -->
+    <form asp-action="Rezervasyon" asp-controller="Rezervasyon" method="post">
+        <input type="hidden" name="OdaId" value="@Model.OdaId" />
+        <input type="hidden" name="BaslangicTarihi" value="@Model.BaslangicTarihi" />
+        <input type="hidden" name="BitisTarihi" value="@Model.BitisTarihi" />
+     
+    </form>
+</div>
 
-    <div class="form-group">
-        <label for="Cvv">CVV</label>
-        <input asp-for="Cvv" type="password" class="form-control" required pattern="\d{3}" title="3 haneli CVV girin" />
-    </div>
+<hr />
 
-    <button type="submit" class="btn btn-primary">Rezervasyonu Tamamla</button>
-</form>
+<div class="card p-3 mt-4">
+    <h4>Yorumlar</h4>
+    @{
+        var yorumlar = ViewBag.Yorumlar as List<Tatil2.Models.Yorum>;
+    }
+
+    @if (yorumlar != null && yorumlar.Any())
+    {
+        foreach (var yorum in yorumlar)
+        {
+            <div class="yorum-karti">
+                <p><strong>@yorum.Musteri.Ad @yorum.Musteri.Soyad</strong></p>
+                <p>@yorum.Yazi</p>
+                <p>Puan: @yorum.Puan / 10</p>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Henüz yorum yapılmamış.</p>
+    }
+
+</div>
+
+<hr />
+
+<div class="card p-3 mt-4">
+    <h4>Yorum Yap</h4>
+    <form asp-action="YorumYap" asp-controller="Rezervasyon" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="odaId" value="@Model.OdaId" />
+
+        <div class="form-group">
+            <label for="yorumMetni">Yorumunuz:</label>
+            <textarea class="form-control" id="yorumMetni" name="yorumMetni" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group mt-2">
+            <label for="puan">Puan (1-10):</label>
+            <input type="number" class="form-control" id="puan" name="puan" min="1" max="10" required />
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Yorumu Gönder</button>
+    </form>
+</div>

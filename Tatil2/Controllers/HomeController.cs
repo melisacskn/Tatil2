@@ -1,37 +1,47 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Tatil2.DBContext;
 using Tatil2.Models;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Tatil2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly TatilDBContext Tatildb;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(TatilDBContext tatilDB)
         {
-            _logger = logger;
+            Tatildb = tatilDB;
         }
+
+
 
         public IActionResult Index()
         {
-            return View();
-        }
+            string userJson = HttpContext.Session.GetString("login");
 
-        public IActionResult Kaydol()
-        {
-            return View();
-        }
+            if (string.IsNullOrEmpty(userJson))
+            {
+             
+                return View();
+            }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            var user = JsonConvert.DeserializeObject<Musteri>(userJson);
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+            var gecmisRezervasyonlar = Tatildb.Rezervasyon
+            .Include(r => r.Oda)  
+            .Where(r => r.MusteriId == user.Id)
+            .OrderByDescending(r => r.BitisTarihi)
+            .ToList();
+
+
+
+            ViewBag.GecmisRezervasyonlar = gecmisRezervasyonlar;
+
+            return View();
         }
     }
 }

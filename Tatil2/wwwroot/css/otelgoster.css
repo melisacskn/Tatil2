@@ -2,9 +2,10 @@
     font-size: 50px;
     padding: 50px;
     text-align: center;
+    color: #aad665;
 }
 a.btn {
-   width: 97%;
+    width: 97%;
     padding: 10px;
     background-color: #3d2224;
     color: white;
@@ -16,14 +17,74 @@ a.btn {
     margin: 10px;
 }
 
-a.btn:hover {
-    background-color: #1c1011;
-}
+    a.btn:hover {
+        background-color: #3d2224;
+    }
 main{
     padding: 30px;
 }
-li{
-
+textarea {
+    display: block;
+    width: 100%;
+    height: 150px;
 }
 
-    
+#otelSearchForm {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #3d2224;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+/* Giriş Tarihi, Çıkış Tarihi ve Kişi Sayısı */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+    .form-control:focus {
+        border-color: #aad665;
+        outline: none;
+    }
+
+/* Buton */
+#araButton {
+    background-color: #3d2224;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+    #araButton:hover {
+        background-color: #3d2224;
+    }
+
+/* Ayrıcı çizgi */
+hr {
+    border: 0;
+    border-top: 2px solid #aad665;
+    margin-top: 30px;
+}

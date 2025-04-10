@@ -1,5 +1,6 @@
 ﻿@model List<Tatil2.Models.Otel>
 
+
 @foreach (var otel in Model)
 {
     <div class="otel">
@@ -8,24 +9,10 @@
         <p><strong>Konum:</strong> @otel.Konum</p>
         <p>@otel.Aciklama</p>
 
-        <a href="@Url.Action("incele", "Oteller", new { id = otel.Id })" class="btn btn-primary">İncele</a>
+        <a href="@Url.Action("incele", "Oteller", new { id = otel.Id , BaslangicTarihi =  ViewBag.BaslangicTarihi,  BitisTarihi =  ViewBag.BitisTarihi, KisiSayisi =  ViewBag.KisiSayisi})" class="btn btn-primary">İncele</a>
 
         <hr />
 
-        <!-- Oda bilgileri -->
-        @foreach (var oda in otel.Odalar)
-        {
-            <div class="oda">
-                <h4>@oda.OdaAd</h4>
-                <img src="@oda.OdaFoto" alt="Oda Fotoğrafı" class="img-fluid" />
-                <p><strong>Fiyat:</strong> @oda.OdaFiyat</p>
-                <p><strong>Kişi Sayısı:</strong> @oda.KisiSayisi</p>
-                <p><strong>Stok:</strong> @oda.OdaStok</p>
-
-                <a href="@Url.Action("incele", "Odalar", new { id = oda.Id })" class="btn btn-primary">İncele</a>
-
-                <hr />
-            </div>
-        }
+      
     </div>
 }

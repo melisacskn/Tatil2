@@ -22,11 +22,12 @@ namespace Tatil2.Models
         public int İlceId { get; set; }
         [ForeignKey(nameof(İlceId))]
         public İlce İlce { get; set; }
+
         public ICollection<Tag> Tag { get; set; } = [];
         //public ICollection<OtelTag> OtelTag { get; set; }
         public virtual ICollection<Oda> Odalar { get; set; }
-        public virtual ICollection<Rezervasyon> BaslangicTarihi { get; set; }
-        public virtual ICollection<Rezervasyon> BitisTarihi { get; set; }
+
+        //public virtual ICollection<Rezervasyon> Rezervasyon { get; set; }
 
     }
 }

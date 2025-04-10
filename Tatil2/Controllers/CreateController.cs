@@ -4,6 +4,7 @@ using Tatil2.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Tatil2.Controllers
 {
@@ -50,11 +51,10 @@ namespace Tatil2.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Şehirleri alıyoruz
+
             var sehirList = Tatildb.Sehir.ToList();
             ViewBag.Sehirler = sehirList;
 
-            // Tag Kategorilerini ve Tag'lerini alıyoruz
             var tagKategoriList = Tatildb.TagKategori.Include(tk => tk.Tag).ToList(); // İlişkili Tag'lerle birlikte
             ViewBag.TagKategori = tagKategoriList;
 
@@ -91,10 +91,13 @@ namespace Tatil2.Controllers
                             if (fileExtension.ToLower() != ".jpg" && fileExtension.ToLower() != ".png")
                             {
                                 TempData["ErrorMessage"] = "Yalnızca .jpg veya .png dosyası yükleyebilirsiniz.";
-                                return View(otelCreate);
+                                //return View(otelCreate);
+                                return Json(new {IsSuccess = false, Message= "Yalnızca .jpg veya .png dosyası yükleyebilirsiniz." });
                             }
+                            string posterAd = Path.GetFileNameWithoutExtension(otelCreate.Poster.FileName);
+                            posterAd = Regex.Replace(posterAd, @"[^a-zA-Z0-9_-]", "");
+                            posterAd = posterAd + fileExtension;
 
-                            string posterAd = otel.Ad + fileExtension;
                             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", posterAd);
                             using (var stream = new FileStream(filePath, FileMode.Create))
                             {
@@ -128,7 +131,9 @@ namespace Tatil2.Controllers
                                     if (odaFotografExtension.ToLower() != ".jpg" && odaFotografExtension.ToLower() != ".png")
                                     {
                                         TempData["ErrorMessage"] = "Yalnızca .jpg veya .png dosyası yükleyebilirsiniz.";
-                                        return View(otelCreate);
+                                        //return View(otelCreate);
+                                        return Json(new { IsSuccess = false, Message = "Yalnızca .jpg veya .png dosyası yükleyebilirsiniz." });
+
                                     }
 
                                     string odaFotoAd = yeniOda.OdaAd + odaFotografExtension;
@@ -147,7 +152,6 @@ namespace Tatil2.Controllers
 
                         if (otelCreate.SelectedTagId != null && otelCreate.SelectedTagId.Any())
                         {
-                            // SelectedTagId içinde boş olmayan ID'ler varsa, OtelTag ekliyoruz
                             Tatildb.OtelTag.AddRange(otelCreate.SelectedTagId.Select(id => new OtelTag() { OtelId = otel.Id, TagId = id }));
                             Tatildb.SaveChanges();
                         }
@@ -161,13 +165,19 @@ namespace Tatil2.Controllers
                     {
                         transaction.Rollback();
                         TempData["ErrorMessage"] = "Bir hata oluştu: " + ex.Message;
-                        return View(otelCreate);
+
+                        if (ex.InnerException != null)
+                        {
+                            TempData["ErrorMessage"] += " | Inner: " + ex.InnerException.Message;
+                        }
+
+                        return Json(new { IsSuccess = false, Message = TempData["ErrorMessage"] });
                     }
                 }
             }
 
-            ViewBag.Sehirler = Tatildb.Sehir.ToList();
-            return View(otelCreate);
+            //ViewBag.Sehirler = Tatildb.Sehir.ToList();
+            return Json(new { IsSuccess = false, Message = "Zorunlu alanları doldurduğunuzdan emin olunuz." });
         }
     }
 }

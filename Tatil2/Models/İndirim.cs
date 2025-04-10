@@ -6,7 +6,7 @@ namespace Tatil2.Models
     public class İndirim
     {
         [Key]
-        public int OdaId { get; set; }  // OdaId'yi Primary Key olarak işaretliyoruz
+        public int OdaId { get; set; }  // OtelId'yi Primary Key olarak işaretliyoruz
 
         [ForeignKey(nameof(OdaId))]
         public Oda? Oda { get; set; }

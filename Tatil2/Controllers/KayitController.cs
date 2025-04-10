@@ -7,14 +7,13 @@ namespace Tatil2.Controllers
 {
     public class KayitController : Controller
     {
-        private readonly TatilDBContext _context;
 
+        private readonly TatilDBContext Tatildb;
 
-        public KayitController(TatilDBContext context)
+        public KayitController(TatilDBContext tatilDB)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            Tatildb = tatilDB;
         }
-
 
         public IActionResult Index()
         {
@@ -47,7 +46,7 @@ namespace Tatil2.Controllers
                 }
 
 
-                if (!string.IsNullOrEmpty(model.Mail) && _context.Musteri.Any(m => m.Mail == model.Mail))
+                if (!string.IsNullOrEmpty(model.Mail) && Tatildb.Musteri.Any(m => m.Mail == model.Mail))
                 {
                     ModelState.AddModelError("Mail", "Bu e-posta adresi zaten kayıtlı.");
                 }
@@ -58,10 +57,10 @@ namespace Tatil2.Controllers
                     try
                     {
 
-                        _context.Musteri.Add(model);
+                        Tatildb.Musteri.Add(model);
 
 
-                        _context.SaveChanges();
+                        Tatildb.SaveChanges();
 
 
                         return RedirectToAction("Index", "Home");

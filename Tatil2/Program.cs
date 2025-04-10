@@ -7,7 +7,7 @@ using Tatil2.DBContext; // Konsol loglama için gerekli namespace
 var builder = WebApplication.CreateBuilder(args);
 
 // Logging yapýlandýrmasýný ekleyin
-builder.Logging.ClearProviders();  // Varsayýlan loglama saðlayýcýlarýný temizleyebilirsiniz (isteðe baðlý)
+builder.Logging.ClearProviders();
 builder.Logging.AddConsole();  // Konsola loglama ekleyin
 
 // DbContext'inizi ekleyin
@@ -21,16 +21,14 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Oturum süresi
     options.Cookie.IsEssential = true; // Çerezlerin zorunlu olduðu durum
     options.Cookie.HttpOnly = true;
-    
-
 });
 
 // Authentication yapýlandýrmasý
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/giris/SignIn";  // Giriþ sayfasý
-        options.LogoutPath = "/giris/SignOut"; // Çýkýþ sayfasý
+        options.LoginPath = "/giris/SignIn";
+        options.LogoutPath = "/giris/SignOut";
     });
 
 // Localization (Dil desteði) yapýlandýrmasý
@@ -46,7 +44,6 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 // MVC veya Razor Pages kullanýyorsanýz ilgili servisleri ekleyin
 builder.Services.AddControllersWithViews();  // Eðer sadece View kullanacaksanýz
-// builder.Services.AddRazorPages();  // Razor Pages kullanýyorsanýz
 
 var app = builder.Build();
 
@@ -61,18 +58,21 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
+
+
 app.UseHttpsRedirection();
 app.UseSession();
 app.UseStaticFiles();
 
 // Authentication ve Authorization sýrasýyla kullanýlmalý
 app.UseAuthentication();  // Kullanýcý doðrulamasý
-   // Yetkilendirme iþlemi
+app.UseAuthorization();  // Yetkilendirme iþlemi
 
 // MVC veya Razor Pages iþlemleri
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.Run();

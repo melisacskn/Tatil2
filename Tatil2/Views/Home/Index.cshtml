@@ -2,9 +2,49 @@
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    var gecmisRezervasyonlar = ViewBag.GecmisRezervasyonlar as List<Tatil2.Models.Rezervasyon>;
+}
 
 <div class="text-center">
     <h1 class="display-4">Anasayfa</h1>
     <p>En Popüler Oteller</p>
-    
 </div>
+
+
+
+<h2>Geçmiş Rezervasyonlar</h2>
+
+@if (gecmisRezervasyonlar != null && gecmisRezervasyonlar.Count > 0)
+{
+    <table>
+        <thead>
+            <tr>
+               
+                <th>  Oda Adı  </th>
+                <th>  Başlangıç Tarihi  </th>
+                <th>  Bitiş Tarihi  </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rezervasyon in gecmisRezervasyonlar)
+            {
+                <tr>
+                    <td>@rezervasyon.Oda.OdaAd</td>
+                    <td>@rezervasyon.BaslangicTarihi.ToString("dd MMM yyyy")</td>
+                    <td>@rezervasyon.BitisTarihi.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <a href="@Url.Action("Rezervasyon", "Rezervasyon", new { odaId = rezervasyon.OdaId })" class="btn btn-primary">
+                            Yorum Yap
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Geçmiş rezervasyonunuz bulunmamaktadır.</p>
+}

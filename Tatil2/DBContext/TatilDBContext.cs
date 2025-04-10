@@ -5,7 +5,10 @@ namespace Tatil2.DBContext
 {
     public class TatilDBContext : DbContext
     {
-        public TatilDBContext(DbContextOptions<TatilDBContext> options) : base(options) { }
+           
+            
+
+            public TatilDBContext(DbContextOptions<TatilDBContext> options) : base(options) { }
 
         public DbSet<Musteri> Musteri { get; set; }
         public DbSet<Otel> Otel { get; set; }
@@ -16,14 +19,16 @@ namespace Tatil2.DBContext
         public DbSet<TagKategori> TagKategori { get; set; }
         public DbSet<Oda> Oda { get; set; }
         public DbSet<Rezervasyon> Rezervasyon { get; set; }
-
-        // KartBilgisi DbSet'ini buraya ekleyin
-        public DbSet<KartBilgisi> KartBilgisi { get; set; } // KartBilgisi ekledik
+        public DbSet<Yorum> Yorum { get; set; }
 
 
 
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+
+
+
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
@@ -34,6 +39,18 @@ namespace Tatil2.DBContext
                 .HasMany(x => x.Tag)
                 .WithMany(x => x.Otel)
                 .UsingEntity<OtelTag>();
+
+            modelBuilder.Entity<Rezervasyon>()
+                .Property(x => x.BaslangicTarihi)
+                .HasColumnType("smalldatetime");
+
+            modelBuilder.Entity<Rezervasyon>()
+                .Property(x => x.BitisTarihi)
+                .HasColumnType("smalldatetime");
+            //modelBuilder.Entity<Otel>()
+            //    .HasMany(x => x.Odalar)
+            //    .WithOne(x => x.Otel)
+            //    .HasForeignKey(x => x.OtelId);
 
             //modelBuilder.Entity<OtelTag>()
             //    .HasOne(ot => ot.Otel)

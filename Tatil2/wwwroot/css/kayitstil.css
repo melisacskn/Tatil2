@@ -14,14 +14,7 @@ body {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
-form {
-    width: 100%;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
+
 
 /* Başlık */
 h2 {
@@ -101,11 +94,163 @@ button[type="submit"] {
     button[type="submit"]:hover {
         background-color: #1c1011;
     }
-  
+textarea {
+    display: block;
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; /* kullanıcı sadece dikey boyutlandırabilir */
+    box-sizing: border-box;
+}
+
 
 /* Responsive Tasarım */
 @media (max-width: 768px) {
     .container {
         width: 100%;
     }
+}
+
+/* Genel Sayfa Düzeni */
+.card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #aad665;
+    margin-bottom: 30px;
+}
+
+h4 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #aad665;
+    margin-bottom: 15px;
+}
+
+/* Başarı ve Hata Mesajları */
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+/* Rezervasyon Bilgileri */
+.card p {
+    font-size: 16px;
+    color: #3d2224;
+    margin: 8px 0;
+}
+
+    .card p strong {
+        color: #3d2224;
+    }
+
+.card form {
+    margin-top: 20px;
+}
+
+.card .btn {
+    background-color: #3d2224;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .card .btn:hover {
+        background-color: #3d2224;
+    }
+
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .card {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h4 {
+        font-size: 20px;
+    }
+
+    .card p {
+        font-size: 14px;
+    }
+
+    .card .btn {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+.yorum-karti {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+    .yorum-karti p {
+        margin: 8px 0; /* Paragraflar arasına boşluk ekler */
+        font-size: 17px; /* Yazı tipi boyutunu belirler */
+        line-height: 1.6; /* Satır yüksekliği */
+    }
+
+        .yorum-karti p strong {
+            font-size: 18px; /* Müşteri adı ve soyadını belirgin yapar */
+            font-weight: bold;
+        }
+
+        .yorum-karti p:first-child {
+            margin-top: 0; /* İlk paragrafın üst boşluğunu kaldırır */
+        }
+
+        .yorum-karti p:last-child {
+            margin-bottom: 0; /* Son paragrafın alt boşluğunu kaldırır */
+        }
+
+        .yorum-karti p:last-child {
+            font-weight: bold; /* Puan metnini kalın yapar */
+            color: #3d2224;
+            font-size: 13px; /* Puan rengini ayarlama */
+        }
+
+.card h4 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #aad665;
+    margin-bottom: 15px;
 }

@@ -18,13 +18,14 @@ namespace Tatil2.Models
 
         public int İlceId { get; set; }
         public int SehirId { get; set; }
+    
 
         // Odalar'ı ekliyoruz
         public List<OdaCreateDTO> Odalar { get; set; }
         public List<int> SelectedTagId { get; set; }
         public DateOnly BaslangicTarihi { get; set; }
         public DateOnly BitisTarihi { get; set; }
-       
+
     }
 
     public class OdaCreateDTO

@@ -14,10 +14,11 @@ namespace Tatil2.Models
         public int OtelId { get; set; }
         [ForeignKey(nameof(OtelId))]
         public Otel Otel { get; set; }  
-        public string OdaFoto { get; set; }  
-       
+        public string? OdaFoto { get; set; }
+        public virtual ICollection<Rezervasyon> Rezervasyon { get; set; }
+        public virtual ICollection<Yorum> Yorum { get; set; }
+     
+
     }
-
-
 
 }

@@ -23,7 +23,6 @@ namespace Tatil2.Controllers
 
             if (oteller == null || !oteller.Any())
             {
-                // Veriler boş veya null geldiğinde, uygun bir hata mesajı gösterebilirsiniz
                 return NotFound("Otel bulunamadı.");
             }
 
@@ -31,19 +30,5 @@ namespace Tatil2.Controllers
 
         }
 
-        public async Task<IActionResult> Incele(int id)
-        {
-            var otel = await Tatildb.Otel
-                .Include(o => o.İlce)          
-                .Include(o => o.Odalar)        
-                .FirstOrDefaultAsync(o => o.Id == id); 
-     
-            if (otel == null)
-            {
-                return NotFound();
-            }
-
-            return View(otel); 
-        }
     }
 }
