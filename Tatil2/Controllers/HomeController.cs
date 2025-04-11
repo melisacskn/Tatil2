@@ -4,6 +4,8 @@ using Tatil2.DBContext;
 using Tatil2.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tatil2.Controllers
 {
@@ -17,30 +19,16 @@ namespace Tatil2.Controllers
         }
 
 
-
+        [Authorize]
         public IActionResult Index()
         {
-            string userJson = HttpContext.Session.GetString("login");
-
-            if (string.IsNullOrEmpty(userJson))
-            {
-             
-                return View();
-            }
-
-            var user = JsonConvert.DeserializeObject<Musteri>(userJson);
-
-
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var gecmisRezervasyonlar = Tatildb.Rezervasyon
-            .Include(r => r.Oda)  
-            .Where(r => r.MusteriId == user.Id)
-            .OrderByDescending(r => r.BitisTarihi)
-            .ToList();
-
-
-
+                    .Include(r => r.Oda)
+                    .Where(r => r.MusteriId == userId)
+                    .OrderByDescending(r => r.BitisTarihi)
+                    .ToList();
             ViewBag.GecmisRezervasyonlar = gecmisRezervasyonlar;
-
             return View();
         }
     }

@@ -24,6 +24,7 @@ namespace Tatil2.Models
         public string TC { get; set; }
         public string Sifre { get; set; }
         public bool Cinsiyet { get; set; }
+        public bool IsAdmin { get; set; }
 
     }
 

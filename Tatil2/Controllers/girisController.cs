@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Tatil2.DBContext;
 using Tatil2.Models;
@@ -8,10 +12,12 @@ namespace Tatil2.Controllers
     public class girisController : Controller
     {
         private readonly TatilDBContext Tatildb;
+        private readonly IConfiguration _configuration;
 
-        public girisController(TatilDBContext tatilDB)
+        public girisController(TatilDBContext tatilDB, IConfiguration configuration)
         {
             Tatildb = tatilDB;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -19,7 +25,7 @@ namespace Tatil2.Controllers
         {
             ModalLoginJsonResult result = new ModalLoginJsonResult();
 
-           
+
             if (string.IsNullOrEmpty(loginViewModel.Mail) || string.IsNullOrEmpty(loginViewModel.Sifre))
             {
                 result.HasError = true;
@@ -27,40 +33,69 @@ namespace Tatil2.Controllers
             }
             else
             {
-                
+
                 Musteri user = Tatildb.Musteri.FirstOrDefault(x => x.Mail == loginViewModel.Mail && x.Sifre == loginViewModel.Sifre);
 
                 if (user != null)
                 {
-                    
+
                     result.HasError = false;
                     result.Result = "Giriş başarılı.";
 
-                    
-                    user.Sifre = string.Empty;
+                    Response.Cookies.Append("access_token", GenerateJwtToken(user), new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict,
+                        //Secure = false
+                    });
 
-                    
-                    var userJson = JsonConvert.SerializeObject(user);
-                    HttpContext.Session.SetString("login", userJson);
+                    //user.Sifre = string.Empty;
 
-                    
+                    //var userJson = JsonConvert.SerializeObject(user);
+                    //HttpContext.Session.SetString("login", userJson);
+
+
                     return Json(new { HasError = false, Result = "Giriş başarılı.", redirectToUrl = Url.Action("Index", "Home") });
                 }
                 else
                 {
-                   
+
                     result.HasError = true;
                     result.Result = "E-posta ya da şifre hatalı.";
                 }
             }
 
-            
+
             return Json(result);
         }
 
         public ActionResult SignIn()
         {
             return View();
+        }
+
+        private string GenerateJwtToken(Musteri user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("Jwt:Key")!);
+
+            List<Claim> claims = [
+                new Claim(ClaimTypes.Name, $"{user.Ad} {user.Soyad}"),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                ];
+            if (user.IsAdmin)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         [HttpPost]

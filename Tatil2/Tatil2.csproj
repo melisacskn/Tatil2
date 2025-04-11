@@ -11,30 +11,35 @@
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder2\**" />
     <Compile Remove="NewFolder3\**" />
-    <Compile Remove="NewFolder\**" />
     <Compile Remove="obj\**" />
+    <Compile Remove="Views\Profil\**" />
     <Compile Remove="wwwroot\css\NewFolder\**" />
     <Content Remove="bin\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
     <Content Remove="NewFolder3\**" />
-    <Content Remove="NewFolder\**" />
     <Content Remove="obj\**" />
+    <Content Remove="Views\Profil\**" />
     <Content Remove="wwwroot\css\NewFolder\**" />
     <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
     <EmbeddedResource Remove="NewFolder3\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
     <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="Views\Profil\**" />
     <EmbeddedResource Remove="wwwroot\css\NewFolder\**" />
     <None Remove="bin\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder2\**" />
     <None Remove="NewFolder3\**" />
-    <None Remove="NewFolder\**" />
     <None Remove="obj\**" />
+    <None Remove="Views\Profil\**" />
     <None Remove="wwwroot\css\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\YorumController.cs" />
+    <Compile Remove="Models\DTO\YorumDTO.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +55,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -60,6 +66,7 @@
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="4.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
   </ItemGroup>
 
   <ItemGroup>

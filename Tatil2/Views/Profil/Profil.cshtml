@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Profil";
+}
+
+<h2>Profil</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+<!-- Profil Bilgileri Görüntüleme -->
+<div>
+    <h3>@ViewBag.MusteriAdi @ViewBag.MusteriSoyad</h3>
+    <p>Telefon: @ViewBag.Telefon</p>
+    <form method="post" action="@Url.Action("Guncelle", "Profil")">
+        <div>
+            <label for="Telefon">Yeni Telefon:</label>
+            <input type="text" id="Telefon" name="Telefon" value="@ViewBag.Telefon" required />
+        </div>
+        <button type="submit">Güncelle</button>
+    </form>
+</div>
+
+<!-- Rezervasyonlar ve Yorumlar -->
+<div>
+    <h3>Geçmiş Rezervasyonlar</h3>
+    @if (ViewBag.GecmisRezervasyonlar != null)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Oda Adı</th>
+                    <th>Başlangıç Tarihi</th>
+                    <th>Bitiş Tarihi</th>
+                    <th>Yorum Yap</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rezervasyon in ViewBag.GecmisRezervasyonlar)
+                {
+                    <tr>
+                        <td>@rezervasyon.OdaAd</td>
+                        <td>@rezervasyon.BaslangicTarihi.ToString("dd MMM yyyy")</td>
+                        <td>@rezervasyon.BitisTarihi.ToString("dd MMM yyyy")</td>
+                        <td>
+                            <a href="@Url.Action("Rezervasyon", "Rezervasyon", new { odaId = rezervasyon.OdaId })">Yorum Yap</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Geçmiş rezervasyonunuz bulunmamaktadır.</p>
+    }
+</div>
+
+
