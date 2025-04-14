@@ -1,6 +1,7 @@
 ﻿
 using Tatil2.Interfaces;
 using Tatil2.Models;
+using Tatil2.Models.DTO;
 
 
 namespace Tatil2.Giris

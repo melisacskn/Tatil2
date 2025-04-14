@@ -47,9 +47,15 @@
                     </ul>
 
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="giris" asp-action="signIn">Giriş Yap</a>
-                        </li>                   
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                          @*   <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="giris" asp-action="signIn">Giriş Yap</a>
+                            </li> *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark">@User.Identity.Name</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

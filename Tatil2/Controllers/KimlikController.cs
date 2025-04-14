@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Tatil2.DBContext;
 using Tatil2.Models;
+using Tatil2.Models.DTO;
 
 namespace Tatil2.Controllers
 {
-    public class KimlikController : Controller
+    public class KimlikController : BaseController
     {
         private readonly TatilDBContext Tatildb;
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Tatil2.Controllers
 {
-    public class OtellerController : Controller
+    public class OtellerController : BaseController
     {
         private readonly TatilDBContext Tatildb;
 

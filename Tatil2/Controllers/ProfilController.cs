@@ -3,10 +3,11 @@ using Tatil2.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Tatil2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tatil2.Controllers
 {
-    public class ProfilController : Controller
+    public class ProfilController : BaseController
     {
         private readonly TatilDBContext Tatildb;
 
@@ -16,19 +17,11 @@ namespace Tatil2.Controllers
         }
 
         // GET: Profil
+        [Authorize]
         [HttpGet]
         public IActionResult Profil()
         {
-            // Kullanıcıyı session'dan al
-            string userJson = HttpContext.Session.GetString("login");
-            if (string.IsNullOrEmpty(userJson))
-            {
-                TempData["ErrorMessage"] = "Lütfen önce giriş yapın.";
-                return RedirectToAction("Index", "Giris");
-            }
-
-            // Kullanıcı verilerini deserialize et
-            var user = JsonConvert.DeserializeObject<Musteri>(userJson);
+            var user = base.Musteri;
 
             // Geçmiş rezervasyonları al
             var gecmisRezervasyonlar = Tatildb.Rezervasyon

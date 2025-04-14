@@ -1,4 +1,4 @@
-﻿namespace Tatil2.Models
+﻿namespace Tatil2.Models.DTO
 {
     public class ModalLoginJsonResult
     {

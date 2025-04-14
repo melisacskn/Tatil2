@@ -5,7 +5,7 @@ using Tatil2.Models;
 
 namespace Tatil2.Controllers
 {
-    public class OtelgosterController : Controller
+    public class OtelgosterController : BaseController
     {
         private readonly TatilDBContext Tatildb;
 

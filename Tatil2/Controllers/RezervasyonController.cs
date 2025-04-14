@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Tatil2.DBContext;
@@ -7,7 +8,7 @@ using Tatil2.Models.DTO;
 
 namespace Tatil2.Controllers
 {
-    public class RezervasyonController : Controller
+    public class RezervasyonController : BaseController
     {
         private readonly TatilDBContext Tatildb;
 
@@ -41,22 +42,17 @@ namespace Tatil2.Controllers
             return Json(new { musait = !odaDolu });
         }
 
-        
+        [Authorize]
         [HttpGet]
         public IActionResult YorumYap(int odaId)
         {
-            string userJson = HttpContext.Session.GetString("login");
-            if (string.IsNullOrEmpty(userJson))
-                return RedirectToAction("SignIn", "Giris");
-
-            var user = JsonConvert.DeserializeObject<Musteri>(userJson);
             var oda = Tatildb.Oda.FirstOrDefault(o => o.Id == odaId);
 
             if (oda == null)
                 return NotFound();
 
             ViewBag.Oda = oda;
-            ViewBag.KullaniciAdi = user.Ad;
+            ViewBag.KullaniciAdi = base.Musteri.Ad;
 
             return View();
         }

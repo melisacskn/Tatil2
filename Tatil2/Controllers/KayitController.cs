@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tatil2.Controllers
 {
-    public class KayitController : Controller
+    public class KayitController : BaseController
     {
 
         private readonly TatilDBContext Tatildb;

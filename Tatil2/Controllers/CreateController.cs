@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Tatil2.Controllers
 {
-    public class CreateController : Controller
+    public class CreateController : BaseController
     {
         private readonly TatilDBContext Tatildb;
 

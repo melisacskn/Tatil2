@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Tatil2.DBContext;
 using Tatil2.Models;
+using Tatil2.Models.DTO;
 
 namespace Tatil2.Controllers
 {
@@ -82,7 +83,13 @@ namespace Tatil2.Controllers
 
             List<Claim> claims = [
                 new Claim(ClaimTypes.Name, $"{user.Ad} {user.Soyad}"),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim("Ad", user.Ad),
+                new Claim("Soyad", user.Soyad),
+                new Claim("Mail", user.Mail),
+                new Claim("Telefon", user.Telefon),
+                new Claim("TC", user.TC),
+                new Claim("Cinsiyet", user.Cinsiyet.ToString()),
                 ];
             if (user.IsAdmin)
             {
@@ -90,6 +97,8 @@ namespace Tatil2.Controllers
             }
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Issuer = _configuration.GetValue<string>("Jwt:Issuer")!,
+                Audience = _configuration.GetValue<string>("Jwt:Issuer")!,
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
