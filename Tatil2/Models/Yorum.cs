@@ -16,7 +16,7 @@ namespace Tatil2.Models
         public string Yazi { get; set; }
         //TODO: sonra tekrar nullable işaretini kaldıralım
 
-        [Range(1, 10, ErrorMessage = "Puan 1 ile 10 arasında olmalıdır.")]
+        [Range(1, 10, ErrorMessage = "Yorumlar 1 ile 10 arasında olmalıdır.")]
         public decimal Puan { get; set; }
 
         public int OtelId { get; set; }

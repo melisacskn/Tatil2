@@ -30,7 +30,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="otelgoster" asp-action="Index">Oteller</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="oteller" asp-action="Index">Oteller</a>
 
                         </li>
                        
@@ -49,10 +49,10 @@
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
-                          @*   <li class="nav-item">
+                              <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="giris" asp-action="signIn">Giriş Yap</a>
-                            </li> *@
-                            <li class="nav-item">
+                            </li> 
+                            <li class="nav-item1">
                                 <a class="nav-link text-dark">@User.Identity.Name</a>
                             </li>
                         }

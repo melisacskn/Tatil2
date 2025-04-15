@@ -1,18 +1,134 @@
-﻿@model List<Tatil2.Models.Otel>
+﻿@model Tatil2.Models.DTO.OtelFiltreleDTO
+
+<h2>Otel Filtreleme</h2>
 
 
-@foreach (var otel in Model)
+
+<form id="otelSearchForm" method="post">
+	<div class="form-group">
+		<label for="Ara">Ara</label>
+		<input type="text" id="Ara" name="Ara" class="form-control" value="@Model.Ara" />
+	</div>
+	<div class="form-group">
+		<label for="BaslangicTarihi">Giriş Tarihi</label>
+		<input type="date" id="BaslangicTarihi" name="BaslangicTarihi" class="form-control" value="@Model.BaslangicTarihi?.ToString("yyyy-MM-dd")" required />
+	</div>
+
+	<div class="form-group">
+		<label for="BitisTarihi">Çıkış Tarihi</label>
+		<input type="date" id="BitisTarihi" name="BitisTarihi" class="form-control" value="@Model.BitisTarihi?.ToString("yyyy-MM-dd")" required />
+	</div>
+
+	<div class="form-group">
+		<label for="KisiSayisi">Kişi Sayısı</label>
+		<input type="number" id="KisiSayisi" name="KisiSayisi" class="form-control" value="@Model.KisiSayisi" min="1" />
+	</div>
+
+	<div>
+		<div>
+			<label>Tag Seçin:</label><br />
+			@if (Model.BaslangicTarihi.HasValue)
+			{
+				foreach (var tag in Model.OtelTag)
+				{
+					<label>
+						<input type="checkbox" name="tagId" value="@tag.Id"
+						@(Model.TagId != null && Model.TagId.Contains(tag.Id) ? "checked" : "") />
+						@tag.Ad
+					</label>
+					<br />
+				}
+			}
+
+		</div>
+
+		<div>
+			<label>Min Puan:</label>
+			<input type="number" name="MinPuan" step="0.1" min="0" max="10" value="@Model.MinPuan" />
+
+			<label>Max Puan:</label>
+			<input type="number" name="MaxPuan" step="0.1" min="0" max="10" value="@Model.MaxPuan" />
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-success mt-2">Filtrele</button>
+</form>
+
+<hr />
+
+
+
+
+
+<hr />
+
+<h2>Oteller</h2>
+
+@if (Model.Oteller == null || !Model.Oteller.Any())
 {
-    <div class="otel">
-        <h3>@otel.Ad</h3>
-        <img src="@otel.Poster" alt="Otel Resmi" class="img-fluid" />
-        <p><strong>Konum:</strong> @otel.Konum</p>
-        <p>@otel.Aciklama</p>
-
-        <a href="@Url.Action("incele", "Oteller", new { id = otel.Id , BaslangicTarihi =  ViewBag.BaslangicTarihi,  BitisTarihi =  ViewBag.BitisTarihi, KisiSayisi =  ViewBag.KisiSayisi})" class="btn btn-primary">İncele</a>
-
-        <hr />
-
-      
-    </div>
+	<p>Filtrenize uygun otel bulunamadı.</p>
 }
+else
+{
+	foreach (var otel in Model.Oteller)
+	{
+		<div class="otel">
+			<h3>@otel.Ad</h3>
+			<img src="@otel.Poster" alt="Otel Resmi" class="img-fluid" />
+			<p><strong>Konum:</strong> @otel.Konum</p>
+			<p>@otel.Aciklama</p>
+
+			<a href="@Url.Action("Incele", "Oteller", new { id = otel.Id, BaslangicTarihi = Model.BaslangicTarihi.Value.ToString("yyyy-MM-dd"), BitisTarihi = Model.BitisTarihi.Value.ToString("yyyy-MM-dd"), KisiSayisi = Model.KisiSayisi })" class="btn btn-primary">İncele</a>
+
+			<hr />
+		</div>
+	}
+}
+
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const today = new Date().toISOString().split('T')[0];
+		document.getElementById("BaslangicTarihi").setAttribute("min", today);
+		document.getElementById("BitisTarihi").setAttribute("min", today);
+
+		const form = document.getElementById("otelSearchForm");
+
+		form.addEventListener("submit", function (e) {
+			e.preventDefault(); // Sayfa yenilenmesini engelle
+
+			// Gerekli alanları al
+			const baslangic = document.getElementById("BaslangicTarihi").value;
+			const bitis = document.getElementById("BitisTarihi").value;
+			const kisiSayisi = document.getElementById("KisiSayisi").value;
+
+			if (!baslangic || !bitis || !kisiSayisi) {
+				alert("Lütfen Giriş Tarihi, Çıkış Tarihi ve Kişi Sayısı alanlarını doldurunuz.");
+				return;
+			}
+
+			// Form verilerini topla
+			const formData = new FormData(form);
+
+			fetch('@Url.Action("Index2", "Oteller")', {
+				method: 'POST',
+				body: formData,
+			})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("İşlem başarısız.");
+				}
+				// return response.text(); // veya response.json() bekliyorsan
+			})
+			// .then(data => {
+			// 	// Geri dönen HTML'i ya da sonucu DOM'a ekle
+			// 	// Örneğin:
+			// 	document.body.innerHTML = data;
+			}/* ) */
+			.catch(error => {
+				console.error("Hata:", error);
+				alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+			});
+		});
+	});
+</script>
