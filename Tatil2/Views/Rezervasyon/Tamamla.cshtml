@@ -1,0 +1,124 @@
+﻿@model Tatil2.Models.DTO.RezervasyonTamamlaDTO
+
+@{
+    ViewBag.Title = "Rezervasyonu Tamamla";
+    var bugun = DateTime.Now.ToString("yyyy-MM");
+}
+
+<h2>Rezervasyon Detayları</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+<div class="alert alert-info">
+    <strong>Otel:</strong> @Model.Oda?.Otel?.Ad <br />
+    <strong>Oda:</strong> @Model.Oda?.OdaAd <br />
+    <strong>Tarih:</strong> @Model.BaslangicTarihi.ToShortDateString() - @Model.BitisTarihi.ToShortDateString() <br />
+    <strong>Kişi Sayısı:</strong> @Model.KisiSayisi
+</div>
+
+<hr />
+
+<h3>Misafir Bilgileri</h3>
+<form id="rezervasyonForm" method="post">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.OdaId)
+    @Html.HiddenFor(m => m.BaslangicTarihi)
+    @Html.HiddenFor(m => m.BitisTarihi)
+    @Html.HiddenFor(m => m.KisiSayisi)
+
+    <div id="misafir-alani">
+        @for (int i = 0; i < Model.KisiSayisi; i++)
+        {
+            <fieldset class="border p-3 mb-3">
+                <legend>Misafir @(i + 1)</legend>
+                <div class="form-group">
+                    <label>Ad</label>
+                    <input type="text" name="MisafirBilgileri[@i].Ad" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].Ad", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Soyad</label>
+                    <input type="text" name="MisafirBilgileri[@i].Soyad" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].Soyad", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Doğum Tarihi</label>
+                    <input type="date" name="MisafirBilgileri[@i].DogumTarihi" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].DogumTarihi", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Cinsiyet</label><br />
+                    <input type="radio" name="MisafirBilgileri[@i].Cinsiyet" value="true" required /> Erkek
+                    <input type="radio" name="MisafirBilgileri[@i].Cinsiyet" value="false" required /> Kadın
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].Cinsiyet", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>TC Kimlik No</label>
+                    <input type="text" name="MisafirBilgileri[@i].TC" maxlength="11" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].TC", "", new { @class = "text-danger" })
+                </div>
+            </fieldset>
+        }
+    </div>
+
+    <hr />
+    <h3>Ödeme Bilgileri</h3>
+    <div class="form-group">
+        <label>Kart Sahibi Adı</label>
+        <input type="text" name="KartSahibiAdi" required class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Kart Numarası</label>
+        <input type="text" name="KartNo" required class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Son Kullanma Tarihi</label>
+        @* <input type="month" name="KartTarih" class="form-control" required min="@bugun" /> *@
+        <input type="text" placeholder="Örn: 11/25" name="KartTarih" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>CVV</label>
+        <input type="text" name="Cvv" class="form-control" required maxlength="5" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Rezervasyonu Tamamla</button>
+</form>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("rezervasyonForm");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Formun normal gönderimini engelle
+
+                const formData = new FormData(form);
+
+                fetch('@Url.Action("Tamamla", "Rezervasyon")', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json()) // Gelen veriyi JSON olarak al
+                .then(data => {
+                    if (!data.isSuccess) {
+                        alert(data.message || "Bir hata oluştu.");
+                    } else {
+                        alert("Rezervasyon yapıldı!");
+                    }
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                    alert("Bir hata oluştu.");
+                });
+            });
+        });
+    </script>
+}

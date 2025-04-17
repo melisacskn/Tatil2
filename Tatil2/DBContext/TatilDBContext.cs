@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tatil2.Models;
+using Tatil2.Models.DTO;
 
 namespace Tatil2.DBContext
 {
     public class TatilDBContext : DbContext
     {
-           
-            
-
-            public TatilDBContext(DbContextOptions<TatilDBContext> options) : base(options) { }
+        public TatilDBContext(DbContextOptions<TatilDBContext> options) : base(options) { }
 
         public DbSet<Musteri> Musteri { get; set; }
         public DbSet<Otel> Otel { get; set; }
@@ -20,15 +18,23 @@ namespace Tatil2.DBContext
         public DbSet<Oda> Oda { get; set; }
         public DbSet<Rezervasyon> Rezervasyon { get; set; }
         public DbSet<Yorum> Yorum { get; set; }
+        public DbSet<MisafirBilgileri> MisafirBilgileri { get; set; }
+        //public DbSet<RezervasyonTamamlaDTO> RezervasyonTamamlaDTO { get; set; }
 
+        // OnConfiguring metodunda zaman aşımı ayarını yapıyoruz
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                // Bağlantı dizesi ve zaman aşımı ayarı
+                optionsBuilder.UseSqlServer(
+                    "YourConnectionString", // Buraya kendi bağlantı dizesini ekleyin
+                    sqlOptions => sqlOptions.CommandTimeout(180) // 180 saniye zaman aşımı
+                );
+            }
+        }
 
-
-
-
-
-
-
-            protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
@@ -47,36 +53,7 @@ namespace Tatil2.DBContext
             modelBuilder.Entity<Rezervasyon>()
                 .Property(x => x.BitisTarihi)
                 .HasColumnType("smalldatetime");
-            //modelBuilder.Entity<Otel>()
-            //    .HasMany(x => x.Odalar)
-            //    .WithOne(x => x.Otel)
-            //    .HasForeignKey(x => x.OtelId);
 
-            //modelBuilder.Entity<OtelTag>()
-            //    .HasOne(ot => ot.Otel)
-            //    .WithMany()  // Otel modeline eklenmiş bir koleksiyon varsa, ona referans vermelisiniz
-            //    .HasForeignKey(ot => ot.OtelId);
-
-            //modelBuilder.Entity<OtelTag>()
-            //    .HasOne(ot => ot.Tag)
-            //    .WithMany()  // Tag modeline eklenmiş bir koleksiyon varsa, ona referans vermelisiniz
-            //    .HasForeignKey(ot => ot.TagId);
-
-            //// Otel ve TagKategori arasında çoktan çoğa ilişkiyi tanımlıyoruz
-            //modelBuilder.Entity<OtelTagKategori>()
-            //    .HasKey(otk => new { otk.OtelId, otk.TagKategoriId });
-
-            //modelBuilder.Entity<OtelTagKategori>()
-            //    .HasOne(otk => otk.Otel)
-            //    .WithMany(o => o.OtelTagKategoriler)
-            //    .HasForeignKey(otk => otk.OtelId);
-
-            //modelBuilder.Entity<OtelTagKategori>()
-            //    .HasOne(otk => otk.TagKategori)
-            //    .WithMany(t => t.OtelTagKategoriler)
-            //    .HasForeignKey(otk => otk.TagKategoriId);
         }
-
-
     }
 }

@@ -1,4 +1,4 @@
-using System.Net;
+ï»¿using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,37 +6,34 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Tatil2;
-using Tatil2.DBContext; // Konsol loglama için gerekli namespace
+using Tatil2.DBContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Logging yapýlandýrmasýný ekleyin
+// Logging
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole();  // Konsola loglama ekleyin
+builder.Logging.AddConsole();
 
-// DbContext'inizi ekleyin
+// DbContext
 builder.Services.AddDbContext<TatilDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//// Diðer servis eklemeleri...
-//builder.Services.AddSession(options =>
-//{
-//    options.Cookie.Name = ".Tatil2.Session"; // Çerez adý
-//    options.IdleTimeout = TimeSpan.FromMinutes(30); // Oturum süresi
-//    options.Cookie.IsEssential = true; // Çerezlerin zorunlu olduðu durum
-//    options.Cookie.HttpOnly = true;
-//});
+// âœ… Gerekli: Session iÃ§in memory cache
+builder.Services.AddDistributedMemoryCache();
 
-//// Authentication yapýlandýrmasý
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(options =>
-//    {
-//        options.LoginPath = "/giris/SignIn";
-//        options.LogoutPath = "/giris/SignOut";
-//    });
+// âœ… Session yapÄ±landÄ±rmasÄ±
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".Tatil2.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.IsEssential = true;
+    options.Cookie.HttpOnly = true;
+});
 
+// âœ… EÄŸer Session'da HttpContext'e eriÅŸiyorsan
+builder.Services.AddHttpContextAccessor();
 
-// TODO: loginde kullanýlýyo, araþtýr
+// JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,15 +49,13 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Issuer"],
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        //ValidAudience = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
 
-// Localization (Dil desteði) yapýlandýrmasý
+// Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[] { "tr-TR", "en-US" };
@@ -69,16 +64,15 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
            .AddSupportedUICultures(supportedCultures);
 });
 
-// MVC veya Razor Pages kullanýyorsanýz ilgili servisleri ekleyin
-builder.Services.AddControllersWithViews();  // Eðer sadece View kullanacaksanýz
+// MVC
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Dil ayarlarýný kullanmaya baþlamak
+// Localization kullanÄ±mÄ±
 var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
 app.UseRequestLocalization(localizationOptions);
 
-// Error handling for non-development environments
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -86,28 +80,27 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//app.UseSession();
 app.UseStaticFiles();
 
+// âœ… Session middleware'i aktif et
+app.UseSession();
+
+// JWT Cookie â†’ Header dÃ¶nÃ¼ÅŸÃ¼m middleware'in (Ã¶zelleÅŸtirilmiÅŸse)
 app.UseMiddleware<JwtCookieToHeaderMiddleware>();
 
 app.UseStatusCodePages(async context =>
 {
-    //var request = context.HttpContext.Request;
     var response = context.HttpContext.Response;
-
     if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
     {
         response.Redirect("/giris/signIn");
     }
 });
 
-// Authentication ve Authorization sýrasýyla kullanýlmalý
-app.UseAuthentication();  // Kullanýcý doðrulamasý
-app.UseAuthorization();  // Yetkilendirme iþlemi
+app.UseAuthentication();
+app.UseAuthorization();
 
-
-// MVC veya Razor Pages iþlemleri
+// Route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

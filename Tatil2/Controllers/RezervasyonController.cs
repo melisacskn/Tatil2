@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NuGet.Packaging;
 using Tatil2.DBContext;
 using Tatil2.Models;
 using Tatil2.Models.DTO;
@@ -17,7 +18,6 @@ namespace Tatil2.Controllers
             Tatildb = tatilDB;
         }
 
-        
         [HttpGet]
         public IActionResult Rezervasyon([FromQuery] RezervasyonDTO rezervasyon)
         {
@@ -31,6 +31,7 @@ namespace Tatil2.Controllers
             return View(rezervasyon);
         }
 
+
         [HttpGet]
         public JsonResult Oda(int odaId, DateTime baslangic, DateTime bitis)
         {
@@ -42,20 +43,26 @@ namespace Tatil2.Controllers
             return Json(new { musait = !odaDolu });
         }
 
-        [Authorize]
+
         [HttpGet]
         public IActionResult YorumYap(int odaId)
         {
+            string userJson = HttpContext.Session.GetString("login");
+            if (string.IsNullOrEmpty(userJson))
+                return RedirectToAction("SignIn", "Giris");
+
+            var user = JsonConvert.DeserializeObject<Musteri>(userJson);
             var oda = Tatildb.Oda.FirstOrDefault(o => o.Id == odaId);
 
             if (oda == null)
                 return NotFound();
 
             ViewBag.Oda = oda;
-            ViewBag.KullaniciAdi = base.Musteri.Ad;
+            ViewBag.KullaniciAdi = user.Ad;
 
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -71,7 +78,7 @@ namespace Tatil2.Controllers
             if (oda == null)
                 return NotFound();
 
-            // Giriş validasyonları
+
             if (string.IsNullOrWhiteSpace(yorumMetni) || yorumMetni.Length < 3 || yorumMetni.Length > 100 || puan < 1 || puan > 10)
             {
                 TempData["ErrorMessage"] = "Yorum ya da puan alanı hatalı. Lütfen kontrol ediniz.";
@@ -94,7 +101,7 @@ namespace Tatil2.Controllers
             return RedirectToAction("Rezervasyon", new RezervasyonDTO { OdaId = oda.Id });
         }
 
-        // ODA DETAY SAYFASI
+
         public IActionResult OdaDetay(int odaId)
         {
             var oda = Tatildb.Oda.FirstOrDefault(o => o.Id == odaId);
@@ -113,42 +120,133 @@ namespace Tatil2.Controllers
             return View();
         }
 
-        // REZERVASYON OLUŞTUR - POST
+
+        //[HttpPost]
+        //public IActionResult Rezervasyon(RezervasyonCreateDTO model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Json(new { Message = "Giriş bilgilerini kontrol ediniz" });
+        //    }
+
+        //    try
+        //    {
+        //        string userJson = HttpContext.Session.GetString("login");
+        //        if (string.IsNullOrWhiteSpace(userJson))
+        //            return Json(new { Message = "Oturum süresi doldu, lütfen tekrar giriş yapınız." });
+
+        //        var user = JsonConvert.DeserializeObject<Musteri>(userJson);
+
+        //        Rezervasyon rezervasyon = new Rezervasyon
+        //        {
+        //            MusteriId = user.Id,
+        //            OdaId = model.OdaId,
+        //            BaslangicTarihi = model.BaslangicTarihi,
+        //            BitisTarihi = model.BitisTarihi
+        //        };
+
+        //        Tatildb.Rezervasyon.Add(rezervasyon);
+        //        Tatildb.SaveChanges();
+
+        //        TempData["SuccessMessage"] = "Rezervasyonunuz başarıyla tamamlandı!";
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Rezervasyon hatası: {ex.Message}");
+        //        return Json(new { Message = "Rezervasyon işlemi sırasında bir hata oluştu." });
+        //    }
+        //}
+
+
+        [HttpGet]
+        public IActionResult Tamamla(int odaId, DateTime baslangic, DateTime bitis, int kisiSayisi)
+        {
+            var oda = Tatildb.Oda.Include(o => o.Otel).FirstOrDefault(o => o.Id == odaId);
+            if (oda == null) return NotFound();
+
+            var viewModel = new RezervasyonTamamlaDTO
+            {
+                OdaId = oda.Id,
+                Oda = oda,
+                BaslangicTarihi = baslangic,
+                KisiSayisi = kisiSayisi,
+                BitisTarihi = bitis,
+                MusteriId = base.Musteri.Id,
+                MisafirBilgileri = new List<MisafirBilgileri>()
+            };
+
+            for (int i = 0; i < kisiSayisi; i++)
+            {
+                viewModel.MisafirBilgileri.Add(new MisafirBilgileri());
+            }
+
+            return View(viewModel);
+        }
+
+        [Authorize]
         [HttpPost]
-        public IActionResult Rezervasyon(RezervasyonCreateDTO model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Tamamla(RezervasyonCreateDTO model)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { Message = "Giriş bilgilerini kontrol ediniz" });
+                TempData["ErrorMessage"] = "Lütfen tüm alanları eksiksiz doldurun.";
+                return Json(new
+                {
+                    isSuccess = false,
+                    message = "Lütfen tüm alanları eksiksiz doldurun."
+                });
             }
 
             try
             {
-                string userJson = HttpContext.Session.GetString("login");
-                if (string.IsNullOrWhiteSpace(userJson))
-                    return Json(new { Message = "Oturum süresi doldu, lütfen tekrar giriş yapınız." });
 
-                var user = JsonConvert.DeserializeObject<Musteri>(userJson);
-
-                Rezervasyon rezervasyon = new Rezervasyon
+                var rezervasyon = new Rezervasyon
                 {
-                    MusteriId = user.Id,
+                    MusteriId = base.Musteri.Id,
                     OdaId = model.OdaId,
                     BaslangicTarihi = model.BaslangicTarihi,
-                    BitisTarihi = model.BitisTarihi
+                    BitisTarihi = model.BitisTarihi,
                 };
 
+                //Tatildb.SaveChanges();
+
+                //TODO: Misafir bilgileri sayısı ile kişi sayısı eşleşmeli
+                var misafirBilgileri = new List<MisafirBilgileri>();
+
+                foreach (var misafir in model.MisafirBilgileri)
+                {
+                    var misafirBilgi = new MisafirBilgileri
+                    {
+                        Ad = misafir.Ad,
+                        Soyad = misafir.Soyad,
+                        TC = misafir.TC,
+                        DogumTarihi = misafir.DogumTarihi,
+                        Cinsiyet = misafir.Cinsiyet,
+                        //RezervasyonId = rezervasyon.Id,
+                    };
+                    misafirBilgileri.Add(misafirBilgi);
+                    //Tatildb.MisafirBilgileri.Add(misafirBilgi);
+                }
+                rezervasyon.MisafirBilgileri.AddRange(misafirBilgileri);
                 Tatildb.Rezervasyon.Add(rezervasyon);
                 Tatildb.SaveChanges();
 
-                TempData["SuccessMessage"] = "Rezervasyonunuz başarıyla tamamlandı!";
+                TempData["SuccessMessage"] = "Rezervasyonunuz başarıyla kaydedildi!";
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Rezervasyon hatası: {ex.Message}");
-                return Json(new { Message = "Rezervasyon işlemi sırasında bir hata oluştu." });
+                TempData["ErrorMessage"] = "Rezervasyon kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.";
+                return Json(new
+                {
+                    isSuccess = false,
+                    message = "Rezervasyon kaydedilirken bir hata oluştu. Lütfen tekrar deneyin."
+                });
             }
         }
+
     }
 }
+

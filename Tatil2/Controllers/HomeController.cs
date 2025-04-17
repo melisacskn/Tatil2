@@ -22,10 +22,13 @@ namespace Tatil2.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            //var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = base.Musteri.Id;
+
             var gecmisRezervasyonlar = Tatildb.Rezervasyon
-                    .Include(r => r.Oda)
                     .Where(r => r.MusteriId == userId)
+                    .Include(r => r.Oda)
                     .OrderByDescending(r => r.BitisTarihi)
                     .ToList();
             ViewBag.GecmisRezervasyonlar = gecmisRezervasyonlar;

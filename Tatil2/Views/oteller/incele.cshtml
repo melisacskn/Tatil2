@@ -1,115 +1,88 @@
 ﻿@model List<Tatil2.Models.Oda>
 
-@* <h1>@Model.Ad</h1>
-
-<div>
-    <img src="@Model.Poster" alt="@Model.Ad" class="img-fluid" />
-    <p><strong>Konum:</strong> @Model.Konum</p>
-    <p><strong>Açıklama:</strong> @Model.Aciklama</p>
-    <p><strong>İlçe:</strong> @Model.İlce.Ad</p>
-    
-</div> *@
-
 <h2>Odalar</h2>
-
 
 @if (Model != null && Model.Any())
 {
-    <ul>
-        @foreach (var Oda in Model)
-        {
-            <li>
-                <h3>@Oda.OdaAd</h3>
-                @if (!string.IsNullOrEmpty(Oda.OdaFoto))
-                {
-                    <img src="@Oda.OdaFoto" alt="@Oda.OdaAd" class="img-fluid" />
-                }    
-                <p><strong>Açıklama:</strong> @Oda.OdaAciklama</p>
-                <p><strong>Fiyat:</strong> @Oda.OdaFiyat</p>
-                <p><strong>Kapasite:</strong> @Oda.KisiSayisi</p>
-               
+	<ul>
+		@foreach (var Oda in Model)
+		{
+			<li>
+				<h3>@Oda.OdaAd</h3>
+				@if (!string.IsNullOrEmpty(Oda.OdaFoto))
+				{
+					<img src="@Oda.OdaFoto" alt="@Oda.OdaAd" class="img-fluid" />
+				}
+				<p><strong>Açıklama:</strong> @Oda.OdaAciklama</p>
+				<p><strong>Fiyat:</strong> @Oda.OdaFiyat</p>
+				<p><strong>Kapasite:</strong> @Oda.KisiSayisi</p>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="SelectedOdaId" value="@Oda.Id" id="oda_@Oda.Id">
-                    <label class="form-check-label" for="oda_@Oda.Id">
-                        Bu odayı seç
-                    </label>
-                </div>
-            </li>
-        }
-    </ul>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="SelectedOdaId" value="@Oda.Id" id="oda_@Oda.Id">
+					<label class="form-check-label" for="oda_@Oda.Id">
+						Bu odayı seç
+					</label>
+				</div>
+			</li>
+		}
+	</ul>
 }
 else
 {
-    <p>Bu otelde henüz oda bilgisi bulunmamaktadır.</p>
+	<p>Bu otelde henüz oda bilgisi bulunmamaktadır.</p>
 }
 
 <p id="hataMesaji" class="text-danger" style="display: none;">Bu tarihlerde oda müsait değil, lütfen başka bir tarih seçin.</p>
 
-<script>
-       document.addEventListener("DOMContentLoaded", function () {
-        const rezervasyonButon = document.getElementById("rezervasyonButon");
-        const hataMesaji = document.getElementById("hataMesaji");
-
-        
-        document.querySelectorAll('input[name="SelectedOdaId"]').forEach(odaSecim => {
-            odaSecim.addEventListener("change", checkAvailability);
-        });
-
-        
-        document.getElementById("rezervasyonLink").addEventListener("click", function(e) {
-            e.preventDefault();  
-
-            
-            const odaId = document.querySelector('input[name="SelectedOdaId"]:checked')?.value;
-
-            if (odaId) {
-               
-                const url = `@Url.Action("Rezervasyon", "Rezervasyon")?OdaId=${odaId}&BaslangicTarihi=@ViewBag.BaslangicTarihi&BitisTarihi=@ViewBag.BitisTarihi`;
-
-              
-                window.location.href = url;
-            } else {
-                alert("Lütfen bir oda seçin.");
-            }
-        });
-
-        function checkAvailability() {
-            const odaId = document.querySelector('input[name="SelectedOdaId"]:checked')?.value;
-
-            if (odaId) {
-                document.getElementById("rezervasyonLink").classList.remove("disabled");
-            } else {
-                document.getElementById("rezervasyonLink").classList.add("disabled");
-            }
-
-          
-            if (!odaId) {
-                rezervasyonButon.style.display = "none";
-                hataMesaji.style.display = "none";
-                return;
-            }
-
-           
-            fetch(`/Rezervasyon/OdaMusaitMi?odaId=${odaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.musait) {
-                        rezervasyonButon.style.display = "inline-block";
-                        hataMesaji.style.display = "none";
-                    } else {
-                        rezervasyonButon.style.display = "none";
-                        hataMesaji.style.display = "block";
-                    }
-                });
-        }
-    });
-
-
-</script>
-
-
-
-
 <a href="#" id="rezervasyonLink" class="btn btn-primary">Rezervasyon Yap</a>
-<a href="@Url.Action("Index", "Oteller")" class="btn btn-primary">Geri Dön</a>
+<a href="@Url.Action("Index", "Oteller")" class="btn btn-secondary">Geri Dön</a>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const rezervasyonLink = document.getElementById("rezervasyonLink");
+		const hataMesaji = document.getElementById("hataMesaji");
+
+		document.querySelectorAll('input[name="SelectedOdaId"]').forEach(odaSecim => {
+			odaSecim.addEventListener("change", checkAvailability);
+		});
+
+		rezervasyonLink.addEventListener("click", function (e) {
+			e.preventDefault();
+
+			const odaId = document.querySelector('input[name="SelectedOdaId"]:checked')?.value;
+
+			if (odaId) {
+				const baslangic = "@ViewBag.BaslangicTarihi";
+				const bitis = "@ViewBag.BitisTarihi";
+				const kisiSayisi = "@ViewBag.KisiSayisi";
+
+				const url = `/Rezervasyon/Tamamla?odaId=${odaId}&baslangic=${baslangic}&bitis=${bitis}&kisiSayisi=${kisiSayisi}`;
+				window.location.href = url;
+			} else {
+				alert("Lütfen bir oda seçin.");
+			}
+		});
+
+		function checkAvailability() {
+			const odaId = document.querySelector('input[name="SelectedOdaId"]:checked')?.value;
+
+			if (!odaId) {
+				rezervasyonLink.classList.add("disabled");
+				hataMesaji.style.display = "none";
+				return;
+			}
+
+			fetch(`/Rezervasyon/OdaMusaitMi?odaId=${odaId}`)
+				.then(response => response.json())
+				.then(data => {
+					if (data.musait) {
+						rezervasyonLink.classList.remove("disabled");
+						hataMesaji.style.display = "none";
+					} else {
+						rezervasyonLink.classList.add("disabled");
+						hataMesaji.style.display = "block";
+					}
+				});
+		}
+	});
+</script>

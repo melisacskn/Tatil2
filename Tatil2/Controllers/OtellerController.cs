@@ -24,7 +24,8 @@ namespace Tatil2.Controllers
             var odalar = Tatildb.Oda
                             .Where(x => x.OtelId == id)
                             .Where(oda =>
-                  oda.KisiSayisi >= KisiSayisi && oda.Rezervasyon.Count(r => (r.BitisTarihi < BaslangicTarihi && r.BaslangicTarihi > BitisTarihi)) < oda.OdaStok)
+                  oda.KisiSayisi >= KisiSayisi && oda.Rezervasyon.Count(r => r.BitisTarihi > BaslangicTarihi && r.BaslangicTarihi < BitisTarihi) < oda.OdaStok)
+
 
                            .ToList();
 
@@ -34,6 +35,7 @@ namespace Tatil2.Controllers
             }
             ViewBag.BaslangicTarihi = BaslangicTarihi.ToString("yyyy-MM-dd");
             ViewBag.BitisTarihi = BitisTarihi.ToString("yyyy-MM-dd");
+            ViewBag.KisiSayisi = KisiSayisi;
 
 
             return View(odalar);

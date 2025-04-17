@@ -1,0 +1,32 @@
+﻿@model Tatil2.Models.Oda
+
+@{
+    ViewData["Title"] = "Oda Detayı";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="oda-detay">
+    <h3>@ViewBag.Oda.Ad</h3>
+    <p><strong>Fiyat:</strong> @ViewBag.Oda.Fiyat.ToString("C")</p>
+    <p><strong>Açıklama:</strong> @ViewBag.Oda.Aciklama</p>
+    <img src="@ViewBag.Oda.Resim" alt="@ViewBag.Oda.Ad" class="oda-resim" />
+
+    <h4>Yorumlar</h4>
+
+    @if (ViewBag.Yorumlar != null && ViewBag.Yorumlar.Any())
+    {
+        foreach (var yorum in ViewBag.Yorumlar)
+        {
+                    <div class="yorum">
+                        <h5>@yorum.Musteri.Ad @yorum.Musteri.Soyad</h5>
+                        <p>@yorum.Icerik</p>
+                        <p><strong>Puan:</strong> @yorum.Puan</p>
+                    </div>
+        }
+    }
+    else
+    {
+            <p>Henüz yorum yapılmamış.</p>
+    }
+</div>

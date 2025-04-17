@@ -14,7 +14,6 @@ namespace Tatil2.Models
         [Required]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Yorum en az 3, en fazla 100 karakter olmalıdır.")]
         public string Yazi { get; set; }
-        //TODO: sonra tekrar nullable işaretini kaldıralım
 
         [Range(1, 10, ErrorMessage = "Yorumlar 1 ile 10 arasında olmalıdır.")]
         public decimal Puan { get; set; }

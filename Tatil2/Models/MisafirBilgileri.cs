@@ -12,5 +12,7 @@ namespace Tatil2.Models
         [ForeignKey(nameof(RezervasyonId))]
         public Rezervasyon Rezervasyon { get; set; }
         public int RezervasyonId { get; set; }
+        public string TC { get; set; }
+        
     }
 }

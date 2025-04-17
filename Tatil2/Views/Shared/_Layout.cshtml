@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Tatil2</title>
+    <title>@ViewData["Title"] STELLAR STAY </title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -12,6 +12,26 @@
     <link rel="stylesheet" href="~/css/yazi.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/otelgoster.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/rezerve.css" asp-append-version="true" />
+
+    <script type="text/javascript">
+      
+        var titles = ["En iyi Rezervasyon Sitesi", "@ViewData["Title"]  STELLAR STAY"];
+        var currentIndex = 0;
+
+      
+        function changeTitle() {
+          
+            document.title = titles[currentIndex];
+
+           
+            currentIndex = (currentIndex + 1) % titles.length;
+        }
+
+      
+        window.onload = function() {
+            setInterval(changeTitle, 5000);
+        };
+    </script>
 </head>
 <body>
     <header>
@@ -31,15 +51,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="oteller" asp-action="Index">Oteller</a>
-
                         </li>
-                       
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="İndirim" asp-action="index">Fırsatlar</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Create" asp-action="OtelCreate">Otel ekle</a>
-
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="hakkimizda" asp-action="bilgi">Hakkımızda</a>
@@ -49,7 +66,7 @@
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
-                              <li class="nav-item">
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="giris" asp-action="signIn">Giriş Yap</a>
                             </li> 
                             <li class="nav-item1">
@@ -62,9 +79,8 @@
         </nav>
     </header>
 
-   
     <div class="scrolling-text">
-        <p>Erken Rezarvasyon Fırsatlarından Yararlanın! </p>
+        <p>Erken Rezarvasyon Fırsatlarından Yararlanın!</p>
     </div>
 
     <div class="container">
