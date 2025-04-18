@@ -22,7 +22,7 @@ namespace Tatil2.Models
 
         // Odalar'ı ekliyoruz
         public List<OdaCreateDTO> Odalar { get; set; }
-        public List<int> SelectedTagId { get; set; }
+        public List<int> SelectedTagId { get; set; } 
         public DateOnly BaslangicTarihi { get; set; }
         public DateOnly BitisTarihi { get; set; }
 

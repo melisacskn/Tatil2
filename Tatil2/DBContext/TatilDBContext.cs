@@ -26,10 +26,10 @@ namespace Tatil2.DBContext
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Bağlantı dizesi ve zaman aşımı ayarı
+               
                 optionsBuilder.UseSqlServer(
-                    "YourConnectionString", // Buraya kendi bağlantı dizesini ekleyin
-                    sqlOptions => sqlOptions.CommandTimeout(180) // 180 saniye zaman aşımı
+                    "YourConnectionString",
+                    sqlOptions => sqlOptions.CommandTimeout(180) 
                 );
             }
         }

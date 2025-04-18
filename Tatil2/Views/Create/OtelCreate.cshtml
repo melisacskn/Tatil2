@@ -122,26 +122,25 @@
 @section Scripts {
 	<script>
 				function Submit(event) {
-			// Formun submit işlemini engelle
+		
 			event.preventDefault();
 
-			// Form elemanını al
+			
 			const form = event.target;
 
-			// FormData nesnesi ile form verilerini al
 			const formData = new FormData(form);
 
-			// AJAX ile formu gönder
+		
 			fetch('@Url.Action("OtelCreate", "Create")', {
 				method: 'POST',
-				body: formData, // FormData nesnesini doğrudan gönderiyoruz
+				body: formData, 
 			})
 			.then(response => {
 				if (!response.ok) {
 					throw new Error("Ağ isteği başarısız.");
 				}
 				alert("Otel başarıyla eklendi!");
-				// İsterseniz burada formu sıfırlayabilir ya da başka işlemler yapabilirsiniz
+				
 			})
 			.catch(error => {
 				console.error('Hata:', error);

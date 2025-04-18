@@ -123,3 +123,54 @@
         .reservation-button button:hover {
             background-color: #0056b3;
         }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+}
+
+thead {
+    background-color: #3d2224;
+
+    color: white;
+}
+
+    thead th {
+        padding: 12px 25px;
+        text-align: left;
+        font-size: 16px;
+        border-bottom: 2px solid #aad665;
+    }
+
+tbody tr {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+tbody td {
+    padding: 10px 15px;
+    font-size: 15px;
+    color: #3d2224;
+}
+
+.btn-primary {
+    background-color: #aad665;
+    color: #3d2224;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #96bb56;
+    }

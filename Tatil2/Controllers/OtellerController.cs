@@ -128,9 +128,8 @@ namespace Tatil2.Controllers
                oda.KisiSayisi >= otelFiltreleDTO.KisiSayisi && oda.Rezervasyon.Count(r => (r.BitisTarihi < otelFiltreleDTO.BaslangicTarihi && r.BaslangicTarihi > otelFiltreleDTO.BitisTarihi)) < oda.OdaStok
              ))
                   .Include(o => o.İlce)
-                  .Include(o => o.Odalar)
-                  //.ToList()
-                  ;
+                  .Include(o => o.Odalar);
+                  
 
             // Tüm tagları al
             var otelTag = await Tatildb.Tag.ToListAsync();

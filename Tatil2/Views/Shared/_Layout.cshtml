@@ -46,15 +46,11 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="oteller" asp-action="Index">Oteller</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="İndirim" asp-action="index">Fırsatlar</a>
-                        </li>
+                      
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Create" asp-action="OtelCreate">Otel ekle</a>
                         </li>
@@ -66,6 +62,9 @@
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Profil</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="giris" asp-action="signIn">Giriş Yap</a>
                             </li> 

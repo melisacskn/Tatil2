@@ -55,7 +55,7 @@ namespace Tatil2.Controllers
             var sehirList = Tatildb.Sehir.ToList();
             ViewBag.Sehirler = sehirList;
 
-            var tagKategoriList = Tatildb.TagKategori.Include(tk => tk.Tag).ToList(); // İlişkili Tag'lerle birlikte
+            var tagKategoriList = Tatildb.TagKategori.Include(tk => tk.Tag).ToList(); 
             ViewBag.TagKategori = tagKategoriList;
 
             return View();
@@ -123,7 +123,7 @@ namespace Tatil2.Controllers
                                     KisiSayisi = oda.KisiSayisi,
                                     OdaStok = oda.OdaStok,
                                     OtelId = otel.Id,
-                                };
+                                };   
 
                                 if (oda.OdaFoto != null)
                                 {

@@ -18,18 +18,7 @@ namespace Tatil2.Controllers
             Tatildb = tatilDB;
         }
 
-        [HttpGet]
-        public IActionResult Rezervasyon([FromQuery] RezervasyonDTO rezervasyon)
-        {
-            var yorumlar = Tatildb.Yorum
-                .Where(y => y.OdaId == rezervasyon.OdaId)
-                .Include(y => y.Musteri)
-                .ToList();
-
-            ViewBag.Yorumlar = yorumlar;
-
-            return View(rezervasyon);
-        }
+      
 
 
         [HttpGet]
@@ -43,53 +32,41 @@ namespace Tatil2.Controllers
             return Json(new { musait = !odaDolu });
         }
 
-
         [HttpGet]
-        public IActionResult YorumYap(int odaId)
+        public IActionResult Rezervasyon([FromQuery] RezervasyonDTO rezervasyon)
         {
-            string userJson = HttpContext.Session.GetString("login");
-            if (string.IsNullOrEmpty(userJson))
-                return RedirectToAction("SignIn", "Giris");
+            var yorumlar = Tatildb.Yorum
+                .Where(y => y.OdaId == rezervasyon.OdaId)
+                .Include(y => y.Musteri)
+                .ToList();
 
-            var user = JsonConvert.DeserializeObject<Musteri>(userJson);
-            var oda = Tatildb.Oda.FirstOrDefault(o => o.Id == odaId);
+            ViewBag.Yorumlar = yorumlar;
 
-            if (oda == null)
-                return NotFound();
-
-            ViewBag.Oda = oda;
-            ViewBag.KullaniciAdi = user.Ad;
-
-            return View();
+            return View(rezervasyon);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> YorumYap(int odaId, string yorumMetni, int puan)
         {
-            string userJson = HttpContext.Session.GetString("login");
-            if (string.IsNullOrEmpty(userJson))
+            if (Musteri == null) 
                 return RedirectToAction("SignIn", "Giris");
 
-            var user = JsonConvert.DeserializeObject<Musteri>(userJson);
             var oda = await Tatildb.Oda.FirstOrDefaultAsync(o => o.Id == odaId);
-
             if (oda == null)
                 return NotFound();
-
 
             if (string.IsNullOrWhiteSpace(yorumMetni) || yorumMetni.Length < 3 || yorumMetni.Length > 100 || puan < 1 || puan > 10)
             {
                 TempData["ErrorMessage"] = "Yorum ya da puan alanı hatalı. Lütfen kontrol ediniz.";
-                return RedirectToAction("YorumYap", new { odaId });
+                return RedirectToAction("Rezervasyon", new { OdaId = odaId });
             }
 
             var yorum = new Yorum
             {
                 OdaId = oda.Id,
                 OtelId = oda.OtelId,
-                MusteriId = user.Id,
+                MusteriId = Musteri.Id,
                 Yazi = yorumMetni,
                 Puan = puan
             };
@@ -98,27 +75,16 @@ namespace Tatil2.Controllers
             await Tatildb.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Yorumunuz başarıyla kaydedildi.";
-            return RedirectToAction("Rezervasyon", new RezervasyonDTO { OdaId = oda.Id });
+            return RedirectToAction("Rezervasyon", new RezervasyonDTO
+            {
+                OdaId = oda.Id,
+                BaslangicTarihi = DateTime.Now, 
+                BitisTarihi = DateTime.Now.AddDays(1)
+            });
         }
 
 
-        public IActionResult OdaDetay(int odaId)
-        {
-            var oda = Tatildb.Oda.FirstOrDefault(o => o.Id == odaId);
 
-            if (oda == null)
-                return NotFound();
-
-            var yorumlar = Tatildb.Yorum
-                .Where(y => y.OdaId == odaId)
-                .Include(y => y.Musteri)
-                .ToList();
-
-            ViewBag.Oda = oda;
-            ViewBag.Yorumlar = yorumlar;
-
-            return View();
-        }
 
 
         //[HttpPost]
@@ -183,6 +149,8 @@ namespace Tatil2.Controllers
 
             return View(viewModel);
         }
+       
+
 
         [Authorize]
         [HttpPost]
@@ -224,11 +192,10 @@ namespace Tatil2.Controllers
                         TC = misafir.TC,
                         DogumTarihi = misafir.DogumTarihi,
                         Cinsiyet = misafir.Cinsiyet,
-                        //RezervasyonId = rezervasyon.Id,
                     };
                     misafirBilgileri.Add(misafirBilgi);
-                    //Tatildb.MisafirBilgileri.Add(misafirBilgi);
                 }
+
                 rezervasyon.MisafirBilgileri.AddRange(misafirBilgileri);
                 Tatildb.Rezervasyon.Add(rezervasyon);
                 Tatildb.SaveChanges();
@@ -238,13 +205,16 @@ namespace Tatil2.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Rezervasyon kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.";
+                TempData["ErrorMessage"] = $"Rezervasyon kaydedilirken bir hata oluştu. Hata: {ex.Message}";
+                // Hata ayrıntılarını konsola yazdırarak daha fazla bilgi alabilirsiniz.
+                Console.WriteLine(ex);
                 return Json(new
                 {
                     isSuccess = false,
                     message = "Rezervasyon kaydedilirken bir hata oluştu. Lütfen tekrar deneyin."
                 });
             }
+
         }
 
     }

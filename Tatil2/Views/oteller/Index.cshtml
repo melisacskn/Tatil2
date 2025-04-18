@@ -32,7 +32,7 @@
 				foreach (var tag in Model.OtelTag)
 				{
 					<label>
-						<input type="checkbox" name="tagId" value="@tag.Id"
+						<input type="checkbox" name="TagId" value="@tag.Id"
 						@(Model.TagId != null && Model.TagId.Contains(tag.Id) ? "checked" : "") />
 						@tag.Ad
 					</label>
@@ -54,13 +54,7 @@
 	<button type="submit" class="btn btn-success mt-2">Filtrele</button>
 </form>
 
-<hr />
 
-
-
-
-
-<hr />
 
 <h2>Oteller</h2>
 
@@ -95,9 +89,9 @@ else
 		const form = document.getElementById("otelSearchForm");
 
 		form.addEventListener("submit", function (e) {
-			e.preventDefault(); // Sayfa yenilenmesini engelle
+			e.preventDefault(); 
 
-			// Gerekli alanları al
+			
 			const baslangic = document.getElementById("BaslangicTarihi").value;
 			const bitis = document.getElementById("BitisTarihi").value;
 			const kisiSayisi = document.getElementById("KisiSayisi").value;
@@ -107,8 +101,7 @@ else
 				return;
 			}
 
-			// Form verilerini topla
-			const formData = new FormData(form);
+		const formData = new FormData(form);
 
 			fetch('@Url.Action("Index2", "Oteller")', {
 				method: 'POST',
