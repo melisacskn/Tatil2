@@ -89,3 +89,113 @@ hr {
     margin-top: 30px;
 }
 
+form {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Form grup başlıkları */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Etiketler */
+label {
+    display: block;
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+/* Input ve textarea düzeni */
+input[type="text"], input[type="date"], input[type="number"], button {
+    width: 100%;
+    padding: 14px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: 0.3s ease;
+}
+
+input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.4);
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+/* Tagler için stil */
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+    .tag-container label {
+        width: calc(50% - 10px); /* İki sütun yapacak şekilde yerleştirildi */
+        margin-right: 15px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .tag-container input[type="checkbox"] {
+        margin-right: 8px;
+    }
+
+/* Min ve Max Puan input düzeni */
+.min-max-container {
+    display: flex;
+    gap: 10px;
+}
+
+    .min-max-container input[type="number"] {
+        flex: 1; /* Her iki input'un da eşit genişlikte olmasını sağladım */
+    }
+
+/* Buton altı boşluk */
+.mt-2 {
+    margin-top: 20px;
+}
+
+/* Mobil uyumluluk için stil */
+@media (max-width: 768px) {
+    /* Mobilde tagler alt alta gelecek */
+    .tag-container label {
+        width: 100%;
+    }
+
+    /* Mobilde Min/Max Puan inputları alt alta gelecek */
+    .min-max-container {
+        flex-direction: column;
+    }
+
+        .min-max-container input[type="number"] {
+            width: 100%;
+            margin-right: 0;
+        }
+
+    button {
+        width: 100%;
+    }
+}
+

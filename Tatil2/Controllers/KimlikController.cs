@@ -1,128 +1,118 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Tatil2.DBContext;
-using Tatil2.Models;
-using Tatil2.Models.DTO;
+﻿using Microsoft.AspNetCore.Mvc; 
+using Tatil2.DBContext; 
+using Tatil2.Models; 
+using Tatil2.Models.DTO; 
 
-namespace Tatil2.Controllers
+namespace Tatil2.Controllers // KimlikController sınıfını Tatil2.Controllers ad alanı altında tanımla
 {
-    public class KimlikController : BaseController
+    public class KimlikController : BaseController // KimlikController, BaseController'dan türetilir
     {
-        private readonly TatilDBContext Tatildb;
+        private readonly TatilDBContext Tatildb; // DBContext sınıfını tanımla, veritabanı işlemleri için kullanılacak
 
-        public KimlikController(TatilDBContext tatilDB)
+        public KimlikController(TatilDBContext tatilDB) // Constructor, TatilDBContext sınıfı ile bağlıdır
         {
-            Tatildb = tatilDB;
-        }
-      
-        private bool IsAuthenticatedUser()
-        {
-            var userSession = HttpContext.Session.GetString("LoginUser");
-            return !string.IsNullOrEmpty(userSession);
-        }
- 
-        private bool IsAdmin()
-        {
-            var userSession = HttpContext.Session.GetString("LoginUser");
-            return !string.IsNullOrEmpty(userSession) && userSession == "admin";
+            Tatildb = tatilDB; // DBContext nesnesi atanır
         }
 
-        public ActionResult Index()
+        private bool IsAuthenticatedUser() // Kullanıcının giriş yapıp yapmadığını kontrol eden fonksiyon
         {
-
-            if (!IsAuthenticatedUser()) return RedirectToAction("Home");
-            if (!IsAdmin()) return RedirectToAction("Home");
-
-            var members = Tatildb.Musteri.ToList();
-            return View(members);
+            var userSession = HttpContext.Session.GetString("LoginUser"); // Oturumdaki LoginUser verisini al
+            return !string.IsNullOrEmpty(userSession); // Eğer LoginUser bilgisi varsa kullanıcı giriş yapmış demektir
         }
 
-        public ActionResult Create()
+        private bool IsAdmin() // Kullanıcının admin olup olmadığını kontrol eden fonksiyon
         {
-
-            if (!IsAuthenticatedUser()) return RedirectToAction("Home");
-            if (!IsAdmin()) return RedirectToAction("Home");
-
-            return View();
+            var userSession = HttpContext.Session.GetString("LoginUser"); // Oturumdaki LoginUser verisini al
+            return !string.IsNullOrEmpty(userSession) && userSession == "admin"; // Eğer kullanıcı admin ise true döner
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(RegisterViewModel registerUser)
+        public ActionResult Index() // Index sayfasına yönlendirir (Müşterileri listeler)
         {
+            if (!IsAuthenticatedUser()) return RedirectToAction("Home"); // Kullanıcı giriş yapmamışsa Home sayfasına yönlendir
+            if (!IsAdmin()) return RedirectToAction("Home"); // Kullanıcı admin değilse Home sayfasına yönlendir
 
-            if (!IsAuthenticatedUser()) return RedirectToAction("Home");
-            if (!IsAdmin()) return RedirectToAction("Home");
+            var members = Tatildb.Musteri.ToList(); // Veritabanından tüm müşteri verilerini al
+            return View(members); // Müşterilerle birlikte görünümü döndür
+        }
 
-            if (ModelState.IsValid)
+        public ActionResult Create() // Yeni kullanıcı oluşturmak için formu gösterir
+        {
+            if (!IsAuthenticatedUser()) return RedirectToAction("Home"); // Kullanıcı giriş yapmamışsa Home sayfasına yönlendir
+            if (!IsAdmin()) return RedirectToAction("Home"); // Kullanıcı admin değilse Home sayfasına yönlendir
+
+            return View(); // Kullanıcıyı form sayfasına yönlendir
+        }
+
+        [HttpPost] // Bu metod, POST isteği ile tetiklenecektir
+        [ValidateAntiForgeryToken] // CSRF koruması için anti-forgery token doğrulaması
+        public ActionResult Create(RegisterViewModel registerUser) // Yeni kullanıcıyı kaydeden metod
+        {
+            if (!IsAuthenticatedUser()) return RedirectToAction("Home"); // Kullanıcı giriş yapmamışsa Home sayfasına yönlendir
+            if (!IsAdmin()) return RedirectToAction("Home"); // Kullanıcı admin değilse Home sayfasına yönlendir
+
+            if (ModelState.IsValid) // Eğer model doğrulama başarılı ise
             {
                 try
                 {
-
-                    var newUser = new Musteri()
+                    var newUser = new Musteri() // Yeni bir Musteri nesnesi oluştur
                     {
-                        Mail = registerUser.Mail,
-                        Sifre = registerUser.Sifre,
+                        Mail = registerUser.Mail, // Kullanıcı mailini al
+                        Sifre = registerUser.Sifre, // Kullanıcı şifresini al
                     };
 
-                    Tatildb.Musteri.Add(newUser);
-                    int changes = Tatildb.SaveChanges();
+                    Tatildb.Musteri.Add(newUser); // Yeni kullanıcıyı müşteri listesine ekle
+                    int changes = Tatildb.SaveChanges(); // Değişiklikleri veritabanına kaydet
 
-
-                    if (changes > 0)
+                    if (changes > 0) // Eğer veri kaydedildiyse
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index"); // Kullanıcıyı Index sayfasına yönlendir
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Veritabanına veri eklenirken bir hata oluştu.");
+                        ModelState.AddModelError("", "Veritabanına veri eklenirken bir hata oluştu."); // Hata mesajı
                     }
                 }
-                catch (Exception ex)
+                catch (Exception ex) // Hata durumunda
                 {
-
-                    ModelState.AddModelError("", $"Hata: {ex.Message}");
+                    ModelState.AddModelError("", $"Hata: {ex.Message}"); // Hata mesajını model state'e ekle
                 }
             }
 
-            return View(registerUser);
+            return View(registerUser); // Kullanıcı formu geri döndür, kullanıcıyı form ile tekrar göster
         }
 
-
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id) // Kullanıcı silme işlemi için ön izleme
         {
+            if (!IsAuthenticatedUser()) return RedirectToAction("Home"); // Kullanıcı giriş yapmamışsa Home sayfasına yönlendir
+            if (!IsAdmin()) return RedirectToAction("Home"); // Kullanıcı admin değilse Home sayfasına yönlendir
 
-            if (!IsAuthenticatedUser()) return RedirectToAction("Home");
-            if (!IsAdmin()) return RedirectToAction("Home");
-
-            if (id == null)
+            if (id == null) // Eğer id parametresi null ise
             {
-                return BadRequest();
+                return BadRequest(); // BadRequest döndür
             }
 
-            var user = Tatildb.Musteri.Find(id);
-            if (user == null)
+            var user = Tatildb.Musteri.Find(id); // Veritabanında kullanıcıyı id'ye göre ara
+            if (user == null) // Eğer kullanıcı bulunamazsa
             {
-                return NotFound();
+                return NotFound(); // NotFound döndür
             }
 
-            return View(user);
+            return View(user); // Kullanıcıyı silme sayfasında göster
         }
 
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost, ActionName("Delete")] // Silme işlemi post ile yapılacak
+        [ValidateAntiForgeryToken] // CSRF koruması için anti-forgery token doğrulaması
+        public ActionResult DeleteConfirmed(int id) // Silme işlemi onaylandığında tetiklenir
         {
-            var user = Tatildb.Musteri.Find(id);
-            if (user != null)
+            var user = Tatildb.Musteri.Find(id); // Veritabanında kullanıcıyı id'ye göre ara
+            if (user != null) // Eğer kullanıcı bulunmuşsa
             {
-                Tatildb.Musteri.Remove(user);
-                Tatildb.SaveChanges();
-                return RedirectToAction("Index");
+                Tatildb.Musteri.Remove(user); // Kullanıcıyı veritabanından sil
+                Tatildb.SaveChanges(); // Değişiklikleri kaydet
+                return RedirectToAction("Index"); // Index sayfasına yönlendir
             }
 
-            return NotFound();
+            return NotFound(); // Eğer kullanıcı bulunamazsa NotFound döndür
         }
     }
 }

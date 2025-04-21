@@ -11,36 +11,40 @@ namespace Tatil2.Controllers
     {
         private readonly TatilDBContext Tatildb;
 
+        // Constructor: TatilDBContext nesnesi ile controller'ı initialize eder
         public ProfilController(TatilDBContext tatilDB)
         {
             Tatildb = tatilDB;
         }
 
-        // GET: Profil
-        [Authorize]
-        [HttpGet]
+        // Profil sayfasına GET isteği ile erişildiğinde çalışacak metod
+        // Kullanıcının geçmiş rezervasyonlarını ve profil bilgilerini getirir.
+        [Authorize] // Yalnızca oturum açmış kullanıcılar erişebilir.
+        [HttpGet] // HTTP GET isteği ile çalışacak.
         public IActionResult Profil()
         {
+            // Kullanıcı bilgisini "Musteri" modelinden alır.
             var user = base.Musteri;
 
-            // Geçmiş rezervasyonları al
+            // Kullanıcının geçmiş rezervasyonlarını alır (Oda bilgileri dahil).
+            // Rezervasyonlar, son tarihine göre azalan sırayla sıralanır.
             var gecmisRezervasyonlar = Tatildb.Rezervasyon
-                .Include(r => r.Oda)
-                .Where(r => r.MusteriId == user.Id)
-                .OrderByDescending(r => r.BitisTarihi)
+                .Include(r => r.Oda) // Oda bilgilerini de dahil eder
+                .Where(r => r.MusteriId == user.Id) // Kullanıcının rezervasyonları
+                .OrderByDescending(r => r.BitisTarihi) // En son tarihli rezervasyon önce gelir
                 .ToList();
 
-            // Profil bilgilerini model olarak view'a gönder
+            // Kullanıcının profil bilgilerini almak için bir Musteri nesnesi oluşturur.
+            // Bu bilgiler profil sayfasında görüntülenecektir.
             var musteri = new Musteri
             {
-                Ad = user.Ad,
-                Soyad = user.Soyad,
-                Telefon = user.Telefon,
-               
+                Ad = user.Ad, // Kullanıcının adı
+                Soyad = user.Soyad, // Kullanıcının soyadı
+                Telefon = user.Telefon, // Kullanıcının telefon numarası
             };
 
+            // Profil sayfasına ilgili verilerle birlikte view'ı döndürür.
             return View();
         }
-
     }
 }

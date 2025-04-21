@@ -9,14 +9,24 @@
 		<label for="Ara">Ara</label>
 		<input type="text" id="Ara" name="Ara" class="form-control" value="@Model.Ara" />
 	</div>
+	@{
+		var bugun = DateTime.Today.ToString("yyyy-MM-dd");
+	}
+
 	<div class="form-group">
 		<label for="BaslangicTarihi">Giriş Tarihi</label>
-		<input type="date" id="BaslangicTarihi" name="BaslangicTarihi" class="form-control" value="@Model.BaslangicTarihi?.ToString("yyyy-MM-dd")" required />
+		<input type="date" id="BaslangicTarihi" name="BaslangicTarihi"
+			   class="form-control"
+			   value="@Model.BaslangicTarihi?.ToString("yyyy-MM-dd")"
+			   min="@bugun" required />
 	</div>
 
 	<div class="form-group">
 		<label for="BitisTarihi">Çıkış Tarihi</label>
-		<input type="date" id="BitisTarihi" name="BitisTarihi" class="form-control" value="@Model.BitisTarihi?.ToString("yyyy-MM-dd")" required />
+		<input type="date" id="BitisTarihi" name="BitisTarihi"
+			   class="form-control"
+			   value="@Model.BitisTarihi?.ToString("yyyy-MM-dd")"
+			   required />
 	</div>
 
 	<div class="form-group">
@@ -27,18 +37,16 @@
 	<div>
 		<div>
 			<label>Tag Seçin:</label><br />
-			@if (Model.BaslangicTarihi.HasValue)
+			@foreach (var tag in Model.OtelTag)
 			{
-				foreach (var tag in Model.OtelTag)
-				{
-					<label>
-						<input type="checkbox" name="TagId" value="@tag.Id"
-						@(Model.TagId != null && Model.TagId.Contains(tag.Id) ? "checked" : "") />
-						@tag.Ad
-					</label>
-					<br />
-				}
+				<label>
+					<input type="checkbox" name="TagId" value="@tag.Id"
+					@(Model.TagId != null && Model.TagId.Contains(tag.Id) ? "checked" : "") />
+					@tag.Ad
+				</label>
+				<br />
 			}
+
 
 		</div>
 
@@ -81,6 +89,24 @@ else
 
 
 <script>
+	const baslangicInput = document.getElementById('BaslangicTarihi');
+		const bitisInput = document.getElementById('BitisTarihi');
+
+		// Sayfa yüklendiğinde ve giriş tarihi değiştiğinde tetiklenir
+		function updateBitisMinTarihi() {
+			const baslangicTarihi = baslangicInput.value;
+			if (baslangicTarihi) {
+				bitisInput.min = baslangicTarihi;
+
+				// Eğer seçilmiş çıkış tarihi artık geçersizse, sıfırla
+				if (bitisInput.value < baslangicTarihi) {
+					bitisInput.value = baslangicTarihi;
+				}
+			}
+		}
+
+		baslangicInput.addEventListener('change', updateBitisMinTarihi);
+		window.addEventListener('DOMContentLoaded', updateBitisMinTarihi);
 	document.addEventListener("DOMContentLoaded", function () {
 		const today = new Date().toISOString().split('T')[0];
 		document.getElementById("BaslangicTarihi").setAttribute("min", today);

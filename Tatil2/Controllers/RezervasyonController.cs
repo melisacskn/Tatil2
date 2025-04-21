@@ -18,9 +18,8 @@ namespace Tatil2.Controllers
             Tatildb = tatilDB;
         }
 
-      
-
-
+        // Oda durumu kontrolü için bir metod
+        // Belirtilen oda ve tarih aralığına göre odanın dolu olup olmadığını kontrol eder.
         [HttpGet]
         public JsonResult Oda(int odaId, DateTime baslangic, DateTime bitis)
         {
@@ -29,9 +28,12 @@ namespace Tatil2.Controllers
                  (bitis > r.BaslangicTarihi && bitis <= r.BitisTarihi) ||
                  (baslangic <= r.BaslangicTarihi && bitis >= r.BitisTarihi)));
 
+            // Eğer oda doluysa "musait" false döner, değilse true döner.
             return Json(new { musait = !odaDolu });
         }
 
+        // Rezervasyon sayfası için GET metodu
+        // Rezervasyon bilgilerini ve oda ile ilgili yorumları alır ve gösterir.
         [HttpGet]
         public IActionResult Rezervasyon([FromQuery] RezervasyonDTO rezervasyon)
         {
@@ -40,22 +42,26 @@ namespace Tatil2.Controllers
                 .Include(y => y.Musteri)
                 .ToList();
 
+            // Yorumları ViewBag üzerinden view'a aktarır
             ViewBag.Yorumlar = yorumlar;
 
             return View(rezervasyon);
         }
 
+        // Kullanıcı bir oda ile ilgili yorum yazdığında çağrılır
+        // Yorum metninin geçerliliğini kontrol eder ve geçerliyse kaydeder.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> YorumYap(int odaId, string yorumMetni, int puan)
         {
-            if (Musteri == null) 
+            if (Musteri == null)
                 return RedirectToAction("SignIn", "Giris");
 
             var oda = await Tatildb.Oda.FirstOrDefaultAsync(o => o.Id == odaId);
             if (oda == null)
                 return NotFound();
 
+            // Yorum metni ve puan kontrolü
             if (string.IsNullOrWhiteSpace(yorumMetni) || yorumMetni.Length < 3 || yorumMetni.Length > 100 || puan < 1 || puan > 10)
             {
                 TempData["ErrorMessage"] = "Yorum ya da puan alanı hatalı. Lütfen kontrol ediniz.";
@@ -71,6 +77,7 @@ namespace Tatil2.Controllers
                 Puan = puan
             };
 
+            // Yorum kaydedilir
             Tatildb.Yorum.Add(yorum);
             await Tatildb.SaveChangesAsync();
 
@@ -78,59 +85,19 @@ namespace Tatil2.Controllers
             return RedirectToAction("Rezervasyon", new RezervasyonDTO
             {
                 OdaId = oda.Id,
-                BaslangicTarihi = DateTime.Now, 
+                BaslangicTarihi = DateTime.Now,
                 BitisTarihi = DateTime.Now.AddDays(1)
             });
         }
 
-
-
-
-
-        //[HttpPost]
-        //public IActionResult Rezervasyon(RezervasyonCreateDTO model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Json(new { Message = "Giriş bilgilerini kontrol ediniz" });
-        //    }
-
-        //    try
-        //    {
-        //        string userJson = HttpContext.Session.GetString("login");
-        //        if (string.IsNullOrWhiteSpace(userJson))
-        //            return Json(new { Message = "Oturum süresi doldu, lütfen tekrar giriş yapınız." });
-
-        //        var user = JsonConvert.DeserializeObject<Musteri>(userJson);
-
-        //        Rezervasyon rezervasyon = new Rezervasyon
-        //        {
-        //            MusteriId = user.Id,
-        //            OdaId = model.OdaId,
-        //            BaslangicTarihi = model.BaslangicTarihi,
-        //            BitisTarihi = model.BitisTarihi
-        //        };
-
-        //        Tatildb.Rezervasyon.Add(rezervasyon);
-        //        Tatildb.SaveChanges();
-
-        //        TempData["SuccessMessage"] = "Rezervasyonunuz başarıyla tamamlandı!";
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Rezervasyon hatası: {ex.Message}");
-        //        return Json(new { Message = "Rezervasyon işlemi sırasında bir hata oluştu." });
-        //    }
-        //}
-
-
+        // Rezervasyon işlemini tamamlamak için odanın bilgilerini alır
         [HttpGet]
         public IActionResult Tamamla(int odaId, DateTime baslangic, DateTime bitis, int kisiSayisi)
         {
             var oda = Tatildb.Oda.Include(o => o.Otel).FirstOrDefault(o => o.Id == odaId);
             if (oda == null) return NotFound();
 
+            // Rezervasyon tamamlanması için bir ViewModel oluşturulur
             var viewModel = new RezervasyonTamamlaDTO
             {
                 OdaId = oda.Id,
@@ -142,6 +109,7 @@ namespace Tatil2.Controllers
                 MisafirBilgileri = new List<MisafirBilgileri>()
             };
 
+            // Kişi sayısına göre misafir bilgileri eklenir
             for (int i = 0; i < kisiSayisi; i++)
             {
                 viewModel.MisafirBilgileri.Add(new MisafirBilgileri());
@@ -149,9 +117,9 @@ namespace Tatil2.Controllers
 
             return View(viewModel);
         }
-       
 
-
+        // Rezervasyon işlemi tamamlandığında çağrılır
+        // Kullanıcının girdiği bilgilerle rezervasyon kaydeder.
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -169,7 +137,7 @@ namespace Tatil2.Controllers
 
             try
             {
-
+                // Rezervasyon oluşturuluyor
                 var rezervasyon = new Rezervasyon
                 {
                     MusteriId = base.Musteri.Id,
@@ -178,9 +146,7 @@ namespace Tatil2.Controllers
                     BitisTarihi = model.BitisTarihi,
                 };
 
-                //Tatildb.SaveChanges();
-
-                //TODO: Misafir bilgileri sayısı ile kişi sayısı eşleşmeli
+                // Misafir bilgileri ekleniyor
                 var misafirBilgileri = new List<MisafirBilgileri>();
 
                 foreach (var misafir in model.MisafirBilgileri)
@@ -196,6 +162,7 @@ namespace Tatil2.Controllers
                     misafirBilgileri.Add(misafirBilgi);
                 }
 
+                // Misafir bilgileri rezervasyona ekleniyor
                 rezervasyon.MisafirBilgileri.AddRange(misafirBilgileri);
                 Tatildb.Rezervasyon.Add(rezervasyon);
                 Tatildb.SaveChanges();
@@ -219,4 +186,3 @@ namespace Tatil2.Controllers
 
     }
 }
-

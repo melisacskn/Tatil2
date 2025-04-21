@@ -1,26 +1,28 @@
 ﻿@{
-    ViewData["Title"] = "Giriş Yap";
+    ViewData["Title"] = "Giriş Yap"; // Sayfanın başlık verisi ayarlanıyor
 }
 
-<h2>Giriş Yap</h2>
-
-@if (TempData["ErrorMessage"] != null)
+<h2>Giriş Yap</h2> <!-- Sayfa başlığı olarak ekranda görülecek -->
+@if (TempData["ErrorMessage"] != null) // Eğer TempData'da bir hata mesajı varsa
 {
     <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
+        <!-- Kırmızı uyarı kutusu gösterilir -->
+        @TempData["ErrorMessage"]   <!-- Hata mesajı kullanıcıya gösterilir -->
     </div>
 }
 
 <form asp-action="Login" method="post">
+    <!-- Form gönderildiğinde Login action'ına POST edilir -->
     <div class="form-group">
-        <label for="username">Kullanıcı Adı:</label>
-        <input type="text" name="username" class="form-control" required />
+        <!-- Bootstrap form grubu -->
+        <label for="username">Kullanıcı Adı:</label> <!-- Kullanıcı adı etiketi -->
+        <input type="text" name="username" class="form-control" required /> <!-- Kullanıcı adı girişi, boş bırakılamaz -->
     </div>
 
     <div class="form-group">
-        <label for="password">Şifre:</label>
-        <input type="password" name="password" class="form-control" required />
+        <label for="password">Şifre:</label> <!-- Şifre etiketi -->
+        <input type="password" name="password" class="form-control" required /> <!-- Şifre girişi, boş bırakılamaz -->
     </div>
 
-    <button type="submit" class="btn btn-primary">Giriş Yap</button>
+    <button type="submit" class="btn btn-primary">Giriş Yap</button> <!-- Giriş yap butonu -->
 </form>

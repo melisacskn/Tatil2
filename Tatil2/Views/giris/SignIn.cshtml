@@ -2,70 +2,74 @@
     ViewData["Title"] = "Giriş Yap";
 }
 
-<h2>Giriş Yap</h2>
-
+<h2>Giriş Yap</h2> <!-- Sayfa başlığı -->
+<!-- Giriş formu -->
 <form id="signInForm" method="post">
+    <!-- Formun id'si "signInForm", method olarak POST kullanılıyor -->
     <div>
-        <label for="Mail">E-posta:</label>
-        <input type="email" id="Mail" name="Mail" required />
+        <label for="Mail">E-posta:</label> <!-- E-posta etiketi -->
+        <input type="email" id="Mail" name="Mail" required /> <!-- E-posta giriş alanı, boş geçilemez -->
     </div>
     <div>
-        <label for="Sifre">Şifre:</label>
-        <input type="password" id="Sifre" name="Sifre" required />
+        <label for="Sifre">Şifre:</label> <!-- Şifre etiketi -->
+        <input type="password" id="Sifre" name="Sifre" required /> <!-- Şifre giriş alanı, boş geçilemez -->
     </div>
-    <button type="submit">Giriş Yap</button>
-
+    <button type="submit">Giriş Yap</button> <!-- Formu gönderme butonu -->
+    <!-- Hata mesajlarının gösterileceği div -->
     <div class="error-message" id="error-message" style="color: red; font-weight: bold;"></div>
 </form>
 
+<!-- Kayıt olma bağlantısı -->
 <div>
     <p>Hesabınız yok mu? <a href="@Url.Action("Index", "kayit")">Kayıt Ol</a></p>
+    <!-- "Kayıt Ol" linki "kayit" controller'ındaki "Index" action'ına yönlendirir -->
 </div>
 
 <script>
-            document.getElementById("signInForm").onsubmit = function (event) {
+    // Sayfa yüklendiğinde formun gönderme işlemini yakalıyoruz
+    document.getElementById("signInForm").onsubmit = function (event) {
 
-        event.preventDefault();
+        event.preventDefault(); // Formun varsayılan gönderme işlemini iptal ediyoruz (sayfa yenilenmesin diye)
 
-        var mail = document.getElementById("Mail").value;
-        var sifre = document.getElementById("Sifre").value;
+        var mail = document.getElementById("Mail").value; // Mail input değerini al
+        var sifre = document.getElementById("Sifre").value; // Şifre input değerini al
 
-
-        fetch('@Url.Action("SignIn", "giris")', {
-            method: 'POST',
+        // Fetch API ile sunucuya JSON formatında veri gönderiyoruz
+        fetch('@Url.Action("SignIn", "giris")', { // "giris" controller'ındaki "SignIn" action'ına POST isteği atılıyor
+            method: 'POST', // HTTP methodu: POST
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json', // JSON veri gönderileceğini belirtiyoruz
             },
-            body: JSON.stringify({
+            body: JSON.stringify({ // JSON objesi haline getirip gönderiyoruz
                 Mail: mail,
                 Sifre: sifre
             })
         })
         .then(response => {
             if (!response.ok) {
+                // Sunucudan düzgün bir yanıt gelmediyse hata fırlat
                 throw new Error("Ağ isteği başarısız.");
             }
-            return response.json();
+            return response.json(); // JSON olarak cevabı al
         })
         .then(data => {
-
+            // Sunucudan dönen veri işleniyor
             if (data.hasError) {
+                // Eğer hata varsa, ekrana hata mesajını yaz
                 document.getElementById("error-message").innerText = data.result;
                 document.getElementById("error-message").style.color = 'red';
             } else {
-
+                // Hata yoksa ve yönlendirme linki geldiyse sayfayı o adrese yönlendir
                 if (data.redirectToUrl) {
                     window.location.href = data.redirectToUrl;
                 }
             }
         })
         .catch(error => {
-            console.error('Hata:', error);
+            // Fetch sırasında bir hata oluştuysa kullanıcıya genel bir mesaj göster
+            console.error('Hata:', error); // Konsola detaylı hatayı yaz
             document.getElementById("error-message").innerText = "Bir hata oluştu, lütfen tekrar deneyin.";
             document.getElementById("error-message").style.color = 'red';
         });
     };
-
-
-
 </script>

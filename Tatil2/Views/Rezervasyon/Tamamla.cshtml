@@ -97,26 +97,48 @@
 		document.addEventListener("DOMContentLoaded", function () {
 			const form = document.getElementById("rezervasyonForm");
 
-			form.addEventListener("submit", function (event) {
-				event.preventDefault(); // Formun normal gönderimini engelle
+				form.addEventListener("submit", function (event) {
+			event.preventDefault(); // Formun normal gönderimini engelle
 
-				const formData = new FormData(form);
+			const formData = new FormData(form);
 
-				fetch('@Url.Action("Tamamla", "Rezervasyon")', {
-					method: 'POST',
-					body: formData
-				})
-					  .then(response => response.json()) // Gelen veriyi JSON olarak al
-		.then(data => {
-			console.log('Gelen veri:', data); // Burada yanıtı konsola yazdırıyoruz
-			if (!data.isSuccess) {
-				alert(data.message || "Bir hata oluştu.");
-			} else {
-				alert("Rezervasyon yapıldı!");
+			// 1. misafirin doğum tarihini al
+			const dogumTarihiStr = formData.get("MisafirBilgileri[0].DogumTarihi");
+			if (!dogumTarihiStr) {
+				alert("1. misafirin doğum tarihi girilmeli.");
+				return;
 			}
-		})
-		
+
+			const dogumTarihi = new Date(dogumTarihiStr);
+			const bugun = new Date();
+			const yas = bugun.getFullYear() - dogumTarihi.getFullYear();
+			const ayFarki = bugun.getMonth() - dogumTarihi.getMonth();
+			const gunFarki = bugun.getDate() - dogumTarihi.getDate();
+
+			// Yaş hesaplamasında ay ve gün farkını da dikkate al
+			const tamYas = (ayFarki < 0 || (ayFarki === 0 && gunFarki < 0)) ? yas - 1 : yas;
+
+			if (tamYas < 18) {
+				alert("En az bir misafir (1. misafir) 18 yaşından büyük olmalıdır.");
+				return;
+			}
+
+			// Yaş sınırı sağlanıyorsa fetch ile gönder
+			fetch('@Url.Action("Tamamla", "Rezervasyon")', {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Gelen veri:', data);
+				if (!data.isSuccess) {
+					alert(data.message || "Bir hata oluştu.");
+				} else {
+					alert("Rezervasyon yapıldı!");
+				}
+			});
 		});
+
 
 			
 		

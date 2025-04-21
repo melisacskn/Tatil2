@@ -1,58 +1,136 @@
 ﻿/* Genel stil ayarları */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #aad665;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
 /* Sayfa başlığı stil */
 h2 {
     text-align: center;
-    color: #aad665;
-    font-size: 40px;
-    margin-bottom: 30px;
+    color: #3d2224;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 /* Form stilini düzenlemek */
-
+form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
 
 /* Form içindeki inputlar ve butonlar */
-input[type="email"], input[type="password"], input[type="text"], button {
+input[type="email"], input[type="password"], input[type="text"], textarea, button {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 4px;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 8px;
     border: 1px solid #ddd;
     font-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
 }
+
+    /* Form inputlarına focus efekti eklemek */
+    input:focus, textarea:focus {
+        border-color: #aad665;
+        outline: none;
+        box-shadow: 0 0 10px rgba(170, 214, 101, 0.6);
+    }
 
 /* Buton stilini düzenlemek */
 button {
     background-color: #3d2224;
-    border: none;
-    cursor: pointer;
+    color: white;
     font-size: 18px;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
     button:hover {
         background-color: #1c1011;
     }
 
+/* Hata mesajı stilini düzenlemek */
 .error-message {
     color: red;
     font-weight: bold;
     font-size: 14px;
+    margin-top: -10px;
 }
+
+/* Textarea stilini düzenlemek */
 textarea {
     display: block;
     width: 100%;
     height: 150px;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     font-family: inherit;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: vertical; /* kullanıcı sadece dikey boyutlandırabilir */
+    border-radius: 8px;
+    resize: vertical;
     box-sizing: border-box;
 }
+
+/* Genel tablo stili */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+thead {
+    background-color: #3d2224;
+    color: white;
+}
+
+    thead th {
+        padding: 12px;
+        text-align: left;
+        font-size: 16px;
+        border-bottom: 2px solid #aad665;
+    }
+
+tbody tr {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+tbody td {
+    padding: 10px 15px;
+    font-size: 15px;
+    color: #3d2224;
+}
+
+/* İleri düzey buton stili */
+.btn-primary {
+    background-color: #aad665;
+    color: #3d2224;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #96bb56;
+    }
