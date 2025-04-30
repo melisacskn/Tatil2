@@ -22,17 +22,7 @@ namespace Tatil2.DBContext
         //public DbSet<RezervasyonTamamlaDTO> RezervasyonTamamlaDTO { get; set; }
 
         // OnConfiguring metodunda zaman aşımı ayarını yapıyoruz
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-               
-                optionsBuilder.UseSqlServer(
-                    "YourConnectionString",
-                    sqlOptions => sqlOptions.CommandTimeout(180) 
-                );
-            }
-        }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

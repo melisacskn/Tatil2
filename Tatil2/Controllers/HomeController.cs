@@ -30,9 +30,9 @@ namespace Tatil2.Controllers
             // Kullanýcýnýn geçmiþteki rezervasyonlarýný veritabanýndan alýyoruz
             // Oda (Room) bilgilerini de içeriyor ve bitiþ tarihine göre azalan þekilde sýralýyoruz
             var gecmisRezervasyonlar = Tatildb.Rezervasyon
-                    .Where(r => r.MusteriId == userId) // Kullanýcý ID'sine göre filtreleme
-                    .Include(r => r.Oda)               // Ýlgili 'Oda' (Room) verilerini de dahil etme
-                    .OrderByDescending(r => r.BitisTarihi) // Bitiþ tarihine göre azalan sýralama
+                    .Where(r => r.MusteriId == userId)
+                    .Include(r => r.Oda)               
+                    .OrderByDescending(r => r.BitisTarihi) 
                     .ToList();
 
             // Elde edilen geçmiþ rezervasyonlarý View'a göndermek için ViewBag'e atýyoruz

@@ -6,6 +6,7 @@ using Tatil2.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Tatil2.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tatil2.Controllers
 {
@@ -21,6 +22,7 @@ namespace Tatil2.Controllers
 
         // Otel odalarını incelemek için kullanılan metod
         // id, BaslangicTarihi, BitisTarihi, KisiSayisi parametreleri alır.
+        
         public async Task<IActionResult> Incele(int id, DateTime BaslangicTarihi, DateTime BitisTarihi, int KisiSayisi)
         {
             // Verilen otel id'sine göre odaları filtreler. Oda kapasitesi ve tarihlerin uygunluğuna göre sorgu yapar.
@@ -46,7 +48,8 @@ namespace Tatil2.Controllers
             return View(odalar);
         }
 
-        // Otel filtreleme metodunu başlatır. 
+        // Otel filtreleme metodunu başlatır.
+        
         public async Task<IActionResult> Index([FromForm] OtelFiltreleDTO otelFiltreleDTO)
         {
             // Başlangıçta tüm otelleri alacak şekilde bir sorgu başlatılır.

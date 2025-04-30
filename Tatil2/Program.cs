@@ -82,8 +82,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// ✅ Session middleware'i aktif et
-app.UseSession();
+
 
 // JWT Cookie → Header dönüşüm middleware'in (özelleştirilmişse)
 app.UseMiddleware<JwtCookieToHeaderMiddleware>();

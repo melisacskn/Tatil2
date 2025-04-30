@@ -1,7 +1,4 @@
-﻿/* Genel Stil */
-
-
-/* Otel Bilgileri Bölümü */
+﻿
 .hotel-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -33,7 +30,7 @@
     height: auto;
 }
 
-/* Otel Detayları */
+
 .hotel-details {
     margin-bottom: 30px;
 }
@@ -49,7 +46,6 @@
         line-height: 1.6;
     }
 
-/* Oda Seçenekleri */
 .room-info h3 {
     font-size: 24px;
     color: #333;
@@ -75,7 +71,7 @@
         color: #555;
     }
 
-/* Yorumlar */
+
 .reviews {
     margin-bottom: 30px;
 }
@@ -103,7 +99,6 @@
         color: #333;
     }
 
-/* Rezervasyon Butonu */
 .reservation-button {
     text-align: center;
     margin-top: 30px;
@@ -138,6 +133,7 @@ thead {
 }
 
     thead th {
+        border-radius: 5px;
         padding: 12px 25px;
         text-align: left;
         font-size: 16px;

@@ -110,69 +110,64 @@ namespace Tatil2.Controllers
             return tokenHandler.WriteToken(token); // Token döndürülür
         }
 
-        // Kayıt olma işlemi için POST metodu
-        [HttpPost]
-        public JsonResult SignUp(string register_Mail, string register_password)
-        {
-            ModalLoginJsonResult result = new ModalLoginJsonResult();
+        //// Kayıt olma işlemi için POST metodu
+        //[HttpPost]
+        //public JsonResult SignUp(string register_Mail, string register_password)
+        //{
+        //    ModalLoginJsonResult result = new ModalLoginJsonResult();
 
-            // Giriş bilgileri boşsa hata mesajı döner
-            register_Mail = register_Mail.Trim();
-            register_password = register_password.Trim();
+        //    // Giriş bilgileri boşsa hata mesajı döner
+        //    register_Mail = register_Mail.Trim();
+        //    register_password = register_password.Trim();
 
-            if (string.IsNullOrEmpty(register_Mail) || string.IsNullOrEmpty(register_password))
-            {
-                result.HasError = true;
-                result.Result = "Lütfen tüm alanları doldurunuz.";
-            }
-            else
-            {
-                // Kullanıcı zaten mevcut mu diye kontrol eder
-                var existingUser = Tatildb.Musteri.FirstOrDefault(x => x.Mail == register_Mail);
+        //    if (string.IsNullOrEmpty(register_Mail) || string.IsNullOrEmpty(register_password))
+        //    {
+        //        result.HasError = true;
+        //        result.Result = "Lütfen tüm alanları doldurunuz.";
+        //    }
+        //    else
+        //    {
+        //        // Kullanıcı zaten mevcut mu diye kontrol eder
+        //        var existingUser = Tatildb.Musteri.FirstOrDefault(x => x.Mail == register_Mail);
 
-                if (existingUser != null)
-                {
-                    result.HasError = true;
-                    result.Result = "Bu e-posta adresi zaten kullanımda.";
-                }
-                else
-                {
-                    // Şifreyi hash'ler ve yeni kullanıcıyı veritabanına ekler
-                    var hashedPassword = BCrypt.Net.BCrypt.HashPassword(register_password);
+        //        if (existingUser != null)
+        //        {
+        //            result.HasError = true;
+        //            result.Result = "Bu e-posta adresi zaten kullanımda.";
+        //        }
+        //        else
+        //        {
+        //            // Şifreyi hash'ler ve yeni kullanıcıyı veritabanına ekler
+        //            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(register_password);
 
-                    var newUser = new Musteri()
-                    {
-                        Mail = register_Mail,
-                        Sifre = hashedPassword
-                    };
+        //            var newUser = new Musteri()
+        //            {
+        //                Mail = register_Mail,
+        //                Sifre = hashedPassword
+        //            };
 
-                    Tatildb.Musteri.Add(newUser);
+        //            Tatildb.Musteri.Add(newUser);
 
-                    // Kullanıcı kaydını başarılı şekilde yaparsa, sonucu döner
-                    if (Tatildb.SaveChanges() > 0)
-                    {
-                        result.HasError = false;
-                        result.Result = "Hesap başarıyla oluşturuldu.";
+        //            // Kullanıcı kaydını başarılı şekilde yaparsa, sonucu döner
+        //            if (Tatildb.SaveChanges() > 0)
+        //            {
+        //                result.HasError = false;
+        //                result.Result = "Hesap başarıyla oluşturuldu.";
 
-                        var userJson = JsonConvert.SerializeObject(newUser);
-                        HttpContext.Session.SetString("LoginUser", userJson); // Kullanıcı bilgilerini session'a kaydeder
-                    }
-                    else
-                    {
-                        result.HasError = true;
-                        result.Result = "Bir hata oluştu. Lütfen tekrar deneyin.";
-                    }
-                }
-            }
+        //                var userJson = JsonConvert.SerializeObject(newUser);
+        //                HttpContext.Session.SetString("LoginUser", userJson); // Kullanıcı bilgilerini session'a kaydeder
+        //            }
+        //            else
+        //            {
+        //                result.HasError = true;
+        //                result.Result = "Bir hata oluştu. Lütfen tekrar deneyin.";
+        //            }
+        //        }
+        //    }
 
-            return Json(result); // Kayıt sonucu döner
-        }
+        //    return Json(result); // Kayıt sonucu döner
+        //}
 
-        // Çıkış işlemi (session temizlenir)
-        public ActionResult SignOut()
-        {
-            HttpContext.Session.Clear(); // Session temizlenir
-            return RedirectToAction("Index", "Home"); // Ana sayfaya yönlendirir
-        }
+    
     }
 }

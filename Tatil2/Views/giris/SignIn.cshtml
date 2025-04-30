@@ -4,7 +4,7 @@
 
 <h2>Giriş Yap</h2> <!-- Sayfa başlığı -->
 <!-- Giriş formu -->
-<form id="signInForm" method="post">
+<form id="signInForm" method="post" class="col-md-7">
     <!-- Formun id'si "signInForm", method olarak POST kullanılıyor -->
     <div>
         <label for="Mail">E-posta:</label> <!-- E-posta etiketi -->
@@ -14,16 +14,17 @@
         <label for="Sifre">Şifre:</label> <!-- Şifre etiketi -->
         <input type="password" id="Sifre" name="Sifre" required /> <!-- Şifre giriş alanı, boş geçilemez -->
     </div>
+    <div>
+        <p>Hesabınız yok mu? <a href="@Url.Action("Index", "kayit")">Kayıt Ol</a></p>
+        <!-- "Kayıt Ol" linki "kayit" controller'ındaki "Index" action'ına yönlendirir -->
+    </div>
     <button type="submit">Giriş Yap</button> <!-- Formu gönderme butonu -->
     <!-- Hata mesajlarının gösterileceği div -->
     <div class="error-message" id="error-message" style="color: red; font-weight: bold;"></div>
 </form>
 
 <!-- Kayıt olma bağlantısı -->
-<div>
-    <p>Hesabınız yok mu? <a href="@Url.Action("Index", "kayit")">Kayıt Ol</a></p>
-    <!-- "Kayıt Ol" linki "kayit" controller'ındaki "Index" action'ına yönlendirir -->
-</div>
+
 
 <script>
     // Sayfa yüklendiğinde formun gönderme işlemini yakalıyoruz

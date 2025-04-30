@@ -1,102 +1,137 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] STELLAR STAY </title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/stil1.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Kayitstil.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/yazi.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/otelgoster.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/rezerve.css" asp-append-version="true" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] STELLAR STAY </title>
+	<script type="importmap"></script>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/stil1.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/Kayitstil.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/yazi.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/otelgoster.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/rezerve.css" asp-append-version="true" />
 
-    <script type="text/javascript">
-      
-        var titles = ["En iyi Rezervasyon Sitesi", "@ViewData["Title"]  STELLAR STAY"];
-        var currentIndex = 0;
+	<!--scrip kodu : title için -->
+	<script type="text/javascript">
 
-      
-        function changeTitle() {
-          
-            document.title = titles[currentIndex];
+		var titles = ["En iyi Rezervasyon Sitesi", "@ViewData["Title"]  STELLAR STAY"];
+		var currentIndex = 0;
 
-           
-            currentIndex = (currentIndex + 1) % titles.length;
-        }
 
-      
-        window.onload = function() {
-            setInterval(changeTitle, 5000);
-        };
-    </script>
+		function changeTitle() {
+
+		document.title = titles[currentIndex];
+
+
+		currentIndex = (currentIndex + 1) % titles.length;
+		}
+
+
+		window.onload = function() {
+		setInterval(changeTitle, 5000);
+		};
+	</script>
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo.png" style="height: 40px;">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="oteller" asp-action="Index">Oteller</a>
-                        </li>
-                      
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Create" asp-action="OtelCreate">Otel ekle</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="hakkimizda" asp-action="bilgi">Hakkımızda</a>
-                        </li>
-                    </ul>
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+			<div class="container-fluid">
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+					<img src="~/images/logo.png" style="height: 40px;">
+				</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
 
-                    <ul class="navbar-nav ms-auto">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Profil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="giris" asp-action="signIn">Giriş Yap</a>
-                            </li> 
-                            <li class="nav-item1">
-                                <a class="nav-link text-dark">@User.Identity.Name</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+						@if (!User.IsInRole("Admin"))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="oteller" asp-action="Index">Oteller</a>
+							</li>
 
-    <div class="scrolling-text">
-        <p>Erken Rezarvasyon Fırsatlarından Yararlanın!</p>
-    </div>
+						}
+						@if (User.IsInRole("Admin"))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Admin">Kontroller</a>
+							</li>
+						}
+					
+						@if (User.IsInRole("Admin"))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Create" asp-action="OtelCreate">Otel ekle</a>
+							</li>
+						}
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="hakkimizda" asp-action="bilgi">Hakkımızda</a>
+						</li>
+					</ul>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Tatil2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+					<ul class="navbar-nav ms-auto">
+						@if (User.Identity.IsAuthenticated)
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Profil</a>
+							</li>
+						}
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+						@if (User.Identity.IsAuthenticated)
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="giris" asp-action="signIn">Giriş Yap</a>
+							</li>
+						}
+						@if (User.Identity.IsAuthenticated)
+						{
+							<li class="nav-item1">
+								<a class="nav-link text-dark">@User.Identity.Name</a>
+							</li>
+						}
+
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+
+	<div class="scrolling-text">
+		<p>Erken Rezarvasyon Fırsatlarından Yararlanın!</p>
+	</div>
+
+	<div class="">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer text-muted">
+		<div class="container" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+			<div style="display: flex; align-items: center; gap: 15px;">
+				&copy; 2025 - Tatil2 -
+				<a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+
+				<img src="~/images/MasterCard.png" alt="MasterCard" style="height: 20px;">
+				<img src="~/images/VİSA.png" alt="VISA" style="height: 20px;">
+				<img src="~/images/YapıKredi.png" alt="Yapı Kredi" style="height: 20px;">
+			</div>
+		</div>
+	</footer>
+
+
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

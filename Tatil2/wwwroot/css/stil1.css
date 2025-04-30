@@ -1,4 +1,4 @@
-﻿/* Genel stil ayarları */
+﻿
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f4f9;
@@ -7,7 +7,7 @@ body {
     color: #333;
 }
 
-/* Sayfa başlığı stil */
+
 h2 {
     text-align: center;
     color: #3d2224;
@@ -16,9 +16,9 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* Form stilini düzenlemek */
+
 form {
-    max-width: 800px;
+    /*max-width: 800px;*/
     margin: 0 auto;
     padding: 30px;
     background-color: white;
@@ -26,7 +26,6 @@ form {
     border-radius: 10px;
 }
 
-/* Form içindeki inputlar ve butonlar */
 input[type="email"], input[type="password"], input[type="text"], textarea, button {
     width: 100%;
     padding: 14px;
@@ -38,14 +37,14 @@ input[type="email"], input[type="password"], input[type="text"], textarea, butto
     transition: all 0.3s ease;
 }
 
-    /* Form inputlarına focus efekti eklemek */
+   
     input:focus, textarea:focus {
         border-color: #aad665;
         outline: none;
         box-shadow: 0 0 10px rgba(170, 214, 101, 0.6);
     }
 
-/* Buton stilini düzenlemek */
+
 button {
     background-color: #3d2224;
     color: white;
@@ -61,7 +60,6 @@ button {
         background-color: #1c1011;
     }
 
-/* Hata mesajı stilini düzenlemek */
 .error-message {
     color: red;
     font-weight: bold;
@@ -69,7 +67,7 @@ button {
     margin-top: -10px;
 }
 
-/* Textarea stilini düzenlemek */
+
 textarea {
     display: block;
     width: 100%;
@@ -83,7 +81,7 @@ textarea {
     box-sizing: border-box;
 }
 
-/* Genel tablo stili */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -119,7 +117,7 @@ tbody td {
     color: #3d2224;
 }
 
-/* İleri düzey buton stili */
+
 .btn-primary {
     background-color: #aad665;
     color: #3d2224;

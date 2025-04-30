@@ -3,39 +3,108 @@
     ViewData["Title"] = "Kayıt Ol";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="baslik">@ViewData["Title"]</h2>
 
-<form asp-action="Index" method="post">
-    <div>
-        <label for="Ad">Ad:</label>
-        <input type="text" id="Ad" name="Ad" required />
+<style>
+    .baslik{
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #3d2224;
+        font-size: 40px;
+        margin-bottom: 30px;
+    }
+    .kayit-formu {
+        max-width: 600px;
+        margin: 0 auto;
+        font-size: 16px;
+    }
+
+    .col-md-6 {
+        margin-bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 6px;
+    }
+
+    .col-md-12{
+        margin-bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 6px;
+    }
+   
+
+    .kayit-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .kayit-cinsiyet {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 6px;
+        font-size: 15px;
+    }
+
+    .kayit-button {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+        .kayit-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+</style>
+
+
+<form asp-action="Index" method="post" class="kayit-formu">
+    <div class="kayit-row">
+        <div class="col-md-6">
+            <label for="Ad">Ad:</label>
+            <input type="text" id="Ad" name="Ad" required />
+        </div>
+        <div class="col-md-6">
+            <label for="Soyad">Soyad:</label>
+            <input type="text" id="Soyad" name="Soyad" required />
+        </div>
     </div>
-    <div>
-        <label for="Soyad">Soyad:</label>
-        <input type="text" id="Soyad" name="Soyad" required />
-    </div>
-    <div>
+
+    <div class="col-md-12">
         <label for="Mail">E-posta:</label>
         <input type="email" id="Mail" name="Mail" required />
     </div>
-    <div>
-        <label for="Sifre">Şifre:</label>
-        <input type="password" id="Sifre" name="Sifre" required />
-    </div>
-    <div>
+
+    <div class="col-md-12">
         <label for="Telefon">Telefon:</label>
-        <input type="text" id="Telefon" name="Telefon" />
+        <input type="text" id="Telefon" name="Telefon" required />
     </div>
-    <div>
+
+    <div class="col-md-12">
         <label for="TC">TC Kimlik No:</label>
-        <input type="text" id="TC" name="TC" />
+        <input type="text" id="TC" name="TC" required />
     </div>
-    <div>
-        <label for="Cinsiyet">Cinsiyet:</label>
-        <input type="radio" name="Cinsiyet" value="True" /> Erkek
-        <input type="radio" name="Cinsiyet" value="False" /> Kadın
+
+    <div class="kayit-row">
+        <div class="col-md-6">
+            <label for="Sifre">Şifre:</label>
+            <input type="password" id="Sifre" name="Sifre" required />
+        </div>
+        <div class="col-md-6">
+            <label for="Cinsiyet">Cinsiyet:</label>
+            <div class="kayit-cinsiyet">
+                <input type="radio" name="Cinsiyet" value="True" /> Erkek
+                <input type="radio" name="Cinsiyet" value="False" /> Kadın
+            </div>
+        </div>
     </div>
-    <div>
+
+    <div class="kayit-button">
         <button type="submit">Kayıt Ol</button>
     </div>
 </form>

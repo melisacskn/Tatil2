@@ -91,6 +91,7 @@ namespace Tatil2.Controllers
         }
 
         // Rezervasyon işlemini tamamlamak için odanın bilgilerini alır
+        [Authorize]
         [HttpGet]
         public IActionResult Tamamla(int odaId, DateTime baslangic, DateTime bitis, int kisiSayisi)
         {

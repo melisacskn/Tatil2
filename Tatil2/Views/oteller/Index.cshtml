@@ -1,94 +1,149 @@
 ﻿@model Tatil2.Models.DTO.OtelFiltreleDTO
 
-<h2>Otel Filtreleme</h2>
-
-
-
-<form id="otelSearchForm" method="post">
-	<div class="form-group">
-		<label for="Ara">Ara</label>
-		<input type="text" id="Ara" name="Ara" class="form-control" value="@Model.Ara" />
-	</div>
-	@{
-		var bugun = DateTime.Today.ToString("yyyy-MM-dd");
+<h2 class="mb-0">Otel Filtreleme</h2>
+<style>
+	.form-group1{
+		padding: 10px;
+		font-size: 0px;
+		font-weight: bold;
+		
+	}
+	.row1{
+		--bs-gutter-x: 1.5rem;
+		--bs-gutter-y: 0;
+		display: flex;
+		flex-wrap: nowrap;
+		margin-top: calc(-1 * var(--bs-gutter-y));
+		margin-right: calc(-.5 * var(--bs-gutter-x));
+		margin-left: calc(-.5 * var(--bs-gutter-x));
+		width: 70%;
+		padding: 5px;
+		margin: 0px 5px;
+		border-radius: 5px;
+		border: 1px solid #ddd;
+		font-size: 15px;
+		box-sizing: border-box;
+		transition: 0.3s ease;
 	}
 
-	<div class="form-group">
-		<label for="BaslangicTarihi">Giriş Tarihi</label>
-		<input type="date" id="BaslangicTarihi" name="BaslangicTarihi"
-			   class="form-control"
-			   value="@Model.BaslangicTarihi?.ToString("yyyy-MM-dd")"
-			   min="@bugun" required />
-	</div>
+	.mb-0 {
+		text-align: center;
+		color: #3d2224;
+		font-size: 36px;
+		font-weight: bold;
+		margin-bottom: 20px;
+	}
+</style>
 
-	<div class="form-group">
-		<label for="BitisTarihi">Çıkış Tarihi</label>
-		<input type="date" id="BitisTarihi" name="BitisTarihi"
-			   class="form-control"
-			   value="@Model.BitisTarihi?.ToString("yyyy-MM-dd")"
-			   required />
-	</div>
 
-	<div class="form-group">
-		<label for="KisiSayisi">Kişi Sayısı</label>
-		<input type="number" id="KisiSayisi" name="KisiSayisi" class="form-control" value="@Model.KisiSayisi" min="1" />
-	</div>
+<form id="otelSearchForm" class="row p-0" method="post">
 
-	<div>
-		<div>
-			<label>Tag Seçin:</label><br />
-			@foreach (var tag in Model.OtelTag)
-			{
-				<label>
-					<input type="checkbox" name="TagId" value="@tag.Id"
-					@(Model.TagId != null && Model.TagId.Contains(tag.Id) ? "checked" : "") />
-					@tag.Ad
-				</label>
-				<br />
+	<div class="sidebarcontainer col-md-3">
+
+		<div class="sidebar">
+			@* <form method="get" action="@Url.Action("Index", "Otel")"> *@
+			<div class="form-group">
+				<label for="Ara">Ara</label>
+				<input type="text" id="Ara" name="Ara" class="form-control" value="@Model.Ara" />
+			</div>
+
+			<div class="form-group1">
+				
+				@foreach (var tag in Model.OtelTag)
+				{
+					<label>
+						<input type="checkbox" name="TagId" value="@tag.Id"
+						@(Model.TagId != null && Model.TagId.Contains(tag.Id) ? "checked" : "") />
+						@tag.Ad
+					</label>
+
+					<br />
+				}
+			</div>
+
+			<div class="form-group">
+				<label>Min Puan:</label>
+				<input type="number" name="MinPuan" step="0.1" min="0" max="10" value="@Model.MinPuan" class="form-control" />
+			</div>
+
+			<div class="form-group">
+				<label>Max Puan:</label>
+				<input type="number" name="MaxPuan" step="0.1" min="0" max="10" value="@Model.MaxPuan" class="form-control" />
+			</div>		
+			@* </form> *@
+		</div>
+
+	</div>
+	<div class="otelSearchFormContainer col-md-8">
+
+		<div class="row1">
+
+			@{
+				var bugun = DateTime.Today.ToString("yyyy-MM-dd");
 			}
 
+			<div class="form-group col-md-3">
+				<label for="BaslangicTarihi">Giriş Tarihi</label>
+				<input type="date" id="BaslangicTarihi" name="BaslangicTarihi"
+					   class="form-control"
+					   value="@Model.BaslangicTarihi?.ToString("yyyy-MM-dd")"
+					   min="@bugun" required />
+			</div>
 
+			<div class="form-group col-md-3">
+				<label for="BitisTarihi">Çıkış Tarihi</label>
+				<input type="date" id="BitisTarihi" name="BitisTarihi"
+					   class="form-control"
+					   value="@Model.BitisTarihi?.ToString("yyyy-MM-dd")"
+					  max="@bugun" required />
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="KisiSayisi">Kişi Sayısı</label>
+				<input type="number" id="KisiSayisi" name="KisiSayisi" class="form-control" value="@Model.KisiSayisi" min="1" />
+			</div>
+			<div>
+				<button type="submit" class="btn btn-success">Filtrele</button>
+			</div>
+			
 		</div>
 
-		<div>
-			<label>Min Puan:</label>
-			<input type="number" name="MinPuan" step="0.1" min="0" max="10" value="@Model.MinPuan" />
 
-			<label>Max Puan:</label>
-			<input type="number" name="MaxPuan" step="0.1" min="0" max="10" value="@Model.MaxPuan" />
-		</div>
+		@if (Model.Oteller == null || !Model.Oteller.Any())
+		{
+
+		}
+		else
+		{
+			foreach (var otel in Model.Oteller)
+			{
+				<div class="otel">
+					<h3>@otel.Ad</h3>
+					<img src="@otel.Poster" alt="Otel Resmi" class="img-fluid" />
+					<p><strong>Konum:</strong> @otel.Konum</p>
+					<p>@otel.Aciklama</p>
+
+					<a href="@Url.Action("Incele", "Oteller", new { id = otel.Id, BaslangicTarihi = Model.BaslangicTarihi.Value.ToString("yyyy-MM-dd"), BitisTarihi = Model.BitisTarihi.Value.ToString("yyyy-MM-dd"), KisiSayisi = Model.KisiSayisi })" class="btn btn-primary">İncele</a>
+
+					<hr />
+				</div>
+			}
+		}
 	</div>
 
-	<button type="submit" class="btn btn-success mt-2">Filtrele</button>
+
 </form>
 
 
 
-<h2>Oteller</h2>
 
-@if (Model.Oteller == null || !Model.Oteller.Any())
-{
-	<p>Filtrenize uygun otel bulunamadı.</p>
-}
-else
-{
-	foreach (var otel in Model.Oteller)
-	{
-		<div class="otel">
-			<h3>@otel.Ad</h3>
-			<img src="@otel.Poster" alt="Otel Resmi" class="img-fluid" />
-			<p><strong>Konum:</strong> @otel.Konum</p>
-			<p>@otel.Aciklama</p>
 
-			<a href="@Url.Action("Incele", "Oteller", new { id = otel.Id, BaslangicTarihi = Model.BaslangicTarihi.Value.ToString("yyyy-MM-dd"), BitisTarihi = Model.BitisTarihi.Value.ToString("yyyy-MM-dd"), KisiSayisi = Model.KisiSayisi })" class="btn btn-primary">İncele</a>
 
-			<hr />
-		</div>
-	}
-}
+
 
 
 <script>
+		
 	const baslangicInput = document.getElementById('BaslangicTarihi');
 		const bitisInput = document.getElementById('BitisTarihi');
 
@@ -115,9 +170,9 @@ else
 		const form = document.getElementById("otelSearchForm");
 
 		form.addEventListener("submit", function (e) {
-			e.preventDefault(); 
+			e.preventDefault();
 
-			
+
 			const baslangic = document.getElementById("BaslangicTarihi").value;
 			const bitis = document.getElementById("BitisTarihi").value;
 			const kisiSayisi = document.getElementById("KisiSayisi").value;

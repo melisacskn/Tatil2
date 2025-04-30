@@ -1,4 +1,4 @@
-﻿/* Genel Stil Ayarları */
+﻿
 body {
     font-family: 'Arial';
     background-color: #aad665;
@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-    width: 60%;
+    width: 100%;
     margin: 10px auto;
     padding: 10px;
     background-color: #fffaf5;
@@ -16,15 +16,15 @@ body {
 }
 
 
-/* Başlık */
+
 h2 {
-    text-align: center;
+    /*text-align: center;*/
+    margin-bottom:1.5rem;
     color: #aad665;
     font-size: 40px;
-    margin-bottom: 30px;
+    /*margin-bottom: 30px;*/
 }
 
-/* Form Alanları */
 .form-group {
     margin-bottom: 10px;
 }
@@ -70,28 +70,24 @@ select {
         border-color: #2ecc71;
     }
 
-/* Hata Mesajları */
 .text-danger {
     color: #e74c3c;
     font-size: 12px;
     margin-top: 5px;
 }
 
-/* Buton */
+
 button[type="submit"] {
-    width: 97%;
+    width: 145px;
     padding: 10px;
     background-color: #3d2224;
     color: white;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
+    border-radius: 8px;
+    /* font-size: 16px; */
     transition: background-color 0.3s;
-    margin: 10px;
-}
-
-    button[type="submit"]:hover {
+    margin: 22px -1px;
+    button [type="submit"]:hover {
         background-color: #1c1011;
     }
 textarea {
@@ -125,8 +121,8 @@ textarea {
 h2 {
     font-size: 28px;
     font-weight: bold;
-    color: #aad665;
-    margin-bottom: 30px;
+    color: white;
+    /*margin-bottom: 30px;*/
 }
 
 h4 {
@@ -137,10 +133,11 @@ h4 {
 }
 
 .alert {
-    padding: 15px;
+    padding: 10px;
     border-radius: 8px;
     margin-bottom: 20px;
     font-size: 16px;
+    background-color: white;
 }
 
 .alert-success {
@@ -225,22 +222,22 @@ h4 {
     }
 
         .yorum-karti p strong {
-            font-size: 18px; /* Müşteri adı ve soyadını belirgin yapar */
+            font-size: 18px;
             font-weight: bold;
         }
 
         .yorum-karti p:first-child {
-            margin-top: 0; /* İlk paragrafın üst boşluğunu kaldırır */
+            margin-top: 0; 
         }
 
         .yorum-karti p:last-child {
-            margin-bottom: 0; /* Son paragrafın alt boşluğunu kaldırır */
+            margin-bottom: 0; 
         }
 
         .yorum-karti p:last-child {
-            font-weight: bold; /* Puan metnini kalın yapar */
+            font-weight: bold;
             color: #3d2224;
-            font-size: 13px; /* Puan rengini ayarlama */
+            font-size: 13px; 
         }
 
 .card h4 {

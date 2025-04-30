@@ -1,17 +1,17 @@
-﻿/* Sayfa margin ve padding */
+﻿
 body {
     margin: 0;
     padding: 0;
 }
 
-/* Navbar stili */
+
 .navbar {
     background-color: #333;
     color: white;
     padding: 10px;
 }
 
-/* Kayan yazı */
+
 .scrolling-text {
     background-color: #fffaf5;
     position: absolute;
@@ -53,7 +53,7 @@ textarea {
     font-family: inherit;
     border: 1px solid #ccc;
     border-radius: 5px;
-    resize: vertical; /* kullanıcı sadece dikey boyutlandırabilir */
+    resize: vertical; 
     box-sizing: border-box;
 }
 

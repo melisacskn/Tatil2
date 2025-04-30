@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tatil2.Controllers
 {
@@ -24,40 +25,16 @@ namespace Tatil2.Controllers
             return View();
         }
 
-        // Login sayfasında kullanıcı adı ve şifreyi kontrol eden POST metodu
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(string username, string password)
-        {
-            if (username == "admin" && password == "123") // Şifre ve kullanıcı adı sabit
-            {
-                // Kullanıcı giriş yaptıysa oturumu başlatıyoruz
-                HttpContext.Session.SetString("Username", username);
-                return RedirectToAction("OtelCreate");
-            }
-            else
-            {
-                // Hatalı giriş yapılırsa, hata mesajı gösterilir
-                TempData["ErrorMessage"] = "Geçersiz kullanıcı adı veya şifre.";
-                return View();
-            }
-        }
 
-        // Logout işlemi, oturumu sonlandırır
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Remove("Username");
-            return RedirectToAction("Login");
-        }
+
+
 
         // Otel ekleme sayfasına yönlendirir
+        [Authorize(Roles ="Admin")]
         public IActionResult OtelCreate()
         {
-            // Kullanıcı oturum açmamışsa Login sayfasına yönlendirilir
-            if (HttpContext.Session.GetString("Username") == null)
-            {
-                return RedirectToAction("Login");
-            }
+            
+        
 
             // Sehir listesini ve TagKategori listesini ViewBag ile view'e gönderir
             var sehirList = Tatildb.Sehir.ToList();

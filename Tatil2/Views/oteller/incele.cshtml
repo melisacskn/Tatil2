@@ -1,5 +1,12 @@
 ﻿@model List<Tatil2.Models.Oda>
 
+	<style>
+		main{
+			background-color:white;
+			margin: 60px;
+			padding: 30px;
+		}
+	</style>
 <h2>Odalar</h2>
 
 @if (Model != null && Model.Any())
@@ -35,9 +42,10 @@ else
 <p id="hataMesaji" class="text-danger" style="display: none;">Bu tarihlerde oda müsait değil, lütfen başka bir tarih seçin.</p>
 
 <a href="#" id="rezervasyonLink" class="btn btn-primary">Rezervasyon Yap</a>
-<a href="@Url.Action("Index", "Oteller")" class="btn btn-secondary">Geri Dön</a>
+
 
 <script>
+		
 	document.addEventListener("DOMContentLoaded", function () {
 		const rezervasyonLink = document.getElementById("rezervasyonLink");
 		const hataMesaji = document.getElementById("hataMesaji");
