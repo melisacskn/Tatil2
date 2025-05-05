@@ -6,5 +6,6 @@
         public DateTime BitisTarihi { get; set; }
         public int OdaId { get; set; }
         
+
     }
 }

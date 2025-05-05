@@ -1,50 +1,88 @@
 ﻿@model List<Tatil2.Models.Rezervasyon>
+<style>
+	.detaybuton {
+		background-color: #3d2224;
+		color: white;
+		border: none;
+		width: 100px;
+		padding: 10px;
+		font-size: 16px;
+		border-radius: 5px;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+	}
 
+	.buton2 {
+		background-color: white;
+		color: #3d2224;
+		border: none;
+		padding: 10px;
+		font-size: 16px;
+		border-radius: 10px;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+		margin-top: -11px;
+	}
+
+	/* .buton2 .btn:hover {
+			background-color: white;
+		} */
+</style>
 <div class="card p-3 mt-4">
-    <h4>Rezervasyonlar</h4>
+	<h4>Rezervasyonlar</h4>
 
-    @if (Model == null || !Model.Any())
-    {
-        <div class="alert alert-warning">
-            Hiç rezervasyon bulunamadı.
-        </div>
-    }
-    else
-    {
-        <table class="table table-striped mt-3">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Müşteri ID</th>
-                    <th>Başlangıç Tarihi</th>
-                    <th>Bitiş Tarihi</th>
-                    <th>Oda ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var r in Model)
-                {
-                    <tr>
-                        <td>@r.Id</td>
-                        <td>@r.MusteriId</td>
-                        <td>@r.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
-                        <td>@r.BitisTarihi.ToString("dd.MM.yyyy")</td>
-                        <td>@r.OdaId</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+	@if (Model == null || !Model.Any())
+	{
+		<div class="alert alert-warning">
+			Hiç rezervasyon bulunamadı.
+		</div>
+	}
+	else
+	{
+		<table class="table table-striped mt-3">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Müşteri ID</th>
+					<th>Başlangıç Tarihi</th>
+					<th>Bitiş Tarihi</th>
+					<th>Oda ID</th>
+					<th>     </th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var r in Model)
+				{
+					<tr>
+						<td>@r.Id</td>
+						<td>@r.MusteriId</td>
+						<td>@r.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
+						<td>@r.BitisTarihi.ToString("dd.MM.yyyy")</td>
+						<td>@r.OdaId</td>
+						<td>
+							<a href="@Url.Action("Detay", "Admin", new { id = r.Id })"
+							   class="detaybuton">Detay</a>
+						</td>
+
+
+					</tr>
+
+
+
+				}
+			</tbody>
+		</table>
+	}
+</div>
+<div>
+	<a href="@Url.Action("TumRezervasyonlar", "Admin")" style=" display:inline-block; width: 100%; font-size: 20px; padding-left: 45%;" class="buton2">Tümünü Gör..</a>
 </div>
 
 
-<div class="card p-3 mt-4">
-	<h4>Oteller</h4>
-</div>
 
 
-<div class="card p-3 mt-4">
-	<h4>Yorumlar</h4>
-</div>
+
+
+
 
 

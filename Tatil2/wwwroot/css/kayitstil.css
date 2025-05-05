@@ -20,7 +20,7 @@ body {
 h2 {
     /*text-align: center;*/
     margin-bottom:1.5rem;
-    color: #aad665;
+    /*color: #aad665;*/
     font-size: 40px;
     /*margin-bottom: 30px;*/
 }
@@ -77,19 +77,19 @@ select {
 }
 
 
-button[type="submit"] {
-    width: 145px;
-    padding: 10px;
+/*button[type="submit"] {*/
+    /*width: 145px;*/
+    /*padding: 10px;
     background-color: #3d2224;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 8px;*/
     /* font-size: 16px; */
-    transition: background-color 0.3s;
+    /*transition: background-color 0.3s;
     margin: 22px -1px;
     button [type="submit"]:hover {
         background-color: #1c1011;
-    }
+    }*/
 textarea {
     display: block;
     width: 100%;
@@ -167,7 +167,7 @@ h4 {
     margin-top: 20px;
 }
 
-.card .btn {
+/*.card .btn {
     background-color: #3d2224;
     color: #fff;
     border: none;
@@ -176,7 +176,7 @@ h4 {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
+}*/
 
     .card .btn:hover {
         background-color: #3d2224;

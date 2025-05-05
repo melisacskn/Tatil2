@@ -32,6 +32,30 @@ namespace Tatil2.Controllers
 
             return View(son3);  
         }
+        public IActionResult Detay(int id)
+        {
+            var rezervasyon = Tatildb.Rezervasyon
+                .Include(r => r.Musteri)
+                .Include(r => r.MisafirBilgileri)
+                .Include(r => r.Oda)
+                .FirstOrDefault(r => r.Id == id);
+
+            if (rezervasyon == null)
+            {
+                return NotFound();
+            }
+
+            return View(rezervasyon);
+        }
+
+        public IActionResult TumRezervasyonlar()
+        {
+            var tumRezervasyonlar = Tatildb.Rezervasyon
+                .OrderByDescending(r => r.BaslangicTarihi)
+                .ToList();
+
+            return View(tumRezervasyonlar);
+        }
 
     }
 }

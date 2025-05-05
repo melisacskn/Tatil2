@@ -18,7 +18,7 @@ namespace Tatil2.Models
         [ForeignKey(nameof(OdaId))]
         public Oda Oda { get; set; }
 
-        //public string KartSahibiAdi { get; set; }
+       
 
         public DateTime BaslangicTarihi { get; set; }
         public DateTime BitisTarihi { get; set; }

@@ -47,7 +47,7 @@ namespace Tatil2.Controllers
 
             return View(rezervasyon);
         }
-
+    
         // Kullanıcı bir oda ile ilgili yorum yazdığında çağrılır
         // Yorum metninin geçerliliğini kontrol eder ve geçerliyse kaydeder.
         [HttpPost]
@@ -82,12 +82,13 @@ namespace Tatil2.Controllers
             await Tatildb.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Yorumunuz başarıyla kaydedildi.";
-            return RedirectToAction("Rezervasyon", new RezervasyonDTO
+            return RedirectToAction("Rezervasyon", new
             {
                 OdaId = oda.Id,
-                BaslangicTarihi = DateTime.Now,
-                BitisTarihi = DateTime.Now.AddDays(1)
+                BaslangicTarihi = DateTime.Now.ToString("yyyy-MM-dd"),
+                BitisTarihi = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")
             });
+
         }
 
         // Rezervasyon işlemini tamamlamak için odanın bilgilerini alır

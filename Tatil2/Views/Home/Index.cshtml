@@ -31,7 +31,11 @@
                     <td>@rezervasyon.BaslangicTarihi.ToString("dd MMM yyyy")</td>
                     <td>@rezervasyon.BitisTarihi.ToString("dd MMM yyyy")</td>
                     <td>
-                        <a href="@Url.Action("Rezervasyon", "Rezervasyon", new { odaId = rezervasyon.OdaId })" class="btn btn-primary">
+                        <a href="@Url.Action("Rezervasyon", "Rezervasyon", new {
+    odaId = rezervasyon.OdaId,
+    baslangicTarihi = rezervasyon.BaslangicTarihi.ToString("yyyy-MM-dd"),
+    bitisTarihi = rezervasyon.BitisTarihi.ToString("yyyy-MM-dd")
+})" class="btn btn-primary">
                             Yorum Yap
                         </a>
                     </td>
