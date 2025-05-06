@@ -348,8 +348,8 @@ sup {
 }
 
 a {
-  color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
-  text-decoration: underline;
+    color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+    text-decoration: auto;
 }
 a:hover {
   --bs-link-color-rgb: var(--bs-link-hover-color-rgb);

@@ -17,6 +17,7 @@ namespace Tatil2.Models
         public string? OdaFoto { get; set; }
         public virtual ICollection<Rezervasyon> Rezervasyon { get; set; }
         public virtual ICollection<Yorum> Yorumlar { get; set; }
+        
      
 
     }

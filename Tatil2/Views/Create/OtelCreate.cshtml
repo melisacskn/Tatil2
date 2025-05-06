@@ -37,6 +37,15 @@
 		margin: 10px;
 	}
 
+	.label1{
+		display: block;
+		font-size: 16px;
+		color: #444;
+		margin-bottom: 5px;
+		padding-top: 13px;
+		padding-bottom: 5px;
+		font-weight: bold;
+	}
 </style>
 
 <form asp-action="OtelCreate" onsubmit="Submit" method="post" enctype="multipart/form-data">
@@ -114,22 +123,22 @@
 		<div id="odalar">
 			<div class="oda">
 				<h4>Oda 1</h4>
-				<label for="OdaAd">Oda Adı</label>
+				<label for="OdaAd" class="label1">Oda Adı</label>
 				<input type="text" name="Odalar[0].OdaAd" class="form-control" />
 
-				<label for="OdaAciklama">Oda Açıklaması</label>
+				<label for="OdaAciklama" class="label1">Oda Açıklaması</label>
 				<input type="text" name="Odalar[0].OdaAciklama" class="form-control" />
 
-				<label for="OdaFiyat">Fiyat</label>
+				<label for="OdaFiyat" class="label1">Fiyat</label>
 				<input type="number" name="Odalar[0].OdaFiyat" class="form-control" />
 
-				<label for="KisiSayisi">Kişi Sayısı</label>
+				<label for="KisiSayisi" class="label1">Kişi Sayısı</label>
 				<input type="number" name="Odalar[0].KisiSayisi" class="form-control" />
 
-				<label for="OdaStok">Oda Stok</label>
+				<label for="OdaStok" class="label1">Oda Stok</label>
 				<input type="number" name="Odalar[0].OdaStok" class="form-control" />
 
-				<label for="OdaFoto">Oda Fotoğrafı</label>
+				<label for="OdaFoto" class="label1">Oda Fotoğrafı</label>
 				<input type="file" name="Odalar[0].OdaFoto" class="form-control" />
 			</div>
 		</div>

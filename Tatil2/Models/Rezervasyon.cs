@@ -13,6 +13,7 @@ namespace Tatil2.Models
         [ForeignKey(nameof(MusteriId))]
         public Musteri Musteri { get; set; }
         public virtual ICollection<MisafirBilgileri> MisafirBilgileri { get; set; } = [];
+     
 
         public int OdaId { get; set; }
         [ForeignKey(nameof(OdaId))]

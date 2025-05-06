@@ -42,6 +42,7 @@ main {
     /*background-color: #3d2224;*/
     /*border-radius:8px;*/
 }
+
 .sidebar {
     border-radius: 8px;
 }
@@ -63,7 +64,9 @@ main {
         color: #3d2224;
         display: block;
         margin-bottom: 8px;
+        padding-left: 12px;
     }
+
 
 /*.form-control {
     width: 100%;
@@ -118,11 +121,10 @@ label {
     display: block;
     font-size: 16px;
     color: #444;
-    margin-bottom: 5px;
+    margin-bottom: 17px;
 }
 
 input[type="text"], input[type="date"], input[type="number"], button {
-        
     padding: 5px;
     margin: 0px 5px;
     border-radius: 5px;
@@ -149,7 +151,7 @@ button {
     transition: background-color 0.3s ease;
 }
 
-  
+
 
 .tag-container {
     display: flex;

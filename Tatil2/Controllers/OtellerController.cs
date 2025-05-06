@@ -22,34 +22,31 @@ namespace Tatil2.Controllers
 
         // Otel odalarını incelemek için kullanılan metod
         // id, BaslangicTarihi, BitisTarihi, KisiSayisi parametreleri alır.
-        
+
         public async Task<IActionResult> Incele(int id, DateTime BaslangicTarihi, DateTime BitisTarihi, int KisiSayisi)
         {
-            // Verilen otel id'sine göre odaları filtreler. Oda kapasitesi ve tarihlerin uygunluğuna göre sorgu yapar.
             var odalar = Tatildb.Oda
-                            .Where(x => x.OtelId == id) // Otel id'ye göre filtreleme
-                            .Where(oda =>
-                  oda.KisiSayisi >= KisiSayisi && // Oda kapasitesine göre filtreleme
-                  oda.Rezervasyon.Count(r => r.BitisTarihi > BaslangicTarihi && r.BaslangicTarihi < BitisTarihi) < oda.OdaStok) // Tarihler çakışmıyorsa ve oda stokları yeterliyse
-                           .ToList();
+                .Include(o => o.Otel) // Otel bilgilerini dahil et
+                .Where(x => x.OtelId == id)
+                .Where(oda =>
+                    oda.KisiSayisi >= KisiSayisi &&
+                    oda.Rezervasyon.Count(r => r.BitisTarihi > BaslangicTarihi && r.BaslangicTarihi < BitisTarihi) < oda.OdaStok)
+                .ToList();
 
-            // Eğer odalar bulunamazsa 404 döndürülür.
-            if (odalar == null)
+            if (odalar == null || !odalar.Any())
             {
                 return NotFound();
             }
 
-            // ViewBag üzerinden tarih ve kişi sayısı parametreleri view'a gönderilir.
             ViewBag.BaslangicTarihi = BaslangicTarihi.ToString("yyyy-MM-dd");
             ViewBag.BitisTarihi = BitisTarihi.ToString("yyyy-MM-dd");
             ViewBag.KisiSayisi = KisiSayisi;
 
-            // Filtrelenen odalar view'a gönderilir
             return View(odalar);
         }
 
         // Otel filtreleme metodunu başlatır.
-        
+
         public async Task<IActionResult> Index([FromForm] OtelFiltreleDTO otelFiltreleDTO)
         {
             // Başlangıçta tüm otelleri alacak şekilde bir sorgu başlatılır.
@@ -113,5 +110,9 @@ namespace Tatil2.Controllers
 
             return View(viewModel);
         }
+       
+       
+        
+
     }
 }

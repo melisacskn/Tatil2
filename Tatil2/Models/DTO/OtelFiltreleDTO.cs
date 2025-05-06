@@ -15,6 +15,7 @@ namespace Tatil2.Models.DTO
         public decimal? MaxPuan { get; set; }
 
         public List<Otel>? Oteller { get; set; } = [];
+        public List<Oda>? Oda { get; set; } = [];
         public List<Tag> OtelTag { get; set; } 
     }
 }

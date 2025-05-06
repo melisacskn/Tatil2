@@ -1,34 +1,187 @@
 ﻿@model List<Tatil2.Models.Oda>
 
-	<style>
-		main{
-			background-color:white;
-			margin: 60px;
-			padding: 30px;
+<style>
+	.baslik1 {
+		font-size: 28px;
+		font-weight: bold;
+		color: #3d2224;
+	}
+	main {
+		background-color: white;
+		margin: 60px;
+		padding: 30px;
+	}
+
+	.otel {
+		background-color: #f8f9fa;
+		border: 1px solid #dee2e6;
+		border-radius: 10px;
+		padding: 20px;
+		margin-bottom: 30px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+
+		.otel img {
+			width: 100%;
+			max-height: 300px;
+			object-fit: cover;
+			border-radius: 8px;
+			margin-bottom: 15px;
 		}
-	</style>
-<h2>Odalar</h2>
+
+		.otel h3 {
+			color: #aad665;
+			font-size: 40px;
+			margin-bottom: 10px;
+		}
+
+		.otel p {
+			font-size: 16px;
+			color: #333;
+		}
+
+	ul {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	.oda-listesi li {
+		display: flex;
+		position: relative;
+		gap: 20px;
+		background-color: #f1f1f1;
+		margin-bottom: 20px;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		align-items: flex-start; /* Satırları hizalar */
+	}
+
+		.oda-listesi li img {
+			width: 220px;
+			height: 150px;
+			object-fit: cover;
+			border-radius: 8px;
+			flex-shrink: 0;
+		}
+
+		.oda-listesi li .oda-detay {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.oda-listesi li h3 {
+			margin: 0;
+			font-size: 22px;
+			color: #343a40;
+		}
+
+		.oda-listesi li p {
+			margin: 0;
+			color: #555;
+			font-size: 15px;
+		}
+
+		.oda-listesi li .fiyat {
+			position: absolute;
+			right: 10px;
+			top: 20px;
+			color: #343a40;
+			font-size: 22px;
+		}
+
+		.oda-listesi li .form-check {
+			position: absolute;
+			right: 10px;
+			bottom: 10px;
+			display: flex;
+			align-items: center;
+		}
+
+		.oda-listesi li .form-check-label {
+			font-weight: bold;
+			font-size: 16px;
+			color: #aad665;
+		}
+
+		.oda-listesi li.secili {
+			border: 3px solid #aad665;
+			box-shadow: 0 0 10px rgba(170, 214, 101, 0.7);
+		}
+
+
+
+
+/* 	#rezervasyonLink {
+		margin-top: 30px;
+		padding: 12px 25px;
+		font-size: 18px;
+		background-color: #aad665;
+		color: white;
+		border-radius: 8px;
+		transition: background-color 0.3s ease;
+	} */
+
+		/* #rezervasyonLink:hover {
+			background-color: #aad665;
+			color: #fff;
+			text-decoration: none;
+		} */
+
+	#hataMesaji {
+		margin-top: 15px;
+		font-size: 16px;
+	}
+
+	/* .fiyat {
+		color: #aad665;
+		font-size: 18px;
+		background-color: #eaffea;
+		padding: 6px 10px;
+		border-radius: 5px;
+		display: inline-block;
+	} */
+
+</style>
+
+
+@if (Model != null && Model.Any() && Model.First().Otel != null)
+{
+	var otel = Model.First().Otel;
+
+	<h2 class="baslik1">Otel Bilgileri</h2>
+	<div class="otel">
+		<h3>@otel.Ad</h3>
+		<img src="@otel.Poster" alt="Otel Resmi" class="img-fluid" />
+		<p><strong>Konum:</strong> @otel.Konum</p>
+		<p>@otel.Aciklama</p>
+	</div>
+}
+else
+{
+	<p>Otel bilgileri bulunamadı.</p>
+}
+
+<h2 class="baslik1">Odalar</h2>
 
 @if (Model != null && Model.Any())
 {
-	<ul>
+	<ul class="oda-listesi">
 		@foreach (var Oda in Model)
 		{
 			<li>
-				<h3>@Oda.OdaAd</h3>
-				@if (!string.IsNullOrEmpty(Oda.OdaFoto))
-				{
-					<img src="@Oda.OdaFoto" alt="@Oda.OdaAd" class="img-fluid" />
-				}
-				<p><strong>Açıklama:</strong> @Oda.OdaAciklama</p>
-				<p><strong>Fiyat:</strong> @Oda.OdaFiyat</p>
-				<p><strong>Kapasite:</strong> @Oda.KisiSayisi</p>
-
+				<img src="@Oda.OdaFoto" alt="@Oda.OdaAd" class="img-fluid" />
+				<div class="oda-detay">
+					<h3>@Oda.OdaAd</h3>
+					<p><strong>Açıklama:</strong> @Oda.OdaAciklama</p>
+					<p><strong>Kapasite:</strong> @Oda.KisiSayisi</p>
+				</div>
+				<p class="fiyat"><strong>@Oda.OdaFiyat ₺</strong></p>
 				<div class="form-check">
 					<input class="form-check-input" type="radio" name="SelectedOdaId" value="@Oda.Id" id="oda_@Oda.Id">
-					<label class="form-check-label" for="oda_@Oda.Id">
-						Bu odayı seç
-					</label>
+					<label class="form-check-label" for="oda_@Oda.Id">Odayı Seç</label>
 				</div>
 			</li>
 		}
@@ -45,7 +198,22 @@ else
 
 
 <script>
-		
+	document.querySelectorAll('input[name="SelectedOdaId"]').forEach(radio => {
+		radio.addEventListener("change", function () {
+			// Tüm <li> öğelerinden önce sınıfı kaldır
+			document.querySelectorAll(".oda-listesi li").forEach(li => {
+				li.classList.remove("secili");
+			});
+
+			// Seçili radio'nun en yakın <li> öğesine "secili" sınıfını ekle
+			const selectedLi = this.closest("li");
+			if (selectedLi) {
+				selectedLi.classList.add("secili");
+			}
+		});
+	});
+
+
 	document.addEventListener("DOMContentLoaded", function () {
 		const rezervasyonLink = document.getElementById("rezervasyonLink");
 		const hataMesaji = document.getElementById("hataMesaji");

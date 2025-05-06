@@ -2,6 +2,14 @@
 
 <h2 class="mb-0">Otel Filtreleme</h2>
 <style>
+	.sinif{
+		margin-top: 22px;
+		margin-bottom: 2rem;
+	}
+	.kontrol{
+		display: block;
+		width: 90%;
+	}
 	.form-group1{
 		padding: 10px;
 		font-size: 0px;
@@ -30,7 +38,7 @@
 		/* padding: 5px; */
 		/* margin: 0px 5px; */
 		border-radius: 5px;
-		border: 1px solid #ddd;
+		/* border: 1px solid #ddd; */
 		font-size: 15px;
 		box-sizing: border-box;
 		transition: 0.3s ease;
@@ -95,15 +103,15 @@
 			<div class="form-group col-md-3">
 				<label for="BaslangicTarihi">Giriş Tarihi</label>
 				<input type="date" id="BaslangicTarihi" name="BaslangicTarihi"
-					   class="form-control"
+					   class="kontrol"
 					   value="@Model.BaslangicTarihi?.ToString("yyyy-MM-dd")"
-					   max="@bugun" required />
+					   min="@bugun" required />
 			</div>
 			
 			<div class="form-group col-md-3">
 				<label for="BitisTarihi">Çıkış Tarihi</label>
 				<input type="date" id="BitisTarihi" name="BitisTarihi"
-					   class="form-control"
+					   class="kontrol"
 					   value="@Model.BitisTarihi?.ToString("yyyy-MM-dd")"
 					   min="@bugun" required />
 			</div>
@@ -130,8 +138,8 @@
 				<div class="otel">
 					<h3>@otel.Ad</h3>
 					<img src="@otel.Poster" alt="Otel Resmi" class="img-fluid" />
-					<p><strong>Konum:</strong> @otel.Konum</p>
-					<p>@otel.Aciklama</p>
+					<p class="sinif"><strong>Konum:</strong> @otel.Konum</p>
+					<p class="sinif">@otel.Aciklama</p>
 
 					<a href="@Url.Action("Incele", "Oteller", new { id = otel.Id, BaslangicTarihi = Model.BaslangicTarihi.Value.ToString("yyyy-MM-dd"), BitisTarihi = Model.BitisTarihi.Value.ToString("yyyy-MM-dd"), KisiSayisi = Model.KisiSayisi })" class="btn btn-primary">İncele</a>
 
