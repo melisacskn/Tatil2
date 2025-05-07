@@ -3,35 +3,53 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Tatil2.DBContext;
 using Tatil2.Models;
+using Tatil2.Models.DTO;
 
 namespace Tatil2.Controllers
 {
-    public class AdminController:BaseController
+    public class AdminController : BaseController
     {
         private readonly TatilDBContext Tatildb;
 
-     
+
         public AdminController(TatilDBContext tatilDB)
         {
             Tatildb = tatilDB;
         }
         public IActionResult Admin()
         {
-            var son3 = Tatildb.Rezervasyon
-                               .OrderByDescending(r => r.BaslangicTarihi)
-                               .Take(3)
-                               .ToList();
+            var rezervasyon = Tatildb.Rezervasyon
+                                        .Include(r => r.Musteri)
+                                        .Include(r => r.Oda)
+                                        .OrderByDescending(r => r.BaslangicTarihi)
+                                        .Take(3)
+                                        .ToList();
 
-            // Null kontrolü eklemek:
-            if (son3 == null || !son3.Any())
+            if (rezervasyon == null || !rezervasyon.Any())
             {
-                // Boş veri durumu
                 ViewBag.ErrorMessage = "Hiç rezervasyon bulunamadı.";
-                return View(new List<Rezervasyon>());  
+                rezervasyon = new List<Rezervasyon>();
             }
 
-            return View(son3);  
+            var yorum = Tatildb.Yorum
+                                  .Include(y => y.Musteri)
+                                  .Include(y => y.Oda)
+                                  .Include(y => y.Otel)
+                                  .OrderByDescending(y => y.Id)
+                                  .Take(5)
+                                  .ToList();
+
+            var model = new AdminPanelViewModel
+            {
+                Rezervasyon = rezervasyon,
+                Yorum = yorum
+            };
+
+            return View(model);
         }
+
+
+
         public IActionResult Detay(int id)
         {
             var rezervasyon = Tatildb.Rezervasyon
@@ -56,6 +74,28 @@ namespace Tatil2.Controllers
 
             return View(tumRezervasyonlar);
         }
+        public IActionResult YorumDetay(int id)
+        {
+            var Yorum = Tatildb.Yorum
+                .Include(r => r.Musteri)
+                .Include(r => r.Otel)
+                .Include(r => r.Oda)
+                .FirstOrDefault(r => r.Id == id);
 
+            if (Yorum == null)
+            {
+                return NotFound();
+            }
+
+            return View(Yorum);
+        }
+        public IActionResult TumYorumlar()
+        {
+            var TumYorumlar = Tatildb.Yorum
+                .OrderByDescending(r => r.MusteriId)
+                .ToList();
+
+            return View(TumYorumlar);
+        }
     }
 }

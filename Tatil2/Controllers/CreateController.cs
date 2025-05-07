@@ -40,8 +40,8 @@ namespace Tatil2.Controllers
             var sehirList = Tatildb.Sehir.ToList();
             ViewBag.Sehirler = sehirList;
 
-            var tagKategoriList = Tatildb.TagKategori.Include(tk => tk.Tag).ToList();
-            ViewBag.TagKategori = tagKategoriList;
+            var TagKategori = Tatildb.TagKategori.Include(tk => tk.Tag).ToList();
+            ViewBag.TagKategori = TagKategori;
 
             return View();
         }
@@ -142,9 +142,9 @@ namespace Tatil2.Controllers
                         }
 
                         // Seçilen etiketler eklenir
-                        if (otelCreate.SelectedTagId != null && otelCreate.SelectedTagId.Any())
+                        if (otelCreate.TagKategori != null && otelCreate.TagKategori.Any())
                         {
-                            Tatildb.OtelTag.AddRange(otelCreate.SelectedTagId.Select(id => new OtelTag() { OtelId = otel.Id, TagId = id }));
+                            Tatildb.OtelTag.AddRange(otelCreate.TagKategori.Select(id => new OtelTag() { OtelId = otel.Id, TagId = id }));
                             Tatildb.SaveChanges();
                         }
 

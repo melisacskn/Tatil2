@@ -1,0 +1,53 @@
+﻿@model List<Tatil2.Models.Yorum>
+
+<div class="card p-3 mt-4">
+    <h4>Tüm Rezervasyonlar</h4>
+    <style>
+        .detaybuton {
+            background-color: #3d2224;
+            color: white;
+            border: none;
+            width: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: auto;
+        }
+    </style>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">Yorum bulunamadı.</div>
+    }
+    else
+    {
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Müşteri ID</th>
+                    <th>Oda ID</th>
+                    <th>Otel ID</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var y in Model)
+                {
+                    <tr>
+                        <td>@y.Id</td>
+                        <td>@y.MusteriId</td>
+                        <td>@y.OdaId</td>
+                        <td>@y.OtelId</td>
+                        <td>
+                            <a href="@Url.Action("YorumDetay", "Admin", new { id = y.Id })"
+                               class="detaybuton">Detay</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

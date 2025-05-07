@@ -1,0 +1,128 @@
+﻿@model Tatil2.Models.Yorum
+
+<style>
+    /* Genel stil ayarları */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    /* Başlıklar */
+    h3 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        border-bottom: 2px solid #4CAF50;
+        padding-bottom: 5px;
+    }
+
+    /* Tabloyu çevreleyen div */
+    .div1 {
+        max-width: 800px;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Stil düzenlemeleri */
+    table p {
+        font-size: 1em;
+        margin: 10px 0;
+    }
+
+</style>
+<div class="div1">
+    <h3>Kişi Detayı</h3>
+    <table>
+        <tr>
+            <th>Ad Soyad</th>
+            <td>@Model.Musteri.Ad @Model.Musteri.Soyad</td>
+        </tr>
+        <tr>
+            <th>Telefon</th>
+            <td>@Model.Musteri.Telefon</td>
+        </tr>
+        <tr>
+            <th>TC</th>
+            <td>@Model.Musteri.TC</td>
+        </tr>
+        <tr>
+            <th>Cinsiyet</th>
+            <td>@(Model.Musteri.Cinsiyet ? "Erkek" : "Kadın")</td>
+        </tr>
+
+    </table><div class="div1">
+        <h3>Rezervasyon Detayı</h3>
+        <table>
+            <tr>
+                <th>Otel Adı</th>
+                <td>@Model.Otel.Ad</td>
+            </tr>
+            <tr>
+                <th>Otel Konumu</th>
+                <td>@Model.Otel.Konum</td>
+            </tr>
+            <tr>
+                <th>Oda Adı</th>
+                <td>@Model.Oda.OdaAd</td>
+            </tr>
+            <tr>
+                <th>Oda Fiyati</th>
+                <td>@Model.Oda.OdaFiyat</td>
+            </tr>          
+        </table>
+
+    <h3 class="mt-3">Yorum Detayı</h3>  
+    @if (Model.Yazi.Any())
+    {
+    <table>
+        <tr>
+            <th>Yorumu</th>
+            <td>@Model.Yazi</td>
+        </tr>
+        <tr>
+            <th>Puanlaması</th>
+            <td>@Model.Puan</td>
+        </tr>
+    </table>
+    }
+    else
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><p>Yorum bilgisi yok.</p></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        }
+  
+   
+

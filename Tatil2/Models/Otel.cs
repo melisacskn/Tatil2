@@ -26,7 +26,7 @@ namespace Tatil2.Models
         public ICollection<Tag> Tag { get; set; } = [];
         //public ICollection<OtelTag> OtelTag { get; set; }
         public virtual ICollection<Oda> Odalar { get; set; }
-       
+        public ICollection<OtelTag> OtelTagList { get; set; } = new List<OtelTag>();
 
         //public virtual ICollection<Rezervasyon> Rezervasyon { get; set; }
 

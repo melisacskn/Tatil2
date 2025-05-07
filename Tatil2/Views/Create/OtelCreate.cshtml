@@ -98,26 +98,35 @@
 	<div>
 		@if (ViewBag.TagKategori != null)
 		{
-			var tagKategoriList = ViewBag.TagKategori as List<Tatil2.Models.TagKategori>;
-			if (tagKategoriList != null && tagKategoriList.Count > 0)
+			var TagKategori = ViewBag.TagKategori as List<Tatil2.Models.TagKategori>;
+			if (TagKategori != null && TagKategori.Count > 0)
 			{
-				@foreach (var tagKategori in tagKategoriList)
+				foreach (var kategori in TagKategori)
 				{
-					<h6>@tagKategori.Ad</h6>
-					@foreach (var tag in tagKategori.Tag)
+					<h6>@kategori.Ad</h6>
+					if (kategori.Tag != null)
 					{
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox" id="@tag.Ad" name="SelectedTagId" value="@tag.Id" />
-							<label class="form-check-label" for="@tag.Ad">@tag.Ad</label>
-						</div>
+						foreach (var tag in kategori.Tag)
+						{
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="@tag.Ad" name="TagKategori" value="@tag.Id" />
+								<label class="form-check-label" for="@tag.Ad">@tag.Ad</label>
+							</div>
+						}
 					}
 				}
+			}
+			else
+			{
+				<p>Tag kategorisi bulunamadı.</p>
 			}
 		}
 		else
 		{
 			<p>No tag categories available.</p>
 		}
+	</div>
+
 
 
 		<div id="odalar">

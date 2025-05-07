@@ -1,41 +1,83 @@
-﻿@model List<Tatil2.Models.Rezervasyon>
+﻿@model Tatil2.Models.DTO.AdminPanelViewModel
+
 <style>
 	.detaybuton {
-		background-color: #3d2224;
-		color: white;
-		border: none;
-		width: 100px;
-		padding: 11px;
-		padding-top: 5px;
-		padding-bottom: 7px;
-		font-size: 17px;
-		border-radius: 5px;
-		cursor: pointer;
-		transition: background-color 0.3s ease;
-		text-decoration: auto;
+	background-color: #3d2224;
+	color: white;
+	border: none;
+	width: 100px;
+	padding: 11px;
+	padding-top: 5px;
+	padding-bottom: 7px;
+	font-size: 17px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	text-decoration: auto;
 	}
 
 	.buton2 {
-		background-color: white;
-		color: #3d2224;
-		border: none;
-		padding: 10px;
-		font-size: 16px;
-		border-radius: 10px;
-		cursor: pointer;
-		transition: background-color 0.3s ease;
-		margin-top: -11px;
-		text-decoration: auto;
+	background-color: white;
+	color: #3d2224;
+	border: none;
+	padding: 10px;
+	font-size: 16px;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-top: -11px;
+	text-decoration: auto;
 	}
 
 	/* .buton2 .btn:hover {
-			background-color: white;
-		} */
+	background-color: white;
+	} */
 </style>
+<div class="card p-3 mt-4">
+	<h4>Yorumlar</h4>
+
+	@if (Model.Yorum == null || !Model.Yorum.Any())
+	{
+		<div class="alert alert-warning">
+			Hiç Yorum bulunamadı.
+		</div>
+	}
+	else
+	{
+		<table class="table table-striped mt-3">
+			<thead>
+				<tr>
+					<th>Müşteri </th>
+					<th>Otel </th>
+					<th>Oda </th>
+					<th> </th> 
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var y in Model.Yorum)
+				{
+					<tr>
+						<td>@y.Musteri.Ad</td>
+						<td>@y.Oda.OdaAd</td>
+						<td>@y.Otel.Ad</td>
+						<td>
+							<a href="@Url.Action("YorumDetay", "Admin", new { id = y.Id })"
+							   class="detaybuton">Detay</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+
+</div>
+<div>
+	<a href="@Url.Action("TumYorumlar", "Admin")" style=" display:inline-block; width: 100%; font-size: 20px; padding-left: 45%;" class="buton2">Tümünü Gör..</a>
+</div>
 <div class="card p-3 mt-4">
 	<h4>Rezervasyonlar</h4>
 
-	@if (Model == null || !Model.Any())
+	@if (Model.Rezervasyon == null || !Model.Rezervasyon.Any())
 	{
 		<div class="alert alert-warning">
 			Hiç rezervasyon bulunamadı.
@@ -46,41 +88,36 @@
 		<table class="table table-striped mt-3">
 			<thead>
 				<tr>
-					<th>ID</th>
-					<th>Müşteri ID</th>
+					<th>Müşteri </th>
 					<th>Başlangıç Tarihi</th>
 					<th>Bitiş Tarihi</th>
-					<th>Oda ID</th>
-					<th>     </th>
+					<th>Oda </th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (var r in Model)
+				@foreach (var r in Model.Rezervasyon)
 				{
 					<tr>
-						<td>@r.Id</td>
-						<td>@r.MusteriId</td>
+						<td>@r.Musteri.Ad</td>
 						<td>@r.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
 						<td>@r.BitisTarihi.ToString("dd.MM.yyyy")</td>
-						<td>@r.OdaId</td>
+						<td>@r.Oda.OdaAd</td>
 						<td>
 							<a href="@Url.Action("Detay", "Admin", new { id = r.Id })"
 							   class="detaybuton">Detay</a>
 						</td>
-
-
 					</tr>
-
-
-
 				}
 			</tbody>
-		</table>
-	}
+		</table> 
+		}
 </div>
 <div>
 	<a href="@Url.Action("TumRezervasyonlar", "Admin")" style=" display:inline-block; width: 100%; font-size: 20px; padding-left: 45%;" class="buton2">Tümünü Gör..</a>
 </div>
+
+
 
 
 

@@ -174,17 +174,19 @@ namespace Tatil2.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Rezervasyon kaydedilirken bir hata oluştu. Hata: {ex.Message}";
-                // Hata ayrıntılarını konsola yazdırarak daha fazla bilgi alabilirsiniz.
-                Console.WriteLine(ex);
+                var hataMesaji = ex.InnerException?.Message ?? ex.Message;
+
                 return Json(new
                 {
                     isSuccess = false,
-                    message = "Rezervasyon kaydedilirken bir hata oluştu. Lütfen tekrar deneyin."
+                    message = $"Rezervasyon kaydedilirken bir hata oluştu. Hata: {hataMesaji}"
                 });
+            }
+
+         
             }
 
         }
 
     }
-}
+

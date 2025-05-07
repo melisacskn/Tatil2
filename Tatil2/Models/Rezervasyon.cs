@@ -13,22 +13,18 @@ namespace Tatil2.Models
         [ForeignKey(nameof(MusteriId))]
         public Musteri Musteri { get; set; }
         public virtual ICollection<MisafirBilgileri> MisafirBilgileri { get; set; } = [];
-     
+
 
         public int OdaId { get; set; }
         [ForeignKey(nameof(OdaId))]
         public Oda Oda { get; set; }
 
-       
+
 
         public DateTime BaslangicTarihi { get; set; }
         public DateTime BitisTarihi { get; set; }
 
 
-
-        //public string KartNo { get; set; }
-        //public string KartTarih { get; set; }
-        //public string Cvv { get; set; }
     }
 
     public class RezervasyonCreateDTO
