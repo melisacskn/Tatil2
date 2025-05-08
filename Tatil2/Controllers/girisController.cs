@@ -53,8 +53,26 @@ namespace Tatil2.Controllers
                         SameSite = SameSiteMode.Strict,
                     });
 
-                    // Başarılı giriş sonrası yönlendirme yapılır
-                    return Json(new { HasError = false, Result = "Giriş başarılı.", redirectToUrl = Url.Action("Index", "Home") });
+                    if (user.IsAdmin)
+                    {
+                        return Json(new
+                        {
+                            HasError = false,
+                            Result = "Giriş başarılı.",
+                            redirectToUrl = Url.Action("Admin", "Admin")
+                        });
+                    }
+
+                    else
+                    {
+                        return Json(new
+                        {
+                            HasError = false,
+                            Result = "Giriş başarılı.",
+                            redirectToUrl = Url.Action("Index", "Home")
+                        });
+                    }
+
                 }
                 else
                 {
@@ -65,6 +83,13 @@ namespace Tatil2.Controllers
             }
 
             return Json(result); // Hata mesajı döner
+        }
+
+        [HttpGet]
+        public ActionResult SignOut()
+        {
+            Response.Cookies.Delete("access_token");
+            return RedirectToAction("SignIn", "giris");
         }
 
         // Giriş sayfasına yönlendirir (GET metodu)

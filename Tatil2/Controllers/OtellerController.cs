@@ -26,7 +26,8 @@ namespace Tatil2.Controllers
         public async Task<IActionResult> Incele(int id, DateTime BaslangicTarihi, DateTime BitisTarihi, int KisiSayisi)
         {
             var odalar = Tatildb.Oda
-                .Include(o => o.Otel) // Otel bilgilerini dahil et
+                .Include(o => o.Otel)               // Otel bilgileri
+                .Include(o => o.Yorum)              // Yorum bilgileri eklendi
                 .Where(x => x.OtelId == id)
                 .Where(oda =>
                     oda.KisiSayisi >= KisiSayisi &&
@@ -38,12 +39,25 @@ namespace Tatil2.Controllers
                 return NotFound();
             }
 
+            // Ortalama puanı hesapla
+            var yorumlar = odalar
+                .Where(o => o.Yorum != null)
+                .SelectMany(o => o.Yorum)
+                .Where(y => y.OtelId == id)
+                .ToList();
+
+            var ortalamaPuan = yorumlar.Any() ? yorumlar.Average(y => y.Puan) : 0;
+
+            // ViewBag'e aktar
+            ViewBag.OrtalamaPuan = ortalamaPuan.ToString("0.0");
+
             ViewBag.BaslangicTarihi = BaslangicTarihi.ToString("yyyy-MM-dd");
             ViewBag.BitisTarihi = BitisTarihi.ToString("yyyy-MM-dd");
             ViewBag.KisiSayisi = KisiSayisi;
 
             return View(odalar);
         }
+
 
         // Otel filtreleme metodunu başlatır.
 
@@ -66,15 +80,15 @@ namespace Tatil2.Controllers
             // MinPuan parametresi varsa, ortalama puanları bu değeri geçecek şekilde filtreler
             if (otelFiltreleDTO.MinPuan.HasValue)
             {
-                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorumlar).Any() || // Yorum yoksa geçir
-                                        x.Odalar.SelectMany(y => y.Yorumlar).Average(y => (decimal?)y.Puan) >= otelFiltreleDTO.MinPuan.Value);
+                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorum).Any() || // Yorum yoksa geçir
+                                        x.Odalar.SelectMany(y => y.Yorum).Average(y => (decimal?)y.Puan) >= otelFiltreleDTO.MinPuan.Value);
             }
 
             // MaxPuan parametresi varsa, ortalama puanları bu değeri geçmeyecek şekilde filtreler
             if (otelFiltreleDTO.MaxPuan.HasValue)
             {
-                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorumlar).Any() || // Yorum yoksa geçir
-                                        x.Odalar.SelectMany(y => y.Yorumlar).Average(y => (decimal?)y.Puan) <= otelFiltreleDTO.MaxPuan.Value);
+                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorum).Any() || // Yorum yoksa geçir
+                                        x.Odalar.SelectMany(y => y.Yorum).Average(y => (decimal?)y.Puan) <= otelFiltreleDTO.MaxPuan.Value);
             }
 
             // TagId parametreleri varsa, otellerin tag'lerini filtreler

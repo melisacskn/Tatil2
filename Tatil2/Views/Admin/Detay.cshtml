@@ -1,141 +1,151 @@
 ﻿@model Tatil2.Models.Rezervasyon
 <style>
-    /* Genel stil ayarları */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-        background-color: #f9f9f9;
-    }
+	/* Genel stil ayarları */
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 20px;
+		background-color: #f9f9f9;
+	}
 
-    th, td {
-        padding: 12px 15px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
+	th, td {
+		padding: 12px 15px;
+		text-align: left;
+		border: 1px solid #ddd;
+	}
 
-    th {
-        background-color: #4CAF50;
-        color: white;
-    }
+	th {
+		background-color: #4CAF50;
+		color: white;
+		width: 33%; /* Sabit genişlik veriyoruz */
+		min-width: 150px;
+	}
 
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
+	td {
+		width: 70%; /* Geri kalan alan veri sütununa */
+	}
 
-    tr:hover {
-        background-color: #ddd;
-    }
 
-    /* Başlıklar */
-    h3 {
-        color: #333;
-        margin-bottom: 15px;
-        font-size: 1.5em;
-        border-bottom: 2px solid #4CAF50;
-        padding-bottom: 5px;
-    }
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
 
-    /* Tabloyu çevreleyen div */
-    .div1 {
-        max-width: 800px;
-        margin: 0 auto;
-        font-family: Arial, sans-serif;
-    }
+	tr:hover {
+		background-color: #ddd;
+	}
 
-    /* Stil düzenlemeleri */
-    table p {
-        font-size: 1em;
-        margin: 10px 0;
-    }
+	/* Başlıklar */
+	h3 {
+		color: white;
+		margin-bottom: 15px;
+		font-size: 1.9em;
+		border-bottom: 2px solid #4CAF50;
+		/* padding-bottom: 9px; */
+		padding-top: 16px;
+	}
+
+	/* Tabloyu çevreleyen div */
+	.div1 {
+		max-width: 800px;
+		margin: 0 auto;
+		font-family: Arial, sans-serif;
+	}
+
+	/* Stil düzenlemeleri */
+	table p {
+		font-size: 1em;
+		margin: 10px 0;
+	}
 
 </style>
 <div class="div1">
-    <h3>Rezervasyon Detayı</h3>
-    <table>
-        <tr>
-            <th>Ad Soyad</th>
-            <td>@Model.Musteri.Ad @Model.Musteri.Soyad</td>
-        </tr>
-        <tr>
-            <th>Mail</th>
-            <td>@Model.Musteri.Mail</td>
-        </tr>
-        <tr>
-            <th>Telefon</th>
-            <td>@Model.Musteri.Telefon</td>
-        </tr>
-        <tr>
-            <th>TC</th>
-            <td>@Model.Musteri.TC</td>
-        </tr>
-        <tr>
-            <th>Cinsiyet</th>
-            <td>@(Model.Musteri.Cinsiyet ? "Erkek" : "Kadın")</td>
-        </tr>
-        <tr>
-            <th>Başlangıç</th>
-            <td>@Model.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
-        </tr>
-        <tr>
-            <th>Bitiş</th>
-            <td>@Model.BitisTarihi.ToString("dd.MM.yyyy")</td>
-        </tr>
-    </table>
+	<h3>Rezervasyon Detayı</h3>
+	<table>
+		<tr>
+			<th>Ad Soyad</th>
+			<td>@Model.Musteri.Ad @Model.Musteri.Soyad</td>
+		</tr>
+		<tr>
+			<th>Mail</th>
+			<td>@Model.Musteri.Mail</td>
+		</tr>
+		<tr>
+			<th>Telefon</th>
+			<td>@Model.Musteri.Telefon</td>
+		</tr>
+		<tr>
+			<th>TC</th>
+			<td>@Model.Musteri.TC</td>
+		</tr>
+		<tr>
+			<th>Cinsiyet</th>
+			<td>@(Model.Musteri.Cinsiyet ? "Erkek" : "Kadın")</td>
+		</tr>
+		<tr>
+			<th>Başlangıç</th>
+			<td>@Model.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
+		</tr>
+		<tr>
+			<th>Bitiş</th>
+			<td>@Model.BitisTarihi.ToString("dd.MM.yyyy")</td>
+		</tr>
+	</table>
 
-    <h3 class="mt-3">Oda Bilgisi</h3>
-    <table>
-        <tr>
-            <th>Oda Adı</th>
-            <td>@Model.Oda.OdaAd</td>
-        </tr>
-        <tr>
-            <th>Fiyat</th>
-            <td>@Model.Oda.OdaFiyat ₺</td>
-        </tr>
-        <tr>
-            <th>Açıklama</th>
-            <td>@Model.Oda.OdaAciklama</td>
-        </tr>
-    </table>
+	<h3 class="mt-3">Oda Bilgisi</h3>
+	<table>
+		<tr>
+			<th>Oda Adı</th>
+			<td>@Model.Oda.OdaAd</td>
+		</tr>
+		<tr>
+			<th>Fiyat</th>
+			<td>@Model.Oda.OdaFiyat ₺</td>
+		</tr>
+		<tr>
+			<th>Açıklama</th>
+			<td>@Model.Oda.OdaAciklama</td>
+		</tr>
+	</table>
+	<h3 class="mt-3">Misafirler</h3>
+	@if (Model.MisafirBilgileri.Any())
+	{  @foreach (var misafir in Model.MisafirBilgileri)
+		{
+			<table>
+				<tr>
+					<th>Ad Soyad</th>
+					<td>@misafir.Ad @misafir.Soyad</td>
 
-    <h3 class="mt-3">Misafirler</h3>
-    @if (Model.MisafirBilgileri.Any())
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th>Ad Soyad</th>
-                    <th>TC</th>           
-                    <th>DogumTarihi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var misafir in Model.MisafirBilgileri)
-                {
-                    <tr>
-                        <td>@misafir.Ad @misafir.Soyad</td>
-                        <td>@misafir.TC</td>
-                        <td>@misafir.DogumTarihi.ToString("dd.MM.yyyy")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    { <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><p>Misafir bilgisi yok.</p></td>
-            </tr>
-    </tbody>
-       
-       </table> 
-    }
+				</tr>
+				<tr>
+					<th>TC</th>
+					<td>@misafir.TC</td>
+
+				</tr>
+				<tr>
+					<th>DogumTarihi</th>
+					<td>@misafir.DogumTarihi.ToString("dd.MM.yyyy")</td>
+
+				</tr>
+			</table>
+		}
+
+	}
+
+	else
+	{
+		<table>
+			<thead>
+				<tr>
+					<th></th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><p>Misafir bilgisi yok.</p></td>
+				</tr>
+			</tbody>
+
+		</table>
+	}
 </div>

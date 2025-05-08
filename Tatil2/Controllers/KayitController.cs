@@ -66,7 +66,7 @@ namespace Tatil2.Controllers
                         Tatildb.SaveChanges();
 
                         // Başarılı kayıt sonrası anasayfaya yönlendirme
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Oteller");
                     }
                     catch (Exception ex)
                     {

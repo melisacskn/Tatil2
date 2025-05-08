@@ -15,7 +15,7 @@ namespace Tatil2.Models
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Yorum en az 3, en fazla 100 karakter olmalıdır.")]
         public string Yazi { get; set; }
 
-        [Range(1, 10, ErrorMessage = "Yorumlar 1 ile 10 arasında olmalıdır.")]
+        [Range(1, 10, ErrorMessage = "Yorum 1 ile 10 arasında olmalıdır.")]
         public decimal Puan { get; set; }
 
         public int OtelId { get; set; }

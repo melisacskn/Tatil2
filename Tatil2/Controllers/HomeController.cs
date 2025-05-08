@@ -24,6 +24,10 @@ namespace Tatil2.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Admin", "Admin");
+            }
             // Mevcut oturum açmýþ kullanýcýnýn ID'sini base sýnýfýndan (BaseController) alýyoruz
             var userId = base.Musteri.Id;
 

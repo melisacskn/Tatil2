@@ -1,10 +1,38 @@
 ﻿@model List<Tatil2.Models.Oda>
 
 <style>
+	.odasec{
+		display: block;
+		font-size: 18px;
+		color: #aad665;
+		margin-bottom: -5px;
+		padding: 6px;
+		font-weight: bold;
+	}
+	.otel-baslik {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 10px;
+	}
+
+	.otel-adi {
+		font-size: 24px;
+		font-weight: bold;
+		margin: 0;
+	}
+
+	.ortalama-puan {
+		font-weight: bold;
+		color: #aad665;	
+		font-size: 40px;
+		margin-bottom: 10px; /* örnek: altın rengi */
+	}
+
 	.baslik1 {
 		font-size: 28px;
 		font-weight: bold;
-		color: #3d2224;
+		color: #aad665;
 	}
 	main {
 		background-color: white;
@@ -153,16 +181,22 @@
 
 	<h2 class="baslik1">Otel Bilgileri</h2>
 	<div class="otel">
-		<h3>@otel.Ad</h3>
+		<div class="otel-baslik">
+			<h3 class="otel-adi">@otel.Ad</h3>
+			<span class="ortalama-puan">@ViewBag.OrtalamaPuan / 10</span>
+		</div>
 		<img src="@otel.Poster" alt="Otel Resmi" class="img-fluid" />
 		<p><strong>Konum:</strong> @otel.Konum</p>
 		<p>@otel.Aciklama</p>
 	</div>
 }
+
 else
 {
 	<p>Otel bilgileri bulunamadı.</p>
 }
+
+
 
 <h2 class="baslik1">Odalar</h2>
 
@@ -181,7 +215,7 @@ else
 				<p class="fiyat"><strong>@Oda.OdaFiyat ₺</strong></p>
 				<div class="form-check">
 					<input class="form-check-input" type="radio" name="SelectedOdaId" value="@Oda.Id" id="oda_@Oda.Id">
-					<label class="form-check-label" for="oda_@Oda.Id">Odayı Seç</label>
+					<label class="odasec" for="oda_@Oda.Id">Odayı Seç</label>
 				</div>
 			</li>
 		}

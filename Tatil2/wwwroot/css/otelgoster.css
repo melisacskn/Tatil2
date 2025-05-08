@@ -63,7 +63,8 @@ main {
         font-weight: bold;
         color: #3d2224;
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 9px;
+        padding-top: 11px;
         padding-left: 12px;
     }
 
