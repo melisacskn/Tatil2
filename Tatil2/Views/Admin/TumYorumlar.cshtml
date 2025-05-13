@@ -26,10 +26,10 @@
         <table class="table table-striped mt-3">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Müşteri ID</th>
-                    <th>Oda ID</th>
-                    <th>Otel ID</th>
+
+                    <th>Müşteri </th>
+                    <th>Oda </th>
+                    <th>Otel </th>
                     <th> </th>
                 </tr>
             </thead>
@@ -37,10 +37,9 @@
                 @foreach (var y in Model)
                 {
                     <tr>
-                        <td>@y.Id</td>
-                        <td>@y.MusteriId</td>
-                        <td>@y.OdaId</td>
-                        <td>@y.OtelId</td>
+                        <td> @y.Musteri.Ad @y.Musteri.Soyad </td>
+                        <td>@y.Oda.OdaAd</td>
+                        <td>@y.Otel.Ad</td>
                         <td>
                             <a href="@Url.Action("YorumDetay", "Admin", new { id = y.Id })"
                                class="detaybuton">Detay</a>

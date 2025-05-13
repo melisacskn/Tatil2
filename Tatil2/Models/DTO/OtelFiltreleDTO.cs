@@ -16,6 +16,8 @@ namespace Tatil2.Models.DTO
 
         public List<Otel>? Oteller { get; set; } = [];
         public List<Oda>? Oda { get; set; } = [];
-        public List<Tag> OtelTag { get; set; } 
+        public List<Tag> OtelTag { get; set; }
+        public int Sayfa { get; set; } = 1;
+        public int ToplamSayfa { get; set; }
     }
 }

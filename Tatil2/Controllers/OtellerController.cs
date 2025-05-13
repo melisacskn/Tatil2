@@ -26,8 +26,9 @@ namespace Tatil2.Controllers
         public async Task<IActionResult> Incele(int id, DateTime BaslangicTarihi, DateTime BitisTarihi, int KisiSayisi)
         {
             var odalar = Tatildb.Oda
-                .Include(o => o.Otel)               // Otel bilgileri
-                .Include(o => o.Yorum)              // Yorum bilgileri eklendi
+                .Include(o => o.Otel)               
+                .Include(o => o.Yorum)
+                .ThenInclude(y => y.Musteri)     
                 .Where(x => x.OtelId == id)
                 .Where(oda =>
                     oda.KisiSayisi >= KisiSayisi &&
@@ -63,70 +64,74 @@ namespace Tatil2.Controllers
 
         public async Task<IActionResult> Index([FromForm] OtelFiltreleDTO otelFiltreleDTO)
         {
-            // Başlangıçta tüm otelleri alacak şekilde bir sorgu başlatılır.
+            int sayfaBasinaOtel = 2; // Sayfa başına 2 otel
             var query = Tatildb.Otel.AsQueryable();
 
-            // Eğer arama parametresi varsa (otel adı, konum, ilçe adı, şehir adı ile eşleşme yapılır)
+            // Filtreleme işlemleri
             if (!string.IsNullOrWhiteSpace(otelFiltreleDTO.Ara))
             {
                 query = query.Where(x =>
-                    EF.Functions.Like(x.Ad, otelFiltreleDTO.Ara) // Otel adı ile
-                    || EF.Functions.Like(x.Konum, otelFiltreleDTO.Ara) // Konum ile
-                    || EF.Functions.Like(x.İlce.Ad, otelFiltreleDTO.Ara) // İlçe adı ile
-                    || EF.Functions.Like(x.İlce.Sehir.Name, otelFiltreleDTO.Ara) // Şehir adı ile
-                    );
+                    EF.Functions.Like(x.Ad, otelFiltreleDTO.Ara) ||
+                    EF.Functions.Like(x.Konum, otelFiltreleDTO.Ara) ||
+                    EF.Functions.Like(x.İlce.Ad, otelFiltreleDTO.Ara) ||
+                    EF.Functions.Like(x.İlce.Sehir.Name, otelFiltreleDTO.Ara)
+                );
             }
 
-            // MinPuan parametresi varsa, ortalama puanları bu değeri geçecek şekilde filtreler
             if (otelFiltreleDTO.MinPuan.HasValue)
             {
-                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorum).Any() || // Yorum yoksa geçir
+                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorum).Any() ||
                                         x.Odalar.SelectMany(y => y.Yorum).Average(y => (decimal?)y.Puan) >= otelFiltreleDTO.MinPuan.Value);
             }
 
-            // MaxPuan parametresi varsa, ortalama puanları bu değeri geçmeyecek şekilde filtreler
             if (otelFiltreleDTO.MaxPuan.HasValue)
             {
-                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorum).Any() || // Yorum yoksa geçir
+                query = query.Where(x => !x.Odalar.SelectMany(y => y.Yorum).Any() ||
                                         x.Odalar.SelectMany(y => y.Yorum).Average(y => (decimal?)y.Puan) <= otelFiltreleDTO.MaxPuan.Value);
             }
 
-            // TagId parametreleri varsa, otellerin tag'lerini filtreler
             if (otelFiltreleDTO.TagId != null && otelFiltreleDTO.TagId.Any())
             {
                 query = query.Where(x => x.Tag.Select(y => y.Id).Any(y => otelFiltreleDTO.TagId.Contains(y)));
             }
 
-            // Oda kapasitesine göre ve tarih aralıklarına göre uygun odalar olmalı
+            // Oda kapasitesine göre filtreleme
             query = query.Where(otel => otel.Odalar.Any(oda =>
-               oda.KisiSayisi >= otelFiltreleDTO.KisiSayisi && // Oda kapasitesine göre filtre
-               oda.Rezervasyon.Count(r => (r.BitisTarihi < otelFiltreleDTO.BaslangicTarihi && r.BaslangicTarihi > otelFiltreleDTO.BitisTarihi)) < oda.OdaStok // Tarihler arasında rezervasyon çakışması olmamalı
-             ))
-                  .Include(o => o.İlce) // İlçe bilgisi dahil edilir
-                  .Include(o => o.Odalar); // Oda bilgisi dahil edilir
+                oda.KisiSayisi >= otelFiltreleDTO.KisiSayisi &&
+                oda.Rezervasyon.Count(r => (r.BitisTarihi < otelFiltreleDTO.BaslangicTarihi && r.BaslangicTarihi > otelFiltreleDTO.BitisTarihi)) < oda.OdaStok
+            ))
+            .Include(o => o.İlce)
+            .Include(o => o.Odalar);
 
-            // Tüm tagları al
-            var otelTag = await Tatildb.Tag.ToListAsync();
+            // Otel sayısını al
+            var toplamOtelSayisi = await query.CountAsync();
 
-            // Filtreleme sonrası sonuçları view'a gönder
+            // Sayfa başına 2 otel olacak şekilde sorgu
+            var oteller = await query
+                .Skip((otelFiltreleDTO.Sayfa - 1) * sayfaBasinaOtel)  // Geçen sayfalardaki otelleri atla
+                .Take(sayfaBasinaOtel)               // Bu sayfada 2 otel al
+                .ToListAsync();
+
+            // Sayfalama bilgilerini oluştur
+            var sayfalar = (int)Math.Ceiling(toplamOtelSayisi / (double)sayfaBasinaOtel);
+
+            // Filtreleme ve sayfalama bilgilerini view'a gönder
             var viewModel = new OtelFiltreleDTO
             {
-                Oteller = query.ToList(),
-                OtelTag = otelTag,
+                Oteller = oteller,
+                Sayfa = otelFiltreleDTO.Sayfa,
+                OtelTag = await Tatildb.Tag.ToListAsync(),
                 TagId = otelFiltreleDTO.TagId,
                 Ara = otelFiltreleDTO.Ara,
                 BaslangicTarihi = otelFiltreleDTO.BaslangicTarihi,
                 BitisTarihi = otelFiltreleDTO.BitisTarihi,
                 KisiSayisi = otelFiltreleDTO.KisiSayisi,
                 MinPuan = otelFiltreleDTO.MinPuan,
-                MaxPuan = otelFiltreleDTO.MaxPuan
+                MaxPuan = otelFiltreleDTO.MaxPuan,
+                ToplamSayfa = sayfalar // Toplam sayfa bilgisini view model'e ekledik
             };
 
             return View(viewModel);
         }
-       
-       
-        
-
     }
 }

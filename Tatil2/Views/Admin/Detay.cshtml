@@ -51,6 +51,63 @@
 		font-family: Arial, sans-serif;
 	}
 
+	.rezervasyon-durum {
+		max-width: 800px;
+		margin: 30px auto;
+		background-color: #f9f9f9;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		text-align: center;
+		font-family: Arial, sans-serif;
+	}
+
+		.rezervasyon-durum h4 {
+			color: #4CAF50;
+			font-size: 1.8em;
+			margin-bottom: 20px;
+			border-bottom: 2px solid #4CAF50;
+			padding-bottom: 10px;
+		}
+
+		.rezervasyon-durum .btn {
+			padding: 10px 25px;
+			width: 153px;
+			font-size: 1em;
+			margin: 0 10px;
+			border-radius: 6px;
+			border: none;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		.rezervasyon-durum .btn-success {
+			background-color: #aad665;
+			color: white;
+		}
+
+			.rezervasyon-durum .btn-success:hover {
+				background-color: #218838;
+			}
+
+		.rezervasyon-durum .btn-danger {
+			background-color: #dc3545;
+			color: white;
+		}
+
+			.rezervasyon-durum .btn-danger:hover {
+				background-color: #ef1f1f;
+			}
+
+		.rezervasyon-durum .alert {
+			background-color: #e7f3fe;
+			border-left: 6px solid #aad665;
+			color: #0c5460;
+			padding: 15px;
+			margin-top: 15px;
+			border-radius: 5px;
+			font-size: 1.1em;
+		}
 	/* Stil düzenlemeleri */
 	table p {
 		font-size: 1em;
@@ -58,6 +115,8 @@
 	}
 
 </style>
+
+
 <div class="div1">
 	<h3>Rezervasyon Detayı</h3>
 	<table>
@@ -149,3 +208,25 @@
 		</table>
 	}
 </div>
+<div class="rezervasyon-durum">
+	<h4>Rezervasyon Durumu</h4>
+	@if (Model.durum == "Beklemede")
+	{
+		<form asp-action="RezervasyonOnayla" asp-controller="Admin" method="post" style="display:inline;">
+			<input type="hidden" name="id" value="@Model.Id" />
+			<button type="submit" class="btn btn-success">Onayla</button>
+		</form>
+
+		<form asp-action="RezervasyonReddet" asp-controller="Admin" method="post" style="display:inline;">
+			<input type="hidden" name="id" value="@Model.Id" />
+			<button type="submit" class="btn btn-danger">Reddet</button>
+		</form>
+	}
+	else
+	{
+		<div class="alert">
+			Bu rezervasyon <strong>@Model.durum</strong> olarak işaretlenmiş.
+		</div>
+	}
+</div>
+

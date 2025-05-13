@@ -69,6 +69,7 @@ namespace Tatil2.Controllers
         public IActionResult TumRezervasyonlar()
         {
             var tumRezervasyonlar = Tatildb.Rezervasyon
+                .Include(r => r.Musteri)
                 .OrderByDescending(r => r.BaslangicTarihi)
                 .ToList();
 
@@ -92,6 +93,9 @@ namespace Tatil2.Controllers
         public IActionResult TumYorumlar()
         {
             var TumYorumlar = Tatildb.Yorum
+                .Include(r => r.Musteri)
+                .Include(r => r.Oda)
+                .Include(r => r.Otel)
                 .OrderByDescending(r => r.MusteriId)
                 .ToList();
 

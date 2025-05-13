@@ -14,7 +14,7 @@ namespace Tatil2.Models
         public Musteri Musteri { get; set; }
         public virtual ICollection<MisafirBilgileri> MisafirBilgileri { get; set; } = [];
 
-
+        public string durum { get; set; }
         public int OdaId { get; set; }
         [ForeignKey(nameof(OdaId))]
         public Oda Oda { get; set; }

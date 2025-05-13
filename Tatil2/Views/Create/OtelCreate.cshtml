@@ -20,6 +20,15 @@
 	</div>
 }
 <style>
+	.tag-scroll-container {
+		max-height: 160px; /* yükseklik ihtiyacına göre ayarla */
+		overflow-y: auto;
+		border: 1px solid #aad665;
+		padding: 15px;
+		border-radius: 5px;
+		background-color: #f9f9f9;
+	}
+
 	.baslik{
 		color: white;
 		text-align: center;
@@ -96,6 +105,7 @@
 
 	<h3 class="control-label">Tag Kategoriler</h3>
 	<div>
+		<div class="tag-scroll-container">
 		@if (ViewBag.TagKategori != null)
 		{
 			var TagKategori = ViewBag.TagKategori as List<Tatil2.Models.TagKategori>;
@@ -104,16 +114,18 @@
 				foreach (var kategori in TagKategori)
 				{
 					<h6>@kategori.Ad</h6>
-					if (kategori.Tag != null)
-					{
-						foreach (var tag in kategori.Tag)
+					
+						@if (kategori.Tag != null)
 						{
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" id="@tag.Ad" name="TagKategori" value="@tag.Id" />
-								<label class="form-check-label" for="@tag.Ad">@tag.Ad</label>
-							</div>
+							foreach (var tag in kategori.Tag)
+							{
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="@tag.Ad" name="TagKategori" value="@tag.Id" />
+									<label class="form-check-label" for="@tag.Ad">@tag.Ad</label>
+								</div>
+							}
 						}
-					}
+					
 				}
 			}
 			else
@@ -124,8 +136,10 @@
 		else
 		{
 			<p>No tag categories available.</p>
-		}
+			}
+		</div>
 	</div>
+
 
 
 

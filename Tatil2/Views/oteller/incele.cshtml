@@ -1,14 +1,51 @@
 ﻿@model List<Tatil2.Models.Oda>
 
 <style>
-	.odasec{
-		display: block;
+
+
+	.baslik1 {;
+		font-size: 24px;
+		text-decoration: none;
+		color: #aad665;
+		flex: 1;
+		text-align: center;
+	}
+
+	
+
+	.oda-listesi li {
+		position: relative;
+		
+	}
+
+/* 	.form-check {
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+ */
+	
+	.odaradio {
+		width: 20px;
+		height: 17px;
+		margin-right: -10px;
+		margin-top: 21px;
+		accent-color: #aad665;
+	}
+
+	
+	.odasec {
 		font-size: 18px;
 		color: #aad665;
-		margin-bottom: -5px;
-		padding: 6px;
 		font-weight: bold;
+		cursor: pointer;
+		margin: 16px;
+		margin-bottom: -8px;
 	}
+
 	.otel-baslik {
 		display: flex;
 		justify-content: space-between;
@@ -27,12 +64,6 @@
 		color: #aad665;	
 		font-size: 40px;
 		margin-bottom: 10px; /* örnek: altın rengi */
-	}
-
-	.baslik1 {
-		font-size: 28px;
-		font-weight: bold;
-		color: #aad665;
 	}
 	main {
 		background-color: white;
@@ -139,6 +170,60 @@
 			box-shadow: 0 0 10px rgba(170, 214, 101, 0.7);
 		}
 
+	.yorumlar {
+		margin-top: 47px;
+		margin-bottom: 20px;
+		background-color: #fff;
+		padding: 20px;
+		border-left: 5px solid #aad665;
+		border-radius: 8px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	}
+
+		.yorumlar h4 {
+			font-size: 18px;
+			margin-bottom: 10px;
+			color: #343a40;
+			border-bottom: 1px solid #ddd;
+			padding-bottom: 5px;
+		}
+
+		.yorumlar ul {
+			list-style-type: none;
+			padding-left: 0;
+			margin: 0;
+		}
+
+	.yorum {
+		margin-bottom: 12px;
+		padding-bottom: 10px;
+		border-bottom: 1px dashed #ccc;
+	}
+
+		.yorum p {
+			margin: 4px 0;
+			font-size: 14px;
+			color: #444;
+		}
+
+			.yorum p strong {
+				color: #6c757d;
+			}
+
+		.yorum .yorum-yapan {
+			font-style: italic;
+			font-size: 13px;
+			color: #888;
+			margin-top: 4px;
+		}
+
+	.yorum-yok {
+		font-style: italic;
+		font-size: 14px;
+		color: #999;
+		margin-top: 10px;
+	}
+
 
 
 
@@ -198,24 +283,51 @@ else
 
 
 
-<h2 class="baslik1">Odalar</h2>
+	<h2 class="baslik1">Odalar</h2>
+	
+
 
 @if (Model != null && Model.Any())
 {
 	<ul class="oda-listesi">
 		@foreach (var Oda in Model)
 		{
-			<li>
-				<img src="@Oda.OdaFoto" alt="@Oda.OdaAd" class="img-fluid" />
+			<li class="oda-karti">
+				<img src="@Oda.OdaFoto" alt="@Oda.OdaAd" class="img-fluid oda-foto" />
 				<div class="oda-detay">
 					<h3>@Oda.OdaAd</h3>
 					<p><strong>Açıklama:</strong> @Oda.OdaAciklama</p>
 					<p><strong>Kapasite:</strong> @Oda.KisiSayisi</p>
-				</div>
-				<p class="fiyat"><strong>@Oda.OdaFiyat ₺</strong></p>
-				<div class="form-check">
-					<input class="form-check-input" type="radio" name="SelectedOdaId" value="@Oda.Id" id="oda_@Oda.Id">
-					<label class="odasec" for="oda_@Oda.Id">Odayı Seç</label>
+					<p class="fiyat"><strong>@Oda.OdaFiyat ₺</strong></p>
+
+					<div class="form-check">
+						<input class="odaradio" type="radio" name="SelectedOdaId" value="@Oda.Id" id="oda_@Oda.Id">
+						<label class="odasec" for="oda_@Oda.Id">Odayı Seç</label>
+					</div>
+
+					@if (Oda.Yorum != null && Oda.Yorum.Any())
+					{
+						<div class="yorumlar">
+							<h4>Yorumlar</h4>
+							<ul>
+								@foreach (var yorum in Oda.Yorum
+													.OrderByDescending(y => y.Yazi) 
+													.Take(3))                         
+
+								{
+									<li class="yorum">
+										<p><strong>Puan:</strong> @yorum.Puan / 10</p>
+										<p>@yorum.Yazi</p>
+										<p class="yorum-yapan"> <em>- @(yorum.Musteri != null ? yorum.Musteri.Ad + " " + yorum.Musteri.Soyad : "Anonim")</em></p>
+									</li>
+								}
+							</ul>
+						</div>
+					}
+					else
+					{
+						<p class="yorum-yok">Bu oda için henüz yorum yapılmamış.</p>
+					}
 				</div>
 			</li>
 		}
@@ -225,6 +337,7 @@ else
 {
 	<p>Bu otelde henüz oda bilgisi bulunmamaktadır.</p>
 }
+
 
 <p id="hataMesaji" class="text-danger" style="display: none;">Bu tarihlerde oda müsait değil, lütfen başka bir tarih seçin.</p>
 

@@ -2,6 +2,26 @@
 
 <h2 class="mb-0">Otel Filtreleme</h2>
 <style>
+	.paginationbtn{
+		width: 47px;
+		padding: 10px;
+		padding-left: 18px;
+		background-color: #3d2224;
+		color: white;
+		/* border: indigo; */
+		border-radius: 100px;
+		font-size: 16px;
+		/* cursor: pointer; */
+		transition: background-color 0.3s;
+		margin: 10px;
+		margin-left: 85px;
+	}
+
+		.paginationbtn.active {
+			background-color: #aad665;
+			color: white; 
+		}
+
 	.sinif{
 		margin-top: 22px;
 		margin-bottom: 2rem;
@@ -44,9 +64,18 @@
 		transition: 0.3s ease;
 	}
 
+	.tag-scroll-container {
+		max-height: 350px; 
+		overflow-y: auto;
+		border: 1px solid #aad665;
+		padding: 15px;
+		border-radius: 5px;
+		background-color: #f9f9f9;
+	}
+
 	.mb-0 {
-		text-align: center;
-	/* 	color: #3d2224; */
+		text-align: left;
+		/* 	color: #3d2224; */
 		font-size: 36px;
 		font-weight: bold;
 		margin-bottom: 20px;
@@ -55,7 +84,7 @@
 
 
 <form id="otelSearchForm" class="row p-0" method="post">
-
+	<input type="hidden" name="sayfa" value="@Model.Sayfa" />
 	<div class="sidebarcontainer col-md-3">
 
 		<div class="sidebar">
@@ -66,7 +95,7 @@
 			</div>
 
 			<div class="form-group1">
-				
+				<div class="tag-scroll-container">
 				@foreach (var tag in Model.OtelTag)
 				{
 					<label>
@@ -77,6 +106,7 @@
 
 					<br />
 				}
+				</div>
 			</div>
 
 			<div class="form-group">
@@ -126,12 +156,8 @@
 			
 		</div>
 
-
-		@if (Model.Oteller == null || !Model.Oteller.Any())
-		{
-
-		}
-		else
+	
+		@if(Model.Oteller != null && Model.Oteller.Any())
 		{
 			foreach (var otel in Model.Oteller)
 			{
@@ -146,6 +172,20 @@
 					<hr />
 				</div>
 			}
+			<div class="pagination">
+			
+
+				@for (int i = 1; i <= Model.ToplamSayfa; i++)
+				{
+					<a href="javascript:;" class="paginationbtn @(Model.Sayfa == i ? "active" : "")">
+						@i
+					</a>
+				}
+
+				
+			</div>
+
+		
 		}
 	</div>
 
@@ -153,16 +193,9 @@
 </form>
 
 
-
-
-
-
-
-
-
 <script>
 		
-	const baslangicInput = document.getElementById('BaslangicTarihi');
+		const baslangicInput = document.getElementById('BaslangicTarihi');
 		const bitisInput = document.getElementById('BitisTarihi');
 
 		// Sayfa yüklendiğinde ve giriş tarihi değiştiğinde tetiklenir
@@ -185,6 +218,8 @@
 		document.getElementById("BaslangicTarihi").setAttribute("min", today);
 		document.getElementById("BitisTarihi").setAttribute("min", today);
 
+
+
 		const form = document.getElementById("otelSearchForm");
 
 		form.addEventListener("submit", function (e) {
@@ -201,8 +236,8 @@
 			}
 
 		const formData = new FormData(form);
-
-			fetch('@Url.Action("Index2", "Oteller")', {
+	
+			fetch('@Url.Action("Index", "Oteller")', {
 				method: 'POST',
 				body: formData,
 			})
@@ -220,7 +255,29 @@
 			.catch(error => {
 				console.error("Hata:", error);
 				alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+			}));
+		});
+
+
+		// Pagination butonlarına tıklanma olayını dinle
+		const paginationLinks = document.querySelectorAll('.paginationbtn'); // pagination linklerini seç
+
+		// Pagination linkine tıklama olayını tanımla
+		paginationLinks.forEach(link => {
+			link.addEventListener('click', function(e) {
+				e.preventDefault(); // Linkin varsayılan davranışını engelle (sayfayı yenilemesin)
+
+				// Hidden input'u güncelle
+				const sayfaInput = document.querySelector('input[name="sayfa"]');
+				const sayfaNo = this.textContent.trim(); // Sayfa numarasını al (2 gibi)
+				sayfaInput.value = sayfaNo;
+
+				// Formu submit et
+				document.getElementById("otelSearchForm").submit(); // Formu gönder
 			});
 		});
-	});
+
+
+
 </script>
+

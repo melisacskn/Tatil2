@@ -26,11 +26,12 @@
         <table class="table table-striped mt-3">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Müşteri ID</th>
+
+                    <th>Müşteri</th>
                     <th>Başlangıç</th>
                     <th>Bitiş</th>
-                    <th>Oda ID</th>
+                    <th>durum</th>
+
                     <th></th>
                 </tr>
             </thead>
@@ -38,11 +39,25 @@
                 @foreach (var r in Model)
                 {
                     <tr>
-                        <td>@r.Id</td>
-                        <td>@r.MusteriId</td>
+
+                        <td>@r.Musteri.Ad  @r.Musteri.Soyad</td>
                         <td>@r.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
                         <td>@r.BitisTarihi.ToString("dd.MM.yyyy")</td>
-                        <td>@r.OdaId</td>
+                        <td>
+                            @if (r.durum == "Onaylandı")
+                            {
+                                <span style="color:forestgreen">Onaylandı</span>
+                            }
+                            else if (r.durum == "Reddedildi")
+                            {
+                                <span style="color:darkred">Reddedildi</span>
+                            }
+                            else
+                            {
+                                <span style="color:cornflowerblue">Beklemede</span>
+                            }
+                        </td>
+
                         <td>
                             <a href="@Url.Action("Detay", "Admin", new { id = r.Id })" class="detaybuton">Detay</a>
                         </td>

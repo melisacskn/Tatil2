@@ -63,7 +63,7 @@
     --bs-primary-border-subtle: #9ec5fe;
     --bs-secondary-border-subtle: #c4c8cb;
     --bs-success-border-subtle: #a3cfbb;
-  /*  --bs-info-border-subtle: #9eeaf9;*/
+    /*  --bs-info-border-subtle: #9eeaf9;*/
     --bs-warning-border-subtle: #ffe69c;
     --bs-danger-border-subtle: #f1aeb5;
     --bs-light-border-subtle: #e9ecef;
@@ -95,7 +95,7 @@
     --bs-link-color: #0d6efd;
     --bs-link-color-rgb: 13, 110, 253;
     --bs-link-decoration: underline;
-    --bs-link-hover-color: #0a58ca;
+    --bs-link-hover-color: #3d2224;
     --bs-link-hover-color-rgb: 10, 88, 202;
     --bs-code-color: #d63384;
     --bs-highlight-color: #212529;

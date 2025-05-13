@@ -60,6 +60,7 @@
 						<td>@y.Musteri.Ad</td>
 						<td>@y.Oda.OdaAd</td>
 						<td>@y.Otel.Ad</td>
+
 						<td>
 							<a href="@Url.Action("YorumDetay", "Admin", new { id = y.Id })"
 							   class="detaybuton">Detay</a>
@@ -92,6 +93,7 @@
 					<th>Başlangıç Tarihi</th>
 					<th>Bitiş Tarihi</th>
 					<th>Oda </th>
+					<th>durum </th>
 					<th></th>
 				</tr>
 			</thead>
@@ -103,6 +105,20 @@
 						<td>@r.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
 						<td>@r.BitisTarihi.ToString("dd.MM.yyyy")</td>
 						<td>@r.Oda.OdaAd</td>
+						<td>
+							@if (r.durum == "Onaylandı")
+							{
+								<span style="color:forestgreen">Onaylandı</span>
+							}
+							else if (r.durum == "Reddedildi")
+							{
+								<span style="color:darkred">Reddedildi</span>
+							}
+							else
+							{
+								<span style="color:cornflowerblue">Beklemede</span>
+							}
+						</td>
 						<td>
 							<a href="@Url.Action("Detay", "Admin", new { id = r.Id })"
 							   class="detaybuton">Detay</a>
