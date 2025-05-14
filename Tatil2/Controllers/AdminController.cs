@@ -47,6 +47,31 @@ namespace Tatil2.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        public IActionResult RezervasyonOnayla(int id)
+        {
+            var rezervasyon = Tatildb.Rezervasyon.FirstOrDefault(r => r.Id == id);
+            if (rezervasyon == null)
+                return NotFound();
+
+            rezervasyon.durum = "Onaylandı";
+            Tatildb.SaveChanges();
+
+            return RedirectToAction("Detay", new { id = id });
+        }
+
+        [HttpPost]
+        public IActionResult RezervasyonReddet(int id)
+        {
+            var rezervasyon = Tatildb.Rezervasyon.FirstOrDefault(r => r.Id == id);
+            if (rezervasyon == null)
+                return NotFound();
+
+            rezervasyon.durum = "Reddedildi";
+            Tatildb.SaveChanges();
+
+            return RedirectToAction("Detay", new { id = id });
+        }
 
 
 
@@ -101,5 +126,54 @@ namespace Tatil2.Controllers
 
             return View(TumYorumlar);
         }
+        [HttpPost]
+        public IActionResult RezervasyonGuncelle(Rezervasyon model)
+        {
+            if (model.BaslangicTarihi < new DateTime(1753, 1, 1) || model.BitisTarihi < new DateTime(1753, 1, 1))
+            {
+                ModelState.AddModelError("", "Lütfen geçerli bir tarih aralığı giriniz.");
+                return View("Detay", model);
+            }
+           
+
+            var rezervasyon = Tatildb.Rezervasyon
+                .Include(r => r.Musteri)
+                .FirstOrDefault(r => r.Id == model.Id);
+
+            if (rezervasyon != null)
+            {
+                rezervasyon.Musteri.Ad = model.Musteri.Ad;
+                rezervasyon.Musteri.Soyad = model.Musteri.Soyad;
+                rezervasyon.Musteri.Telefon = model.Musteri.Telefon;
+                rezervasyon.Musteri.Mail = model.Musteri.Mail;
+                rezervasyon.BaslangicTarihi = model.BaslangicTarihi;
+                rezervasyon.BitisTarihi = model.BitisTarihi;
+
+
+
+                Tatildb.SaveChanges();
+            }
+
+            return RedirectToAction("Detay", new { id = model.Id });
+        }
+        [HttpPost]
+
+        public IActionResult MisafirGuncelle(MisafirBilgileri misafir)
+        {
+            var mevcutMisafir = Tatildb.MisafirBilgileri.FirstOrDefault(m => m.Id == misafir.Id);
+
+            if (mevcutMisafir != null)
+            {
+                mevcutMisafir.Ad = misafir.Ad;
+                mevcutMisafir.Soyad = misafir.Soyad;
+                mevcutMisafir.TC = misafir.TC;
+                mevcutMisafir.DogumTarihi = misafir.DogumTarihi;
+
+                Tatildb.SaveChanges();
+            }
+
+            return RedirectToAction("Detay", new { id = mevcutMisafir.RezervasyonId });
+        }
+     
     }
 }

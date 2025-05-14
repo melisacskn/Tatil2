@@ -26,12 +26,8 @@ namespace Tatil2.Models
 
         [ForeignKey(nameof(OdaId))]
         public Oda Oda { get; set; }
-       
-  
 
-
-
-
+      
 
     }
 }
