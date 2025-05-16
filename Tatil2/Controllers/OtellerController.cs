@@ -75,7 +75,7 @@ namespace Tatil2.Controllers
                     EF.Functions.Like(x.Konum, otelFiltreleDTO.Ara) ||
                     EF.Functions.Like(x.İlce.Ad, otelFiltreleDTO.Ara) ||
                     EF.Functions.Like(x.İlce.Sehir.Name, otelFiltreleDTO.Ara)
-                );
+                );  
             }
 
             if (otelFiltreleDTO.MinPuan.HasValue)

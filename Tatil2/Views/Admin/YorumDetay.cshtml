@@ -1,6 +1,38 @@
 ﻿@model Tatil2.Models.Yorum
 
 <style>
+    .misafir {
+        font-size: 16px;
+        font-weight: bold;
+        color: #3d2224;
+        display: block;
+        margin-bottom: 9px;
+        padding-top: 11px;
+        padding-left: 12px;
+    }
+
+    .misafir {
+        width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background-color: #fff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    .butonedit {
+        /* background-color: #3498db; */
+        color: white;
+        background-color: white;
+        border: none;
+        padding: 0px;
+        font-size: 0px;
+        /* 	cursor: pointer;
+        transition: background-color 0.3s ease; */
+        width: 0px;
+        height: 0px;
+        border-radius: 0px;
+        /* 		margin: 5px 102% -15px; */
+    }
     /* Genel stil ayarları */
     table {
         width: 100%;
@@ -101,37 +133,69 @@
             </tr>          
         </table>
 
-    <h3 class="mt-3">Yorum Detayı</h3>  
-    @if (Model.Yazi.Any())
-    {
-    <table>
-        <tr>
-            <th>Yorumu</th>
-            <td>@Model.Yazi</td>
-        </tr>
-        <tr>
-            <th>Puanlaması</th>
-            <td>@Model.Puan</td>
-        </tr>
-    </table>
-    }
-    else
+
+        <h3 class="mt-3">Yorum Detayı</h3>
+
+        @if (!string.IsNullOrEmpty(Model.Yazi))
+        {
+            <button type="button" class="butonedit" onclick="toggleEdit()">
+                <img src="~/images/sil.png" alt="sil" style="width: 34px; height: 34px; margin-bottom: -3px; margin-left: 821px;">
+            </button>
+
+            <table>
+                <tr>
+                    <th>Yorumu</th>
+                    <td>@Model.Yazi</td>
+                </tr>
+                <tr>
+                    <th>Puanlaması</th>
+                    <td>@Model.Puan</td>
+                </tr>
+            </table>
+
+            <!-- Silme Formu -->
+            <div id="editForm" style="display: none; ">
+                <form asp-action="YorumSilOnay" asp-controller="Admin" method="post" class="misafir" onsubmit="return handleSubmit();">
+                    <input type="hidden" name="yorumId" value="@Model.Id" />
+
+                    <p><strong>Yorumu neden silmek istiyorsunuz?</strong></p>
+                    <label><input type="checkbox" name="nedenler" value="Şiddet içerikli"> Şiddet içerikli</label><br />
+                    <label><input type="checkbox" name="nedenler" value="Alakasız yorum"> Alakasız yorum</label><br />
+                    <label><input type="checkbox" name="nedenler" value="Spam veya reklam"> Spam veya reklam</label><br />
+                    <label><input type="checkbox" name="nedenler" value="Küfür/hakaret"> Küfür/hakaret</label><br />
+                    <label><input type="checkbox" name="nedenler" value="Diğer" id="digerCheck" onchange="toggleTextbox()"> Diğer</label>
+
+                    <div id="digerTextbox" style="display:none; margin-top:10px;">
+                        <label for="digerSebep">Açıklama:</label>
+                        <textarea name="digerSebep" rows="3" cols="50" placeholder="Yorum silme nedeni..."></textarea>
+                    </div>
+
+                    <br />
+                    <button type="submit">
+                        Silmeyi Onayla
+                    </button>
+                </form>
+            </div>
+        }
+        else
         {
             <table>
-                <thead>
-                    <tr>
-                        <th></th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><p>Yorum bilgisi yok.</p></td>
-                    </tr>
-                </tbody>
-
+                <tr><td><p>Yorum bilgisi yok.</p></td></tr>
             </table>
         }
-  
-   
+        <script>
+            function toggleEdit() {
+                var form = document.getElementById("editForm");
+                form.style.display = (form.style.display === "none") ? "block" : "none";
+            }
 
+            function toggleTextbox() {
+                var digerCheck = document.getElementById("digerCheck");
+                var textbox = document.getElementById("digerTextbox");
+                textbox.style.display = digerCheck.checked ? "block" : "none";
+            }
+
+            function handleSubmit() {
+                return confirm("Yorumu silmek istediğinize emin misiniz?");
+            }
+        </script>

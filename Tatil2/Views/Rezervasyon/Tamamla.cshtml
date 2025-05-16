@@ -1,161 +1,154 @@
 ﻿@model Tatil2.Models.DTO.RezervasyonTamamlaDTO
 
 @{
-	ViewBag.Title = "Rezervasyonu Tamamla";
-	var bugun = DateTime.Now.ToString("yyyy-MM");
+    ViewBag.Title = "Rezervasyonu Tamamla";
+    var bugun = DateTime.Now.ToString("yyyy-MM");
 }
 
 <h2>Rezervasyon Detayları</h2>
 <style>
-	.tamamla{
-		width: 97%;
-		padding: 10px;
-		background-color: #3d2224;
-		color: white;
-		border: none;
-		border-radius: 10px;
-		font-size: 16px;
-		cursor: pointer;
-		transition: background-color 0.3s;
-		margin: 10px;
-	}
-	
+    .tamamla {
+        width: 97%;
+        padding: 10px;
+        background-color: #3d2224;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin: 10px;
+    }
 </style>
 
 @if (TempData["ErrorMessage"] != null)
 {
-	<div class="alert alert-danger">
-		@TempData["ErrorMessage"]
-	</div>
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
 }
 
 @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
 <div class="alert alert-info">
-	<strong>Otel:</strong> @Model.Oda?.Otel?.Ad <br />
-	<strong>Oda:</strong> @Model.Oda?.OdaAd <br />
-	<strong>Tarih:</strong> @Model.BaslangicTarihi.ToShortDateString() - @Model.BitisTarihi.ToShortDateString() <br />
-	<strong>Kişi Sayısı:</strong> @Model.KisiSayisi
+    <strong>Otel:</strong> @Model.Oda?.Otel?.Ad <br />
+    <strong>Oda:</strong> @Model.Oda?.OdaAd <br />
+    <strong>Tarih:</strong> @Model.BaslangicTarihi.ToShortDateString() - @Model.BitisTarihi.ToShortDateString() <br />
+    <strong>Kişi Sayısı:</strong> @Model.KisiSayisi
 </div>
 
 <hr />
 
 <h2>Misafir Bilgileri</h2>
 <form id="rezervasyonForm" method="post">
-	@Html.AntiForgeryToken()
-	@Html.HiddenFor(m => m.OdaId)
-	@Html.HiddenFor(m => m.BaslangicTarihi)
-	@Html.HiddenFor(m => m.BitisTarihi)
-	@Html.HiddenFor(m => m.KisiSayisi)
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.OdaId)
+    @Html.HiddenFor(m => m.BaslangicTarihi)
+    @Html.HiddenFor(m => m.BitisTarihi)
+    @Html.HiddenFor(m => m.KisiSayisi)
 
-	<div id="misafir-alani">
-		@for (int i = 0; i < Model.KisiSayisi; i++)
-		{
-			<fieldset class="border p-3 mb-3">
-				<legend>Misafir @(i + 1)</legend>
-				<div class="form-group">
-					<label>Ad</label>
-					<input type="text" name="MisafirBilgileri[@i].Ad" class="form-control" required />
-					@Html.ValidationMessage($"MisafirBilgileri[{i}].Ad", "", new { @class = "text-danger" })
-				</div>
-				<div class="form-group">
-					<label>Soyad</label>
-					<input type="text" name="MisafirBilgileri[@i].Soyad" class="form-control" required />
-					@Html.ValidationMessage($"MisafirBilgileri[{i}].Soyad", "", new { @class = "text-danger" })
-				</div>
-				<div class="form-group">
-					<label>Doğum Tarihi</label>
-					<input type="date" name="MisafirBilgileri[@i].DogumTarihi" class="form-control" required />
-					@Html.ValidationMessage($"MisafirBilgileri[{i}].DogumTarihi", "", new { @class = "text-danger" })
-				</div>
-				<div class="form-group">
-					<label>Cinsiyet</label><br />
-					<input type="radio" name="MisafirBilgileri[@i].Cinsiyet" value="true" required /> Erkek
-					<input type="radio" name="MisafirBilgileri[@i].Cinsiyet" value="false" required /> Kadın
-					@Html.ValidationMessage($"MisafirBilgileri[{i}].Cinsiyet", "", new { @class = "text-danger" })
-				</div>
-				<div class="form-group">
-					<label>TC Kimlik No</label>
-					<input type="text" name="MisafirBilgileri[@i].TC" maxlength="11" class="form-control" required />
-					@Html.ValidationMessage($"MisafirBilgileri[{i}].TC", "", new { @class = "text-danger" })
-				</div>
-			</fieldset>
-		}
-	</div>
+    <div id="misafir-alani">
+        @for (int i = 0; i < Model.KisiSayisi; i++)
+        {
+            <fieldset class="border p-3 mb-3">
+                <legend>Misafir @(i + 1)</legend>
+                <div class="form-group">
+                    <label>Ad</label>
+                    <input type="text" name="MisafirBilgileri[@i].Ad" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].Ad", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Soyad</label>
+                    <input type="text" name="MisafirBilgileri[@i].Soyad" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].Soyad", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Doğum Tarihi</label>
+                    <input type="date" name="MisafirBilgileri[@i].DogumTarihi" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].DogumTarihi", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Cinsiyet</label><br />
+                    <input type="radio" name="MisafirBilgileri[@i].Cinsiyet" value="true" required /> Erkek
+                    <input type="radio" name="MisafirBilgileri[@i].Cinsiyet" value="false" required /> Kadın
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].Cinsiyet", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>TC Kimlik No</label>
+                    <input type="text" name="MisafirBilgileri[@i].TC" maxlength="11" class="form-control" required />
+                    @Html.ValidationMessage($"MisafirBilgileri[{i}].TC", "", new { @class = "text-danger" })
+                </div>
+            </fieldset>
+        }
+    </div>
 
-	<hr />
-	<h3>Ödeme Bilgileri</h3>
-	<div class="form-group">
-		<label>Kart Sahibi Adı</label>
-		<input type="text" name="KartSahibiAdi" required class="form-control" />
-	</div>
-	<div class="form-group">
-		<label>Kart Numarası</label>
-		<input type="text" name="KartNo" required class="form-control" />
-	</div>
-	<div class="form-group">
-		<label>Son Kullanma Tarihi</label>
-		@* <input type="month" name="KartTarih" class="form-control" required min="@bugun" /> *@
-		<input type="text" placeholder="Örn: 11/25" name="KartTarih" class="form-control" required min="@bugun"/>
-	</div>
-	<div class="form-group">
-		<label>CVV</label>
-		<input type="text" name="Cvv" class="form-control" required maxlength="5" />
-	</div>
+    <hr />
+    <h3>Ödeme Bilgileri</h3>
+    <div class="form-group">
+        <label>Kart Sahibi Adı</label>
+        <input type="text" name="KartSahibiAdi" required class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Kart Numarası</label>
+        <input type="text" name="KartNo" required class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Son Kullanma Tarihi</label>
+        <input type="text" placeholder="Örn: 11/25" name="KartTarih" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>CVV</label>
+        <input type="text" name="Cvv" class="form-control" required maxlength="5" />
+    </div>
 
-	<button type="submit" class="tamamla">Rezervasyonu Tamamla</button>
+    <button type="submit" class="tamamla">Rezervasyonu Tamamla</button>
 </form>
 
-
 @section Scripts {
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			const form = document.getElementById("rezervasyonForm");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("rezervasyonForm");
 
-				form.addEventListener("submit", function (event) {
-			event.preventDefault(); // Formun normal gönderimini engelle
+            form.addEventListener("submit", function (event) {
+                const kisiSayisi = @Model.KisiSayisi;
+                const formData = new FormData(form);
 
-			const formData = new FormData(form);
+                let enAzBirBuyukVar = false;
 
-			// 1. misafirin doğum tarihini al
-			const dogumTarihiStr = formData.get("MisafirBilgileri[0].DogumTarihi");
-			if (!dogumTarihiStr) {
-				alert("1. misafirin doğum tarihi girilmeli.");
-				return;
-			}
+                for (let i = 0; i < kisiSayisi; i++) {
+                    const dogumTarihiStr = formData.get(`MisafirBilgileri[${i}].DogumTarihi`);
 
-			const dogumTarihi = new Date(dogumTarihiStr);
-			const bugun = new Date();
-			const yas = bugun.getFullYear() - dogumTarihi.getFullYear();
-			const ayFarki = bugun.getMonth() - dogumTarihi.getMonth();
-			const gunFarki = bugun.getDate() - dogumTarihi.getDate();
+                    if (!dogumTarihiStr) {
+                        alert(`${i + 1}. misafirin doğum tarihi girilmelidir.`);
+                        event.preventDefault();
+                        return;
+                    }
 
-			// Yaş hesaplamasında ay ve gün farkını da dikkate al
-			const tamYas = (ayFarki < 0 || (ayFarki === 0 && gunFarki < 0)) ? yas - 1 : yas;
+                    const dogumTarihi = new Date(dogumTarihiStr);
+                    const bugun = new Date();
+                    let yas = bugun.getFullYear() - dogumTarihi.getFullYear();
+                    const ayFarki = bugun.getMonth() - dogumTarihi.getMonth();
+                    const gunFarki = bugun.getDate() - dogumTarihi.getDate();
 
-			if (tamYas < 18) {
-				alert("En az bir misafir (1. misafir) 18 yaşından büyük olmalıdır.");
-				return;
-			}
+                    if (ayFarki < 0 || (ayFarki === 0 && gunFarki < 0)) {
+                        yas--;
+                    }
 
-			// Yaş sınırı sağlanıyorsa fetch ile gönder
-			fetch('@Url.Action("Tamamla", "Rezervasyon")', {
-				method: 'POST',
-				body: formData
-			})
-			.then(response => response.json())
-			.then(data => {
-				console.log('Gelen veri:', data);
-				if (!data.isSuccess) {
-					alert(data.message || "Bir hata oluştu.");
-				} else {
-					alert("Rezervasyon yapıldı!");
-				}
-			});
-		});
+                    if (yas >= 18) {
+                        enAzBirBuyukVar = true;
+                        break; // en az bir tane yeterli, döngüden çıkabiliriz
+                    }
+                }
 
+                if (!enAzBirBuyukVar) {
+                    alert("En az bir misafir 18 yaşından büyük olmalıdır.");
+                    event.preventDefault();
+                    return;
+                }
 
-			
-		
-	</script>
+                // Buraya kadar geldiyse form gönderilebilir
+            });
+        });
+    </script>
+
 }

@@ -20,6 +20,15 @@
 	</div>
 }
 <style>
+	.Otelekle {
+		max-width: 85%;
+		margin: 30px auto;
+		padding: 25px;
+		background-color: #fff;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+		border-radius: 8px;
+	}
+
 	.tag-scroll-container {
 		max-height: 160px; /* yükseklik ihtiyacına göre ayarla */
 		overflow-y: auto;
@@ -29,11 +38,12 @@
 		background-color: #f9f9f9;
 	}
 
-	.baslik{
+	.baslik {
 		color: white;
 		text-align: center;
 	}
-	.odabuton{
+
+	.odabuton {
 		width: 97%;
 		padding: 10px;
 		background-color: #3d2224;
@@ -43,10 +53,10 @@
 		font-size: 16px;
 		cursor: pointer;
 		transition: background-color 0.3s;
-		margin: 10px;
+		margin: 25px 0px 0px 12px;
 	}
 
-	.label1{
+	.label1 {
 		display: block;
 		font-size: 16px;
 		color: #444;
@@ -57,7 +67,7 @@
 	}
 </style>
 
-<form asp-action="OtelCreate" onsubmit="Submit" method="post" enctype="multipart/form-data">
+<form asp-action="OtelCreate" onsubmit="Submit" method="post" enctype="multipart/form-data" class="Otelekle">
 	<div class="form-group">
 		<label asp-for="Ad" class="control-label"></label>
 		<input asp-for="Ad" class="form-control" />
@@ -106,15 +116,15 @@
 	<h3 class="control-label">Tag Kategoriler</h3>
 	<div>
 		<div class="tag-scroll-container">
-		@if (ViewBag.TagKategori != null)
-		{
-			var TagKategori = ViewBag.TagKategori as List<Tatil2.Models.TagKategori>;
-			if (TagKategori != null && TagKategori.Count > 0)
+			@if (ViewBag.TagKategori != null)
 			{
-				foreach (var kategori in TagKategori)
+				var TagKategori = ViewBag.TagKategori as List<Tatil2.Models.TagKategori>;
+				if (TagKategori != null && TagKategori.Count > 0)
 				{
-					<h6>@kategori.Ad</h6>
-					
+					foreach (var kategori in TagKategori)
+					{
+						<h6>@kategori.Ad</h6>
+
 						@if (kategori.Tag != null)
 						{
 							foreach (var tag in kategori.Tag)
@@ -125,17 +135,17 @@
 								</div>
 							}
 						}
-					
+
+					}
+				}
+				else
+				{
+					<p>Tag kategorisi bulunamadı.</p>
 				}
 			}
 			else
 			{
-				<p>Tag kategorisi bulunamadı.</p>
-			}
-		}
-		else
-		{
-			<p>No tag categories available.</p>
+				<p>No tag categories available.</p>
 			}
 		</div>
 	</div>
@@ -143,55 +153,55 @@
 
 
 
-		<div id="odalar">
-			<div class="oda">
-				<h4>Oda 1</h4>
-				<label for="OdaAd" class="label1">Oda Adı</label>
-				<input type="text" name="Odalar[0].OdaAd" class="form-control" />
+	<div id="odalar">
+		<div class="oda">
+			<h4>Oda 1</h4>
+			<label for="OdaAd" class="label1">Oda Adı</label>
+			<input type="text" name="Odalar[0].OdaAd" class="form-control" />
 
-				<label for="OdaAciklama" class="label1">Oda Açıklaması</label>
-				<input type="text" name="Odalar[0].OdaAciklama" class="form-control" />
+			<label for="OdaAciklama" class="label1">Oda Açıklaması</label>
+			<input type="text" name="Odalar[0].OdaAciklama" class="form-control" />
 
-				<label for="OdaFiyat" class="label1">Fiyat</label>
-				<input type="number" name="Odalar[0].OdaFiyat" class="form-control" />
+			<label for="OdaFiyat" class="label1">Fiyat</label>
+			<input type="number" name="Odalar[0].OdaFiyat" class="form-control" />
 
-				<label for="KisiSayisi" class="label1">Kişi Sayısı</label>
-				<input type="number" name="Odalar[0].KisiSayisi" class="form-control" />
+			<label for="KisiSayisi" class="label1">Kişi Sayısı</label>
+			<input type="number" name="Odalar[0].KisiSayisi" class="form-control" />
 
-				<label for="OdaStok" class="label1">Oda Stok</label>
-				<input type="number" name="Odalar[0].OdaStok" class="form-control" />
+			<label for="OdaStok" class="label1">Oda Stok</label>
+			<input type="number" name="Odalar[0].OdaStok" class="form-control" />
 
-				<label for="OdaFoto" class="label1">Oda Fotoğrafı</label>
-				<input type="file" name="Odalar[0].OdaFoto" class="form-control" />
-			</div>
+			<label for="OdaFoto" class="label1">Oda Fotoğrafı</label>
+			<input type="file" name="Odalar[0].OdaFoto" class="form-control" />
 		</div>
+	</div>
 
-		<button type="button" class="odabuton" onclick="addRoom()">Oda Ekle</button>
+	<button type="button" class="odabuton" onclick="addRoom()">Oda Ekle</button>
 
-		<button type="submit" class="odabuton">Kaydet</button>
+	<button type="submit" class="odabuton">Kaydet</button>
 </form>
 @section Scripts {
 	<script>
 				function Submit(event) {
-		
+
 			event.preventDefault();
 
-			
+
 			const form = event.target;
 
 			const formData = new FormData(form);
 
-		
+
 			fetch('@Url.Action("OtelCreate", "Create")', {
 				method: 'POST',
-				body: formData, 
+				body: formData,
 			})
 			.then(response => {
 				if (!response.ok) {
 					throw new Error("Ağ isteği başarısız.");
 				}
 				alert("Otel başarıyla eklendi!");
-				
+
 			})
 			.catch(error => {
 				console.error('Hata:', error);

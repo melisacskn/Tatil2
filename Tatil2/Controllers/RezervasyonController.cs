@@ -96,6 +96,10 @@ namespace Tatil2.Controllers
         [HttpGet]
         public IActionResult Tamamla(int odaId, DateTime baslangic, DateTime bitis, int kisiSayisi)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { isSuccess = false, message = "Form verileri geçersiz." });
+            }
             var oda = Tatildb.Oda.Include(o => o.Otel).FirstOrDefault(o => o.Id == odaId);
             if (oda == null) return NotFound();
 
@@ -139,33 +143,44 @@ namespace Tatil2.Controllers
 
             try
             {
-                // Rezervasyon oluşturuluyor
+                
+                var oda = Tatildb.Oda.FirstOrDefault(o => o.Id == model.OdaId);
+                if (oda == null)
+                {
+                    return Json(new { isSuccess = false, message = "Oda bulunamadı." });
+                }
+
+                int cakisanRezervasyonSayisi = Tatildb.Rezervasyon
+                    .Count(r => r.OdaId == model.OdaId &&
+                                !(r.BitisTarihi <= model.BaslangicTarihi || r.BaslangicTarihi >= model.BitisTarihi));
+
+                if (cakisanRezervasyonSayisi >= oda.OdaStok)
+                {
+                    return Json(new
+                    {
+                        isSuccess = false,
+                        message = "Seçilen tarihler arasında bu odada yeterli müsaitlik yok. Lütfen farklı tarih seçin."
+                    });
+                }
+
+                // 3. Rezervasyon oluştur
                 var rezervasyon = new Rezervasyon
                 {
                     MusteriId = base.Musteri.Id,
                     OdaId = model.OdaId,
                     BaslangicTarihi = model.BaslangicTarihi,
                     BitisTarihi = model.BitisTarihi,
+                    durum = "Beklemede",
+                    MisafirBilgileri = model.MisafirBilgileri.Select(m => new MisafirBilgileri
+                    {
+                        Ad = m.Ad,
+                        Soyad = m.Soyad,
+                        TC = m.TC,
+                        DogumTarihi = m.DogumTarihi,
+                        Cinsiyet = m.Cinsiyet
+                    }).ToList()
                 };
 
-                // Misafir bilgileri ekleniyor
-                var misafirBilgileri = new List<MisafirBilgileri>();
-
-                foreach (var misafir in model.MisafirBilgileri)
-                {
-                    var misafirBilgi = new MisafirBilgileri
-                    {
-                        Ad = misafir.Ad,
-                        Soyad = misafir.Soyad,
-                        TC = misafir.TC,
-                        DogumTarihi = misafir.DogumTarihi,
-                        Cinsiyet = misafir.Cinsiyet,
-                    };
-                    misafirBilgileri.Add(misafirBilgi);
-                }
-
-                // Misafir bilgileri rezervasyona ekleniyor
-                rezervasyon.MisafirBilgileri.AddRange(misafirBilgileri);
                 Tatildb.Rezervasyon.Add(rezervasyon);
                 Tatildb.SaveChanges();
 
@@ -182,11 +197,9 @@ namespace Tatil2.Controllers
                     message = $"Rezervasyon kaydedilirken bir hata oluştu. Hata: {hataMesaji}"
                 });
             }
-
-         
-            }
-
         }
 
     }
+
+}
 

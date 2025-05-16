@@ -174,6 +174,35 @@ namespace Tatil2.Controllers
 
             return RedirectToAction("Detay", new { id = mevcutMisafir.RezervasyonId });
         }
-     
+        [HttpPost]
+        public IActionResult YorumSilOnay(int yorumId, List<string> nedenler, string digerSebep)
+        {
+            // Silme nedenlerini birleştir
+            string tumNedenler = string.Join(", ", nedenler ?? new List<string>());
+            if (!string.IsNullOrWhiteSpace(digerSebep))
+            {
+                tumNedenler += $" | Diğer Açıklama: {digerSebep}";
+            }
+
+            // Loglama veya denetim amaçlı
+            Console.WriteLine($"Yorum ID: {yorumId} siliniyor. Nedenler: {tumNedenler}");
+
+            // Yorum veritabanından siliniyor
+            var yorum = Tatildb.Yorum.FirstOrDefault(y => y.Id == yorumId);
+            if (yorum != null)
+            {
+                Tatildb.Yorum.Remove(yorum);
+                Tatildb.SaveChanges();
+                TempData["SilmeMesaji"] = "Yorum başarıyla silindi.";
+            }
+            else
+            {
+                TempData["SilmeMesaji"] = "Yorum bulunamadı.";
+            }
+
+            // Geri yönlendirme
+            return RedirectToAction("Admin");
+        }
+
     }
 }
