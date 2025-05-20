@@ -40,7 +40,6 @@ namespace Tatil2.Controllers
                 return NotFound();
             }
 
-            // Ortalama puanı hesapla
             var yorumlar = odalar
                 .Where(o => o.Yorum != null)
                 .SelectMany(o => o.Yorum)
@@ -64,18 +63,22 @@ namespace Tatil2.Controllers
 
         public async Task<IActionResult> Index([FromForm] OtelFiltreleDTO otelFiltreleDTO)
         {
-            int sayfaBasinaOtel = 2; // Sayfa başına 2 otel
+            int sayfaBasinaOtel = 2; 
             var query = Tatildb.Otel.AsQueryable();
 
             // Filtreleme işlemleri
             if (!string.IsNullOrWhiteSpace(otelFiltreleDTO.Ara))
             {
+                var ara = otelFiltreleDTO.Ara?.ToLower();
+                var araDeger = $"%{ara}%";
+
                 query = query.Where(x =>
-                    EF.Functions.Like(x.Ad, otelFiltreleDTO.Ara) ||
-                    EF.Functions.Like(x.Konum, otelFiltreleDTO.Ara) ||
-                    EF.Functions.Like(x.İlce.Ad, otelFiltreleDTO.Ara) ||
-                    EF.Functions.Like(x.İlce.Sehir.Name, otelFiltreleDTO.Ara)
-                );  
+                    EF.Functions.Like(x.Ad.ToLower(), araDeger) ||
+                    EF.Functions.Like(x.Konum.ToLower(), araDeger) ||
+                    EF.Functions.Like(x.İlce.Ad.ToLower(), araDeger) ||
+                    EF.Functions.Like(x.İlce.Sehir.Name.ToLower(), araDeger)
+                );
+
             }
 
             if (otelFiltreleDTO.MinPuan.HasValue)
@@ -95,7 +98,6 @@ namespace Tatil2.Controllers
                 query = query.Where(x => x.Tag.Select(y => y.Id).Any(y => otelFiltreleDTO.TagId.Contains(y)));
             }
 
-            // Oda kapasitesine göre filtreleme
             query = query.Where(otel => otel.Odalar.Any(oda =>
                 oda.KisiSayisi >= otelFiltreleDTO.KisiSayisi &&
                 oda.Rezervasyon.Count(r => (r.BitisTarihi < otelFiltreleDTO.BaslangicTarihi && r.BaslangicTarihi > otelFiltreleDTO.BitisTarihi)) < oda.OdaStok
@@ -103,7 +105,6 @@ namespace Tatil2.Controllers
             .Include(o => o.İlce)
             .Include(o => o.Odalar);
 
-            // Otel sayısını al
             var toplamOtelSayisi = await query.CountAsync();
 
             // Sayfa başına 2 otel olacak şekilde sorgu

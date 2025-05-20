@@ -21,30 +21,30 @@ namespace Tatil2.Controllers
             }
         }
 
-        // Kullanıcı bilgilerini 'Claims' üzerinden alarak 'Musteri' nesnesine atama yapan metod.
+       
         private Musteri SetMusteri()
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;  // Kullanıcının kimlik bilgilerini alır.
+            var claimsIdentity = User.Identity as ClaimsIdentity; 
 
-            if (claimsIdentity == null)  // Eğer kimlik bilgileri mevcut değilse, null döndürülür.
+            if (claimsIdentity == null)  
                 return null;
 
-            var claims = claimsIdentity.Claims;  // Kullanıcıya ait tüm 'Claim' verilerini alır.
+            var claims = claimsIdentity.Claims;  
 
-            // 'Musteri' nesnesi, 'Claims' üzerinden gelen verilere göre doldurulur.
+          
             musteri = new Musteri
             {
-                Id = int.Parse(claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value),  // Kullanıcının ID'si alınır.
-                Ad = claims.First(c => c.Type == "Ad").Value,  // Kullanıcının adı alınır.
-                Soyad = claims.First(c => c.Type == "Soyad").Value,  // Kullanıcının soyadı alınır.
-                Mail = claims.First(c => c.Type == "Mail").Value,  // Kullanıcının e-posta adresi alınır.
-                Telefon = claims.First(c => c.Type == "Telefon").Value,  // Kullanıcının telefon numarası alınır.
-                TC = claims.First(c => c.Type == "TC").Value,  // Kullanıcının TC kimlik numarası alınır.
-                Cinsiyet = bool.Parse(claims.First(c => c.Type == "Cinsiyet").Value),  // Kullanıcının cinsiyeti alınır.
-                IsAdmin = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")  // Kullanıcının admin olup olmadığı kontrol edilir.
+                Id = int.Parse(claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value),  
+                Ad = claims.First(c => c.Type == "Ad").Value, 
+                Soyad = claims.First(c => c.Type == "Soyad").Value, 
+                Mail = claims.First(c => c.Type == "Mail").Value,  
+                Telefon = claims.First(c => c.Type == "Telefon").Value,  
+                TC = claims.First(c => c.Type == "TC").Value, 
+                Cinsiyet = bool.Parse(claims.First(c => c.Type == "Cinsiyet").Value),  
+                IsAdmin = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")  
             };
 
-            return musteri;  // Doldurulan 'Musteri' nesnesi geri döndürülür.
+            return musteri;  
         }
     }
 }
